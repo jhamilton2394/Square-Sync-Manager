@@ -15,7 +15,14 @@ xls = ExcelFile('C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xls
 df = xls.parse(xls.sheet_names[0])
 
 for i in range(len(df)):
-    (df.loc[i].at["SKU"])
-    print(df.loc[i].at["Name"])
-    print(df.loc[i].at["Item Description"])
-
+    sku = (df.loc[i].at["SKU"])
+    name = (df.loc[i].at["Name"])
+    itemDesc = (df.loc[i].at["Item Description"])
+    price = (df.loc[i].at["Price"])
+    pageID = '6404283498e5bf333e47441a'
+    #cp.createProduct(storePageID=pageID,
+    #                productName=name,
+    #               productDescription=itemDesc,
+    #              variantSku=sku,
+    #             productPrice=price)
+    print(sku, name, itemDesc, price, pageID)
