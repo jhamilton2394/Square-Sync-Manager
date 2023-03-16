@@ -94,7 +94,7 @@ def getProducts():
 ### Gets store pages, need to make into a function
 #getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
 
-#getStorePagesHeaders = {'Authorization': 'Bearer bb931555-22ae-48f9-8ab5-9ff5b3744eb6',
+#getStorePagesHeaders = {'Authorization': 'Bearer yourAPIKey',
 #                        'User-Agent': 'APIAPP1.0'}
 
 #getStorePages = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
