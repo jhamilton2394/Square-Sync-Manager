@@ -1,6 +1,7 @@
-import requests
-import json
+from requests import get, post
+from json import dumps
 from pandas import ExcelFile
+import keys as k
 
 
 
@@ -15,7 +16,7 @@ def importInventory(file):
 
 
 
-### Defining our function to manually create a new single product
+### Function manually creates a single new product. Function works.
 def createProduct(storePageID, productName, productDescription, variantSku, productPrice):
     dataOutbox = {'type': 'PHYSICAL',
               'storePageId': storePageID,
@@ -26,14 +27,13 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
                             'pricing': {'basePrice': {'currency': 'USD',
                                                       'value': productPrice
                                                       }
-                                        }
+                                         }
                              }
                             ]
                 }
-
     jsonDataOutbox = json.dumps(dataOutbox)
     prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-    prodHeaders = {'Authorization': 'Bearer bb931555-22ae-48f9-8ab5-9ff5b3744eb6',
+    prodHeaders = {'Authorization': 'Bearer ' + k.apiKey,
                'User-Agent': 'APIAPP1.0',
                'Content-Type': 'application/json'}
     r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
@@ -45,10 +45,24 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
 
 
 
-### Defining our function to pull all products from excel sheet and upload them to the website.
-def createAllProducts(file, storePageID, productName, productDescription, variantSku, productPri):
-    df = importInventory(file)
-    #STILL DEVELOPING, NEED TO ITERATE OVER THE DF AND PUT ITEMS INTO THE POST.
+### Function takes a spreadsheet with the below titles, and uploads all items to site.
+# Uses the createProduct function in a loop.
+# C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xlsx is the path to the test file
+# parameter needs to be a complete file path like example above, must terminate in .xlsx file.
+def createAllProducts(file):
+    xls = ExcelFile(file)
+    df = xls.parse(xls.sheet_names[0])
+    for i in range(len(df)):
+        sku = str((df.loc[i].at["SKU"]))
+        name = (df.loc[i].at["Name"])
+        itemDesc = (df.loc[i].at["Item Description"])
+        price = str((df.loc[i].at["Price"]))
+        pageID = '6404283498e5bf333e47441a'
+        createProduct(storePageID=pageID,
+                        productName=name,
+                       productDescription=itemDesc,
+                      variantSku=sku,
+                     productPrice=price)
 
 
 
@@ -56,8 +70,7 @@ def createAllProducts(file, storePageID, productName, productDescription, varian
 def getInventory():
     url = 'https://api.squarespace.com/1.0/commerce/inventory'
     # Need to provide curson for pagination
-    APIkey = ''
-    headers = {'Authorization': APIkey,
+    headers = {'Authorization': 'Bearer ' + k.apiKey,
                'User-Agent': 'APIAPP1.0'}
     r = requests.get(url,headers=headers)
     prettyData = json.dumps(r.json(), indent=3)
@@ -68,7 +81,7 @@ def getInventory():
 ### Defining out function getProducts, which retreives one page of products
 def getProducts():
     prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-    prodHeaders = {'Authorization': 'Bearer yourAPIKEY',
+    prodHeaders = {'Authorization': 'Bearer ' + k.apiKey,
                    'User-Agent': 'APIAPP1.0'}
     r = requests.get(prodURL, headers=prodHeaders)
     json_data = r.json()
@@ -94,7 +107,7 @@ def getProducts():
 ### Gets store pages, need to make into a function
 #getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
 
-#getStorePagesHeaders = {'Authorization': 'Bearer yourAPIKey',
+#getStorePagesHeaders = {'Authorization': 'Bearer ' + k.apiKey,
 #                        'User-Agent': 'APIAPP1.0'}
 
 #getStorePages = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
@@ -108,7 +121,7 @@ def getProducts():
 ### Updates a product name only, can be changed if needed.
 def ProductUpdate(prodID, name):
     prodUpURL = 'https://api.squarespace.com/1.0/commerce/products/'
-    prodUpHeaders = {'Authorization': 'Bearer yourAPIKEY',
+    prodUpHeaders = {'Authorization': 'Bearer ' + k.apiKey,
                      'User-Agent': 'APIAPP1.0',
                      'Content-Type': 'application/json'}
     nameChange = {'name': name}
