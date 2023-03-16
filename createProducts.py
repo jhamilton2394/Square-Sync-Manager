@@ -33,7 +33,7 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
 
     jsonDataOutbox = json.dumps(dataOutbox)
     prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-    prodHeaders = {'Authorization': 'bb931555-22ae-48f9-8ab5-9ff5b3744eb6',
+    prodHeaders = {'Authorization': 'Bearer bb931555-22ae-48f9-8ab5-9ff5b3744eb6',
                'User-Agent': 'APIAPP1.0',
                'Content-Type': 'application/json'}
     r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
