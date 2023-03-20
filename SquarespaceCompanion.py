@@ -16,5 +16,3 @@ def getPages():
     data = r.json()
     df = pandas.DataFrame(r)
     print(data)
-
-getPages()
