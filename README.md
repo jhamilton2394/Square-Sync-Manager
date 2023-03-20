@@ -11,3 +11,7 @@ Python 3.11
 openpyxl 3.0.7
 pandas 1.5.3
 requests 2.28.2
+
+IMPORTANT
+For all functions to work properly you must create a file called "keys.py" with a variable named "apiKey" set equal to your
+Squarespace api key. This file should be included in the .gitignore file to prevent exposing your key.
