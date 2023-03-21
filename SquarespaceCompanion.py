@@ -24,17 +24,17 @@ getPages()
 
 
 ###CURRENTLY WORKING ON UI USING CUSTOMTKINTER
-# #window
+#window
 # window = ctk.CTk()
 # window.title('Squarespace Companion')
 # window.geometry('600x400')
 
-#widgets
-label = ctk.CTkLabel(window, text = 'a ctk label',
-                        fg_color = 'red',
-                        text_color = 'white',
-                        corner_radius = 10)
-label.pack()
+# #widgets
+# label = ctk.CTkLabel(window, text = 'a ctk label',
+#                         fg_color = 'red',
+#                         text_color = 'white',
+#                         corner_radius = 10)
+# label.pack()
 
 # button = ctk.CTkButton(window,
 #                         text = 'a ctk button',
