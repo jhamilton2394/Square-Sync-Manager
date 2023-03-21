@@ -18,3 +18,31 @@ def getPages():
     data = r.json()
     df = pandas.DataFrame(r)
     print(data)
+
+getPages()
+
+
+
+###CURRENTLY WORKING ON UI USING CUSTOMTKINTER
+# #window
+# window = ctk.CTk()
+# window.title('Squarespace Companion')
+# window.geometry('600x400')
+
+#widgets
+label = ctk.CTkLabel(window, text = 'a ctk label',
+                        fg_color = 'red',
+                        text_color = 'white',
+                        corner_radius = 10)
+label.pack()
+
+# button = ctk.CTkButton(window,
+#                         text = 'a ctk button',
+#                         fg_color = '#FF0',
+#                         text_color = 'red',
+#                         hover_color = '#AA0',
+#                         command = lambda: ctk.set_appearance_mode('dark'))
+# button.pack()
+
+# #run
+# window.mainloop()
