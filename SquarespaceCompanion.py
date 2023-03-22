@@ -85,3 +85,7 @@ doc = Document('/Users/jonathan/Downloads/DRESS INVENTORY.numbers')
 sheets = doc.sheets()
 tables = sheets[0].tables()
 rows = tables[0].rows()
+
+newDict = dict(doc)
+
+print(type(newDict))
