@@ -18,6 +18,4 @@ IMPORTANT
 For all functions to work properly you must create a file called "keys.py" with a variable named "apiKey" set equal to your
 Squarespace api key. This file should be included in the .gitignore file to prevent exposing your key.
 
-** (numbers parser requires python-snappy, which needs snappy installed from homebrew first. Example on Mac:
-'brew install snappy' then 'pip3 install numbers-parser' if the install fails then 'pip3 install python-snappy'
-then retry the numbers parser install.)
+** (numbers parser requires python-snappy. Follow complete installation instructions in the numbers-parser documentation here > https://pypi.org/project/numbers-parser/)
