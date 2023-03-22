@@ -76,3 +76,12 @@ def getPages():
 #     elif selection != ['c', 's', 'x']:
 #         print('not a valid selection'
 #               '\n')
+
+
+
+### Working on a version of import excel that imports .numbers files
+from numbers_parser import Document
+doc = Document('/Users/jonathan/Downloads/DRESS INVENTORY.numbers')
+sheets = doc.sheets()
+tables = sheets[0].tables()
+rows = tables[0].rows()
