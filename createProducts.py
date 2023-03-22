@@ -1,4 +1,4 @@
-import resquests
+import requests
 from json import dumps
 from pandas import ExcelFile
 import keys as k

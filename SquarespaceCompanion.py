@@ -2,10 +2,12 @@
 import createProducts as cp
 import json
 import keys as k
-import requests
 import pandas
 import tkinter as tk
 import customtkinter as ctk
+import requests
+import time
+import menu as m
 
 
 ###CURRENTLY WORKING ON RETREIVING PAGE ID FOR USE IN PRODUCT CREATION
@@ -18,8 +20,6 @@ def getPages():
     data = r.json()
     df = pandas.DataFrame(r)
     print(data)
-
-getPages()
 
 
 
@@ -46,3 +46,33 @@ getPages()
 
 # #run
 # window.mainloop()
+
+
+
+print('Welcome to Squarespace Companion!\n'
+      '\n'
+      'If you have not already, please configure your settings\n'
+      'under the settings option in the main menu.')
+time.sleep(3)
+
+#Start the menu loop
+while True:
+    print('Main menu \n')
+    print('c - Create Products \n'
+          's - Settings \n'
+          'x - Exit \n')
+    selection = input('Select an option. \n')
+
+    if selection == 'c':
+        getPages()
+        print('\n')
+
+    elif selection == 's':
+        m.settingsMenu()
+
+    elif selection == 'x':
+        break
+
+    elif selection != ['c', 's', 'x']:
+        print('not a valid selection'
+              '\n')
