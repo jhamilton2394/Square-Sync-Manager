@@ -1,18 +1,34 @@
+### File originally created only for the create products functions, but it ended up growing.
+# It is now too inconvenient to try to rename it, so it is going to stay "create products"
+# It should honestly just be named "functions" or something.
+
 import requests
 from json import dumps
 from pandas import ExcelFile
 import keys as k
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
 
-
-#inventory='C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xlsx'
 
 ### Defining our function to import the excel file containing inventory to be loaded to squarespace.
 #   the parameter "file" must be a complete file path ending in a document of type .xlsx
+#inventory='C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xlsx' on acer laptop only.
 def importInventory(file):
     xls = ExcelFile(file)
     df = xls.parse(xls.sheet_names[0])
     return print(df)
+
+
+
+### Function creates file browser popup to select the file containing inventory
+def openFile():
+    Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+    print(filename)
+    # Must import these modules below:
+    # from tkinter import Tk
+    # from tkinter.filedialog import askopenfilename
 
 
 
@@ -47,7 +63,7 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
 
 ### Function takes a spreadsheet with the below titles, and uploads all items to site.
 # Uses the createProduct function in a loop.
-# C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xlsx is the path to the test file
+# C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xlsx is the path to the test file on acer laptop.
 # parameter needs to be a complete file path like example above, must terminate in .xlsx file.
 def createAllProducts(file):
     xls = ExcelFile(file)

@@ -49,30 +49,30 @@ def getPages():
 
 
 
-print('Welcome to Squarespace Companion!\n'
-      '\n'
-      'If you have not already, please configure your settings\n'
-      'under the settings option in the main menu.')
-time.sleep(3)
+# print('Welcome to Squarespace Companion!\n'
+#       '\n'
+#       'If you have not already, please configure your settings\n'
+#       'under the settings option in the main menu.')
+# time.sleep(3)
 
-#Start the menu loop
-while True:
-    print('Main menu \n')
-    print('c - Create Products \n'
-          's - Settings \n'
-          'x - Exit \n')
-    selection = input('Select an option. \n')
+# #Start the menu loop
+# while True:
+#     print('Main menu \n')
+#     print('c - Create Products \n'
+#           's - Settings \n'
+#           'x - Exit \n')
+#     selection = input('Select an option. \n')
 
-    if selection == 'c':
-        getPages()
-        print('\n')
+#     if selection == 'c':
+#         getPages()
+#         print('\n')
 
-    elif selection == 's':
-        m.settingsMenu()
+#     elif selection == 's':
+#         m.settingsMenu()
 
-    elif selection == 'x':
-        break
+#     elif selection == 'x':
+#         break
 
-    elif selection != ['c', 's', 'x']:
-        print('not a valid selection'
-              '\n')
+#     elif selection != ['c', 's', 'x']:
+#         print('not a valid selection'
+#               '\n')
