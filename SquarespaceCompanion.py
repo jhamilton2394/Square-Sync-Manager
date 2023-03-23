@@ -56,11 +56,14 @@ def getNumOfPages():
 #   getPagesList in order to iterate over all pages.
 def pagesList():
     PagesNo = getNumOfPages()
+    # erases any previously saved data from 'pages.txt' file
+    open('pages.txt', 'w').close()
+    # iterates over pages and writes them to file
     for i in range(0, PagesNo):
         page = getPagesList(i)
-        file1 = open('pages.txt', 'w')
-        
+        file1 = open('pages.txt', 'a')
         file1.write(str(page))
+        print(type(page))
 
 pagesList()
 
