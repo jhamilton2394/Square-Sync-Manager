@@ -57,7 +57,10 @@ def getNumOfPages():
 def pagesList():
     PagesNo = getNumOfPages()
     for i in range(0, PagesNo):
-        print(getPagesList(i))
+        page = getPagesList(i)
+        file1 = open('pages.txt', 'w')
+        
+        file1.write(str(page))
 
 pagesList()
 
