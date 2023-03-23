@@ -8,7 +8,6 @@ import customtkinter as ctk
 import requests
 import time
 import menu as m
-import pagesFunctions as pf
 
 
 
@@ -40,33 +39,34 @@ import pagesFunctions as pf
 
 
 ### Command line menu loop
-# print('Welcome to Squarespace Companion!\n'
-#       '\n'
-#       'If you have not already, please configure your settings\n'
-#       'under the settings option in the main menu.')
-# time.sleep(3)
+print('Welcome to Squarespace Companion!\n'
+      '\n'
+      'If you have not already, please configure your settings\n'
+      'under the settings option in the main menu.')
+time.sleep(1)
 
-# #Start the menu loop
-# while True:
-#     print('Main menu \n')
-#     print('c - Create Products \n'
-#           's - Settings \n'
-#           'x - Exit \n')
-#     selection = input('Select an option. \n')
+#Start the menu loop
+while True:
+    print('Main menu \n')
+    print('c - Create Products \n'
+          's - Settings \n'
+          'x - Exit \n')
+    selection = input('Select an option. \n'
+                      '\n')
 
-#     if selection == 'c':
-#         getPages()
-#         print('\n')
+    if selection == 'c':
+        cp.pagesList()
+        print('\n')
 
-#     elif selection == 's':
-#         m.settingsMenu()
+    elif selection == 's':
+        m.settingsMenu()
 
-#     elif selection == 'x':
-#         break
+    elif selection == 'x':
+        break
 
-#     elif selection != ['c', 's', 'x']:
-#         print('not a valid selection'
-#               '\n')
+    elif selection != ['c', 's', 'x']:
+        print('not a valid selection'
+              '\n')
 
 
 
@@ -80,7 +80,3 @@ import pagesFunctions as pf
 # newDict = dict(doc)
 
 # print(type(newDict))
-
-
-
-
