@@ -61,9 +61,9 @@ def pagesList():
     # iterates over pages and writes them to file
     for i in range(0, PagesNo):
         page = getPagesList(i)
-        file1 = open('pages.txt', 'a')
+        file1 = open('pages.txt', 'w')
+        
         file1.write(str(page))
-        print(type(page))
 
 pagesList()
 
