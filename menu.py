@@ -1,6 +1,6 @@
-###PROGRAM FLOW FUNCTIONS
 import createProducts as cp
 
+######------PROGRAM FLOW FUNCTIONS------######
 
 
 ### Settings menu layout
@@ -10,21 +10,15 @@ def settingsMenu():
               '\n')
         print('a - Set API key \n'
               'b - back')
-
         settingOption = input('Select an option. \n')
-
         if settingOption == 'a':
             apiKeyInput()
-
         elif settingOption == 'b':
             break
-
         elif settingOption != ['a', 'b']:
             print('not a valid selection. \n'
                     '\n')
             
-
-
 ### API key input. Saves api key to file called keyfile.txt. Used in settings menu.
 def apiKeyInput():
     while True:
@@ -46,13 +40,11 @@ def apiKeyInput():
                 print('That is not a valid response. \n')
                 continue
 
-
-### function grabs the api key from the keyfile.txt file
-def apiTestKey():
-    testKey = open('keyfile.txt', 'r')
-    apiTestKey = testKey.read()
-    return apiTestKey
-
+### function grabs the api key from the keyfile.txt file for use in requests
+def retreiveApiKey():
+    file = open('keyfile.txt', 'r')
+    retreivedKey = file.read()
+    return retreivedKey
 
 ### Uses pagesList to show user available pages then has them choose the one they want.
 #   returns the selected page id
@@ -76,7 +68,7 @@ def pageSelect():
             continue
     return selectedPage
 
-
+### Product menu layout
 def productMenu():
     while True:
         choice = input('Would you like to create one, or multiple products? \n'
