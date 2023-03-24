@@ -46,27 +46,27 @@ print('Welcome to Squarespace Companion!\n'
 time.sleep(1)
 
 #Start the menu loop
-# while True:
-#     print('Main menu \n')
-#     print('c - Create Products \n'
-#           's - Settings \n'
-#           'x - Exit \n')
-#     selection = input('Select an option. \n'
-#                       '\n')
+while True:
+    print('Main menu \n')
+    print('c - Create Products \n'
+          's - Settings \n'
+          'x - Exit \n')
+    selection = input('Select an option. \n'
+                      '\n')
 
-#     if selection == 'c':
-        # m.productMenu()
-#         print('\n')
+    if selection == 'c':
+        m.productMenu()
+        print('\n')
 
-#     elif selection == 's':
-#         m.settingsMenu()
+    elif selection == 's':
+        m.settingsMenu()
 
-#     elif selection == 'x':
-#         break
+    elif selection == 'x':
+        break
 
-#     elif selection != ['c', 's', 'x']:
-#         print('not a valid selection'
-#               '\n')
+    elif selection != ['c', 's', 'x']:
+        print('not a valid selection'
+              '\n')
 
 
 

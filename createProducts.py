@@ -8,6 +8,7 @@ from pandas import ExcelFile
 import keys as k
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
+from menu import retreiveApiKey
 
 
 ######------FILE HANDLING FUNCTIONS------###### (note: some other file handling functions are in menu.py file since they have program flow.)
@@ -70,7 +71,7 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
                 }
     jsonDataOutbox = json.dumps(dataOutbox)
     prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-    prodHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+    prodHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
                'User-Agent': 'APIAPP1.0',
                'Content-Type': 'application/json'}
     r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
@@ -87,7 +88,7 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
 def getInventory():
     url = 'https://api.squarespace.com/1.0/commerce/inventory'
     # Need to provide curson for pagination
-    headers = {'Authorization': 'Bearer ' + k.apiKey,
+    headers = {'Authorization': 'Bearer ' + retreiveApiKey(),
                'User-Agent': 'APIAPP1.0'}
     r = requests.get(url,headers=headers)
     prettyData = json.dumps(r.json(), indent=3)
@@ -96,7 +97,7 @@ def getInventory():
 ### Defining out function getProducts, which retreives one page of products
 def getProducts():
     prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-    prodHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+    prodHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
                    'User-Agent': 'APIAPP1.0'}
     r = requests.get(prodURL, headers=prodHeaders)
     json_data = r.json()
@@ -106,7 +107,7 @@ def getProducts():
 ### Updates a product name only, can be changed if needed.
 def ProductUpdate(prodID, name):
     prodUpURL = 'https://api.squarespace.com/1.0/commerce/products/'
-    prodUpHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+    prodUpHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
                      'User-Agent': 'APIAPP1.0',
                      'Content-Type': 'application/json'}
     nameChange = {'name': name}
@@ -123,7 +124,7 @@ def ProductUpdate(prodID, name):
 #   called by the function 'pagesList'.
 def getPagesList(x):
     getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
-    getStorePagesHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+    getStorePagesHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
                             'User-Agent': 'APIAPP1.0'}
     r = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
     # data is the dictionary returned by the request.
@@ -146,7 +147,7 @@ def getPagesList(x):
 #   of pages to be iterated over.
 def getNumOfPages():
     getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
-    getStorePagesHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+    getStorePagesHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
                             'User-Agent': 'APIAPP1.0'}
     r = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
     # data is the dictionary returned by the request.
