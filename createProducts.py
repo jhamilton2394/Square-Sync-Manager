@@ -3,7 +3,7 @@
 # It should honestly just be named "functions" or something.
 
 import requests
-from json import dumps
+import json
 from pandas import ExcelFile
 import keys as k
 from tkinter import Tk
@@ -25,7 +25,7 @@ def importInventory(file):
 def openFile():
     Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
     filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-    print(filename)
+    return str(filename)
     # Must import these modules below:
     # from tkinter import Tk
     # from tkinter.filedialog import askopenfilename
@@ -61,11 +61,12 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
 
 
 
-### Function takes a spreadsheet with the below titles, and uploads all items to site.
+### Function takes a spreadsheet with the below titles, and uploads all items to site. Also takes page id.
 # Uses the createProduct function in a loop.
 # C:/Users/Hamiltons/Jonathan/Python Programs/dress inventory.xlsx is the path to the test file on acer laptop.
-# parameter needs to be a complete file path like example above, must terminate in .xlsx file.
-def createAllProducts(file):
+# parameter for file needs to be a complete file path like example above, must terminate in .xlsx file.
+# to get the id parameter "pagesList" should be called and the applicable id pasted in.
+def createAllProducts(file, id):
     xls = ExcelFile(file)
     df = xls.parse(xls.sheet_names[0])
     for i in range(len(df)):
@@ -73,7 +74,7 @@ def createAllProducts(file):
         name = (df.loc[i].at["Name"])
         itemDesc = (df.loc[i].at["Item Description"])
         price = str((df.loc[i].at["Price"]))
-        pageID = '6404283498e5bf333e47441a'
+        pageID = id
         createProduct(storePageID=pageID,
                         productName=name,
                        productDescription=itemDesc,
@@ -145,3 +146,72 @@ def ProductUpdate(prodID, name):
     r = requests.post(prodUpURL + prodID, headers = prodUpHeaders, data = jsonNameChange)
     json_var = r.json
     return print(r, json_var)
+
+
+
+
+######------BEGIN PAGES FUNCTIONS------######
+
+### gets a list of pages and their id's, as well as some other random info that is included.
+#   returns name and id of specified page number only. This function is only intended to be
+#   called by the function 'pagesList'.
+def getPagesList(x):
+    getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
+    getStorePagesHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+                            'User-Agent': 'APIAPP1.0'}
+    r = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
+    # data is the dictionary returned by the request.
+    data = r.json()
+    # storePages is the 2nd key in dictionary, its value is a list of dictionaries.
+    storePages = data['storePages']
+    # pageOne accesses the first element of the list, which is a dictionary of the
+    # first page's info. If there are multiple store pages then this is a good
+    # place to start a for loop to iterate through them.
+    pageOne = storePages[x]
+    # pageOne has all the info we need for now. pageID and pageName are accessing
+    # the specific keys and values needed for our current use.
+    pageID = pageOne['id']
+    pageName = pageOne['title']
+    pageInfo = {pageName: pageID}
+    return pageInfo
+
+
+
+### getNumOfPages returns the number of pages. It can be called by itself if the user
+#   wants the number of pages, and is also called by pagesList to be used for the range
+#   of pages to be iterated over.
+def getNumOfPages():
+    getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
+    getStorePagesHeaders = {'Authorization': 'Bearer ' + k.apiKey,
+                            'User-Agent': 'APIAPP1.0'}
+    r = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
+    # data is the dictionary returned by the request.
+    data = r.json()
+    # storePages is the 2nd key in dictionary, its value is a list of dictionaries.
+    storePages = data['storePages']
+    numOfPages = len(storePages)
+    return numOfPages
+
+ 
+
+### pagesList shows a list of all pages, their id's, and their page number.
+#   Calls getNumOfPages and getPagesList in order to iterate over all pages.
+def pagesList():
+    PagesNo = getNumOfPages()
+    for i in range(0, PagesNo):
+        page = getPagesList(i)
+        print(str(i), str(page))
+
+
+
+
+
+### This is 'data' from getPagesList function. It is all the data returned by the website
+#   excluding any new pages that have been created since pulling this data. 
+{'pagination': {'nextPageUrl': None,
+                'nextPageCursor': None,
+                'hasNextPage': False},
+'storePages': [{'id': '641a906c3f58246e8a8fe285',
+                'title': 'All products',
+                'isEnabled': True,
+                'urlSlug': 'all-products'}]}
