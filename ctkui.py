@@ -1,6 +1,6 @@
-import tkinter as tk
-import customtkinter
-from menu import settingsMenu, apiKeyInput
+# import tkinter as tk
+# import customtkinter
+# from menu import settingsMenu, apiKeyInput
 
 ###CURRENTLY WORKING ON UI USING CUSTOMTKINTER
 #window
@@ -26,41 +26,41 @@ from menu import settingsMenu, apiKeyInput
 # #run
 # window.mainloop()
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("600x500")
-        self.title("CTk example")
+# class App(customtkinter.CTk):
+#     def __init__(self):
+#         super().__init__()
+#         self.geometry("600x500")
+#         self.title("CTk example")
 
-        # add widgets to app
-        self.button = customtkinter.CTkButton(self, text="Settings", command=settingsMenu)
-        self.button1 = customtkinter.CTkButton(self, text="About", command=self.button_click)
-        self.button.grid(row=0, column=0, padx=20, pady=10)
-        self.button1.grid(row=1, column=0, padx=20, pady=10)
+#         add widgets to app
+#         self.button = customtkinter.CTkButton(self, text="Settings", command=settingsMenu)
+#         self.button1 = customtkinter.CTkButton(self, text="About", command=self.button_click)
+#         self.button.grid(row=0, column=0, padx=20, pady=10)
+#         self.button1.grid(row=1, column=0, padx=20, pady=10)
 
-    # add methods to app
-    def button_click(self):
-        print("button click")
+#     add methods to app
+#     def button_click(self):
+#         print("button click")
 
-    def settingsMenu():
-        while True:
-            print('settings menu'
-                '\n')
-            print('a - Set API key \n'
-                'b - back')
-            settingOption = input('Select an option. \n')
-            if settingOption == 'a':
-                apiKeyInput()
-            elif settingOption == 'b':
-                break
-            elif settingOption != ['a', 'b']:
-                print('not a valid selection. \n'
-                        '\n')
+#     def settingsMenu():
+#         while True:
+#             print('settings menu'
+#                 '\n')
+#             print('a - Set API key \n'
+#                 'b - back')
+#             settingOption = input('Select an option. \n')
+#             if settingOption == 'a':
+#                 apiKeyInput()
+#             elif settingOption == 'b':
+#                 break
+#             elif settingOption != ['a', 'b']:
+#                 print('not a valid selection. \n'
+#                         '\n')
                 
-    def settingsMenuOptions():
-        
+#     def settingsMenuOptions():
 
 
 
-app = App()
-app.mainloop()
+
+# app = App()
+# app.mainloop()
