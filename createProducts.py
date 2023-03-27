@@ -8,7 +8,6 @@ from pandas import ExcelFile
 import keys as k
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-from menu import retreiveApiKey
 
 
 ######------FILE HANDLING FUNCTIONS------###### (note: some other file handling functions are in menu.py file since they have program flow.)
@@ -30,6 +29,13 @@ def openFile():
     # Must import these modules below:
     # from tkinter import Tk
     # from tkinter.filedialog import askopenfilename
+
+    ### function grabs the api key from the keyfile.txt file for use in requests
+def retreiveApiKey():
+    file = open('keyfile.txt', 'r')
+    retreivedKey = file.read()
+    return retreivedKey
+
 
 
 ######------PRODUCT CREATION FUNCTIONS------######
