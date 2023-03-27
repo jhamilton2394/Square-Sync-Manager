@@ -4,20 +4,20 @@ import createProducts as cp
 
 
 ### Settings menu layout
-def settingsMenu():
-    while True:
-        print('settings menu'
-              '\n')
-        print('a - Set API key \n'
-              'b - back')
-        settingOption = input('Select an option. \n')
-        if settingOption == 'a':
-            apiKeyInput()
-        elif settingOption == 'b':
-            break
-        elif settingOption != ['a', 'b']:
-            print('not a valid selection. \n'
-                    '\n')
+# def settingsMenu():
+#     while True:
+#         print('settings menu'
+#               '\n')
+#         print('a - Set API key \n'
+#               'b - back')
+#         settingOption = input('Select an option. \n')
+#         if settingOption == 'a':
+#             apiKeyInput()
+#         elif settingOption == 'b':
+#             break
+#         elif settingOption != ['a', 'b']:
+#             print('not a valid selection. \n'
+#                     '\n')
             
 ### API key input. Saves api key to file called keyfile.txt. Used in settings menu.
 def apiKeyInput():
@@ -39,12 +39,6 @@ def apiKeyInput():
             elif response != ['y', 'n']:
                 print('That is not a valid response. \n')
                 continue
-
-### function grabs the api key from the keyfile.txt file for use in requests
-def retreiveApiKey():
-    file = open('keyfile.txt', 'r')
-    retreivedKey = file.read()
-    return retreivedKey
 
 ### Uses pagesList to show user available pages then has them choose the one they want.
 #   returns the selected page id
