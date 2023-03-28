@@ -1,20 +1,21 @@
-###TEST EVERYTHING HERE: comment out the modules that will affect debug
-import createProducts as cp
-import json
-import keys as k
-import pandas
-import tkinter as tk
-import customtkinter as ctk
-import requests
+###This is the main file. It houses the main structure of the program. The options menu items will call their respective
+#  functions from the menu file. The menu file functions will call the meat and potatoes functions from the CreateProducts file.
 import time
 import menu as m
+
+
+
+
+
+######------MAIN STRUCTURE------######
 
 
 ### Command line menu loop
 print('Welcome to Squarespace Companion!\n'
       '\n'
       'If you have not already, please configure your settings\n'
-      'under the settings option in the main menu.')
+      'under the settings option in the main menu. \n')
+
 time.sleep(1)
 
 #Start the menu loop
@@ -25,30 +26,13 @@ while True:
           'x - Exit \n')
     selection = input('Select an option. \n'
                       '\n')
-
     if selection == 'c':
         m.productMenu()
         print('\n')
-
     elif selection == 's':
         m.settingsMenu()
-
     elif selection == 'x':
         break
-
     elif selection != ['c', 's', 'x']:
         print('not a valid selection'
               '\n')
-
-
-
-### Working on a version of import excel that imports .numbers files
-# from numbers_parser import Document
-# doc = Document('/Users/jonathan/Downloads/DRESS INVENTORY.numbers')
-# sheets = doc.sheets()
-# tables = sheets[0].tables()
-# rows = tables[0].rows()
-
-# newDict = dict(doc)
-
-# print(type(newDict))

@@ -10,6 +10,9 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
 
+
+
+
 ######------FILE HANDLING FUNCTIONS------###### (note: some other file handling functions are in menu.py file since they have program flow.)
 
 
@@ -35,6 +38,8 @@ def retreiveApiKey():
     file = open('keyfile.txt', 'r')
     retreivedKey = file.read()
     return retreivedKey
+
+
 
 
 
@@ -76,7 +81,6 @@ def column_heading_configuration_write():
 name1 = open('namefile.txt', 'r')
 nameHeader = (name1.read())
 
-
 ### Function manually creates a single new product.
 def createProduct(storePageID, productName, productDescription, variantSku, productPrice, quantity):
     dataOutbox = {'type': 'PHYSICAL',
@@ -103,6 +107,10 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
     print(r)
     print(pretty_json_data)
     return
+
+
+
+
 
 ######------GET AND UPDATE FUNCTIONS------######
 
@@ -138,6 +146,10 @@ def ProductUpdate(prodID, name):
     r = requests.post(prodUpURL + prodID, headers = prodUpHeaders, data = jsonNameChange)
     json_var = r.json
     return print(r, json_var)
+
+
+
+
 
 ######------PAGES FUNCTIONS------######
 

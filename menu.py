@@ -1,5 +1,9 @@
 import createProducts as cp
 
+
+
+
+
 ######------PROGRAM FLOW FUNCTIONS------######
 
 
@@ -68,7 +72,8 @@ def productMenu():
         choice = input('Would you like to create one, or multiple products? \n'
                     '1 - one product \n'
                     '2 - multiple products \n'
-                    '3 - back \n')
+                    '3 - back \n'
+                    '\n')
         if choice == '1':
             name = input('enter the product name \n')
             description = input('enter the product description \n')
@@ -82,8 +87,20 @@ def productMenu():
                 cp.createProduct(str(pageSelect()), name, description, sku, price, quantity)
                 break
         elif choice == '2':
-            input('Please press enter to select file containing properly formatted inventory. \n'
+            input('Please press enter to select file containing properly formatted inventory, \n'
+                  'then navigate back to this window.'
                   '(See inventory formatting guidelines for more info) \n')
             cp.createAllProducts(cp.openFile(), str(pageSelect()))
         elif choice == '3':
             break
+### checks internet connection to prevent crash when user isn't connected to the internet.
+
+import urllib.request
+def connect(host='http://google.com'):
+    try:
+        urllib.request.urlopen(host) #Python 3.x
+        return True
+    except:
+        return False
+    
+print('connected' if connect() else 'no internet')
