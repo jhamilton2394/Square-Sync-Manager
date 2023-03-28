@@ -45,12 +45,15 @@ def retreiveApiKey():
 # Uses the createProduct function in a loop.
 # parameter for file needs to be a complete file path like example above, must terminate in .xlsx file.
 # to get the id parameter "pagesList" should be called and the applicable id pasted in.
+# FUTURE DEVELOPMENT: Create a configuration function that gets excel sheet column heading names from user and saves them
+# so the user doesn't need to reformat their inventory column headings. When createall products or createproducts is called
+# it should load the saved column heading names, should be very similar to the apiKey function. 
 def createAllProducts(file, id):
     xls = ExcelFile(file)
     df = xls.parse(xls.sheet_names[0])
     for i in range(len(df)):
         sku = str((df.loc[i].at["SKU"]))
-        name = (df.loc[i].at["Name"])
+        name = (df.loc[i].at[nameHeader])
         itemDesc = (df.loc[i].at["Item Description"])
         price = str((df.loc[i].at["Price"]))
         quant = str((df.loc[i].at["Quantity"]))
@@ -62,6 +65,18 @@ def createAllProducts(file, id):
                      productPrice=price,
                      quantity=quant)
         
+### see comments above createAllProducts
+def column_heading_configuration_write():
+    name_var = input('Enter the column heading for the "name" column as it reads on your inventory excel sheet.')
+    file = open('namefile.txt', 'w')
+    file.write(name_var)
+    print('saved')
+        
+### This setup seems to work when ran. consider wrapping in function.
+name1 = open('namefile.txt', 'r')
+nameHeader = (name1.read())
+
+
 ### Function manually creates a single new product.
 def createProduct(storePageID, productName, productDescription, variantSku, productPrice, quantity):
     dataOutbox = {'type': 'PHYSICAL',
