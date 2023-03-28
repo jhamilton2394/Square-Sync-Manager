@@ -4,20 +4,20 @@ import createProducts as cp
 
 
 ### Settings menu layout
-# def settingsMenu():
-#     while True:
-#         print('settings menu'
-#               '\n')
-#         print('a - Set API key \n'
-#               'b - back')
-#         settingOption = input('Select an option. \n')
-#         if settingOption == 'a':
-#             apiKeyInput()
-#         elif settingOption == 'b':
-#             break
-#         elif settingOption != ['a', 'b']:
-#             print('not a valid selection. \n'
-#                     '\n')
+def settingsMenu():
+    while True:
+        print('settings menu'
+              '\n')
+        print('a - Set API key \n'
+              'b - back')
+        settingOption = input('Select an option. \n')
+        if settingOption == 'a':
+            apiKeyInput()
+        elif settingOption == 'b':
+            break
+        elif settingOption != ['a', 'b']:
+            print('not a valid selection. \n'
+                    '\n')
             
 ### API key input. Saves api key to file called keyfile.txt. Used in settings menu.
 def apiKeyInput():
@@ -74,11 +74,12 @@ def productMenu():
             description = input('enter the product description \n')
             sku = input('enter the product SKU \n')
             price = input('enter the product price \n')
+            quantity = input('enter the product quantity \n')
             choice2 = input('Are you sure you want to create a product with the info you entered? \n'
                             'y - yes \n'
                             'n - no \n')
             if choice2 == 'y':
-                cp.createProduct(str(pageSelect()), name, description, sku, price)
+                cp.createProduct(str(pageSelect()), name, description, sku, price, quantity)
                 break
         elif choice == '2':
             input('Please press enter to select file containing properly formatted inventory. \n'

@@ -53,15 +53,17 @@ def createAllProducts(file, id):
         name = (df.loc[i].at["Name"])
         itemDesc = (df.loc[i].at["Item Description"])
         price = str((df.loc[i].at["Price"]))
+        quant = str((df.loc[i].at["Quantity"]))
         pageID = id
         createProduct(storePageID=pageID,
                         productName=name,
                        productDescription=itemDesc,
                       variantSku=sku,
-                     productPrice=price)
+                     productPrice=price,
+                     quantity=quant)
         
 ### Function manually creates a single new product.
-def createProduct(storePageID, productName, productDescription, variantSku, productPrice):
+def createProduct(storePageID, productName, productDescription, variantSku, productPrice, quantity):
     dataOutbox = {'type': 'PHYSICAL',
               'storePageId': storePageID,
                'name': productName,
@@ -71,8 +73,8 @@ def createProduct(storePageID, productName, productDescription, variantSku, prod
                             'pricing': {'basePrice': {'currency': 'USD',
                                                       'value': productPrice
                                                       }
-                                         }
-                             }
+                                         },
+                            'stock': {'quantity': quantity}}
                             ]
                 }
     jsonDataOutbox = json.dumps(dataOutbox)
@@ -161,6 +163,7 @@ def getNumOfPages():
     # storePages is the 2nd key in dictionary, its value is a list of dictionaries.
     storePages = data['storePages']
     numOfPages = len(storePages)
+    # return numOfPages
     return numOfPages
 
 ### pagesList shows a list of all pages, their id's, and their page number.
