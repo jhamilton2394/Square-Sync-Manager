@@ -5,7 +5,6 @@
 import requests
 import json
 from pandas import ExcelFile
-import keys as k
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 

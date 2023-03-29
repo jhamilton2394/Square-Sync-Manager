@@ -1,21 +1,20 @@
-# SquarespaceCompanion
+# SquarespaceCompanion v0.0.1 is officially released as of March 28th 2023!
 Squarespace Companion is an inventory manager for your Squarespace website. It automates the product upload process to save you time.
 Additional functionalities are in development.
 
-SquarespaceCompanion uses Squarespace's API.
-
-Version 0.0.0 is still in development, but is expected to be usable by the end of March 2023.
+SquarespaceCompanion uses Squarespace's API and requires the Commerce Advanced subscription.
 
 Here is a list of dependencies needed to run Squarespace companion:
 Python 3.11
 openpyxl 3.0.7
 pandas 1.5.3
 requests 2.28.2
-numbers_parser 3.9.5 if using .numbers files on Mac **
 
+After downloading and installing dependecies, then cloning the repository, a small amount of initial setup is required.
+Run the program and navigate to 'info' where you can see instructions on how to configure your column headers. Next,
+navigate to settings to set column header configuration and your api key.
 
-IMPORTANT
-For all functions to work properly you must create a file called "keys.py" with a variable named "apiKey" set equal to your
-Squarespace api key. This file should be included in the .gitignore file to prevent exposing your key.
+Once your initial setup is done you can use your existing inventory excel spreadsheet to create batches of products,
+or you can create individual products.
 
-** (numbers parser requires python-snappy. Follow complete installation instructions in the numbers-parser documentation here > https://pypi.org/project/numbers-parser/)
+NOTE: Excel is the only spreadsheet type supported in v0.0.1. 

@@ -1,3 +1,5 @@
+### Squarespace Companion v0.0.1 released March 28th 2023
+
 ###This is the main file. It houses the main structure of the program. The options menu items will call their respective
 #  functions from the menu file. The menu file functions will call the meat and potatoes functions from the CreateProducts file.
 from time import sleep
