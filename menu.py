@@ -15,10 +15,18 @@ def settingsMenu():
         print('settings menu'
               '\n')
         print('a - Set API key \n'
-              'b - back')
+              'c - Column header configuration \n'
+              'b - back \n')
         settingOption = input('Select an option. \n')
         if settingOption == 'a':
             apiKeyInput()
+        elif settingOption == 'c':
+            settingOption2 = input('1 - Check configuration \n'
+                                   '2 - Set configuration \n')
+            if settingOption2 == '1':
+                column_header_configuration_read()
+            elif settingOption2 == '2':
+                column_header_configuration_write()
         elif settingOption == 'b':
             break
         elif settingOption != ['a', 'b']:
@@ -32,7 +40,7 @@ def infoMenu():
                        '1 - Inventory spreadsheet configuration \n'
                        'b - back \n')
         if choice == '1':
-            pass
+            info_inventory_spreadsheet_configuration()
         elif choice == 'b':
             break
 
@@ -154,6 +162,47 @@ def info_inventory_spreadsheet_configuration():
                        'Navigate to the settings menu and select "column header configuration" \n'
                        'You will be prompted to enter the column header names that correspond \n'
                        'to the above headers EXACTLY as they appear on your spreadsheet. \n'
-                       'It is very important that your input matches exactly, it is case sensitive. \n')
+                       'It is very important that your input matches exactly, it is case sensitive. \n'
+                       'Once they are saved you don\'t need to set them again unless you change \n'
+                       'them on your spreadsheet. \n'
+                       '\n'
+                       'b - back \n')
         if choice == 'b':
             break
+
+### Configures the column headers for product creation. Needs to configure name, sku, item description, price, and qty
+def column_header_configuration_write():
+    name_var = input('Enter the column heading for the "name" column as it reads on your inventory excel sheet. \n')
+    file = open('namefile.txt', 'w')
+    file.write(name_var)
+    sku_var = input('Enter the column heading for the "SKU" column as it reads on your inventory excel sheet. \n')
+    file1 = open('skufile.txt', 'w')
+    file1.write(sku_var)
+    item_desc_var = input('Enter the column heading for the "item description" column as it reads on your inventory excel sheet. \n')
+    file2 = open('item_desc_file.txt', 'w')
+    file2.write(item_desc_var)
+    price_var = input('Enter the column heading for the "price" column as it reads on your inventory excel sheet. \n')
+    file3 = open('pricefile.txt', 'w')
+    file3.write(price_var)
+    qty_var = input('Enter the column heading for the "quantity" column as it reads on your inventory excel sheet. \n')
+    file4 = open('qtyfile.txt', 'w')
+    file4.write(qty_var)
+    print('saved')
+
+### reads and prints column header configurations
+def column_header_configuration_read():
+    name1 = open('namefile.txt', 'r')
+    nameHeader = (name1.read())
+    print('name header set to ', nameHeader, '\n')
+    sku = open('skufile.txt', 'r')
+    skuHeader = (sku.read())
+    print('SKU header set to ', skuHeader, '\n')
+    item_desc = open('item_desc_file.txt', 'r')
+    item_desc_header = (item_desc.read())
+    print('Item description header set to ', item_desc_header, '\n')
+    price = open('pricefile.txt', 'r')
+    priceHeader = (price.read())
+    print('Price header set to ', priceHeader, '\n')
+    qty = open('qtyfile.txt', 'r')
+    qtyHeader = (qty.read())
+    print('Quantity header set to ', qtyHeader, '\n')

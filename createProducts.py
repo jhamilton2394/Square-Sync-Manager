@@ -50,18 +50,32 @@ def retreiveApiKey():
 # Uses the createProduct function in a loop.
 # parameter for file needs to be a complete file path like example above, must terminate in .xlsx file.
 # to get the id parameter "pagesList" should be called and the applicable id pasted in.
-# FUTURE DEVELOPMENT: Create a configuration function that gets excel sheet column heading names from user and saves them
-# so the user doesn't need to reformat their inventory column headings. When createall products or createproducts is called
-# it should load the saved column heading names, should be very similar to the apiKey function. 
+# HERE is the format for loading the column headers:
+# name1 = open('namefile.txt', 'r')
+# nameHeader = (name1.read())
+# Stick all column header files at top of create allproducts funct for use in the loop.
 def createAllProducts(file, id):
+    #opening column header files for input into loop
+    name1 = open('namefile.txt', 'r')
+    nameHeader = (name1.read())
+    sku1 = open('skufile.txt', 'r')
+    skuHeader = (sku1.read())
+    item_desc1 = open('item_desc_file.txt', 'r')
+    item_desc_header = (item_desc1.read())
+    price1 = open('pricefile.txt', 'r')
+    priceHeader = (price1.read())
+    qty1 = open('qtyfile.txt', 'r')
+    qtyHeader = (qty1.read())
+    #open excel doc
     xls = ExcelFile(file)
     df = xls.parse(xls.sheet_names[0])
+    #loop thru doc & create products using column header files.
     for i in range(len(df)):
-        sku = str((df.loc[i].at["SKU"]))
+        sku = str((df.loc[i].at[skuHeader]))
         name = (df.loc[i].at[nameHeader])
-        itemDesc = (df.loc[i].at["Item Description"])
-        price = str((df.loc[i].at["Price"]))
-        quant = str((df.loc[i].at["Quantity"]))
+        itemDesc = (df.loc[i].at[item_desc_header])
+        price = str((df.loc[i].at[priceHeader]))
+        quant = str((df.loc[i].at[qtyHeader]))
         pageID = id
         createProduct(storePageID=pageID,
                         productName=name,
@@ -70,17 +84,6 @@ def createAllProducts(file, id):
                      productPrice=price,
                      quantity=quant)
         
-### see comments above createAllProducts
-def column_heading_configuration_write():
-    name_var = input('Enter the column heading for the "name" column as it reads on your inventory excel sheet.')
-    file = open('namefile.txt', 'w')
-    file.write(name_var)
-    print('saved')
-        
-### This setup seems to work when ran. consider wrapping in function.
-name1 = open('namefile.txt', 'r')
-nameHeader = (name1.read())
-
 ### Function manually creates a single new product.
 def createProduct(storePageID, productName, productDescription, variantSku, productPrice, quantity):
     dataOutbox = {'type': 'PHYSICAL',
