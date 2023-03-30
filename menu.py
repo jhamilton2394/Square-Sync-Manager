@@ -1,8 +1,10 @@
 import createProducts as cp
 import urllib.request
 from time import sleep
-
-
+import os.path
+import os
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
 
 
@@ -12,24 +14,29 @@ from time import sleep
 ### Settings menu layout
 def settingsMenu():
     while True:
-        print('settings menu'
+        print('\n ---settings menu---'
               '\n')
         print('a - Set API key \n'
+              '2 - Select inventory spreadsheet \n'
               'c - Column header configuration \n'
               'b - back \n')
-        settingOption = input('Select an option. \n')
+        settingOption = input('Select an option. \n'
+                              '\n')
         if settingOption == 'a':
             apiKeyInput()
+        elif settingOption == '2':
+            inventory_file_select()
         elif settingOption == 'c':
             settingOption2 = input('1 - Check configuration \n'
-                                   '2 - Set configuration \n')
+                                   '2 - Set configuration \n'
+                                   '3 - back \n')
             if settingOption2 == '1':
                 column_header_configuration_read()
             elif settingOption2 == '2':
                 column_header_configuration_write()
         elif settingOption == 'b':
             break
-        elif settingOption != ['a', 'b']:
+        elif settingOption != ['a', 'b', 'c']:
             print('not a valid selection. \n'
                     '\n')
             
@@ -48,6 +55,7 @@ def infoMenu():
 def productMenu():
     while True:
         while True:
+            #verifies there is an internet connection to prevent exception
             if connect():
                 choice = input('Would you like to create one, or multiple products? \n'
                             '1 - one product \n'
@@ -130,7 +138,6 @@ def pageSelect():
             continue
     return selectedPage
 
-
 ### checks internet connection to prevent crash when user isn't connected to the internet.
 def connect(host='http://google.com'):
     try:
@@ -138,8 +145,6 @@ def connect(host='http://google.com'):
         return True
     except:
         return False
-    
-#print('connected' if connect() else 'no internet')
 
 ### Displays instructions on how to setup Squarespace companion to interface with their spreadsheet
 def info_inventory_spreadsheet_configuration():
@@ -170,7 +175,8 @@ def info_inventory_spreadsheet_configuration():
         if choice == 'b':
             break
 
-### Configures the column headers for product creation. Needs to configure name, sku, item description, price, and qty
+### Configures the column headers for product creation. Needs to configure name, sku, item description, price, and qty.
+#   should probably incorporate a loop to cut down redundant code.
 def column_header_configuration_write():
     name_var = input('Enter the column heading for the "name" column as it reads on your inventory excel sheet. \n')
     file = open('namefile.txt', 'w')
@@ -189,20 +195,37 @@ def column_header_configuration_write():
     file4.write(qty_var)
     print('saved')
 
-### reads and prints column header configurations
+### reads and prints column header configurations. Has for loop for failsafe if config file doesnt exist.
 def column_header_configuration_read():
-    name1 = open('namefile.txt', 'r')
-    nameHeader = (name1.read())
-    print('name header set to ', nameHeader, '\n')
-    sku = open('skufile.txt', 'r')
-    skuHeader = (sku.read())
-    print('SKU header set to ', skuHeader, '\n')
-    item_desc = open('item_desc_file.txt', 'r')
-    item_desc_header = (item_desc.read())
-    print('Item description header set to ', item_desc_header, '\n')
-    price = open('pricefile.txt', 'r')
-    priceHeader = (price.read())
-    print('Price header set to ', priceHeader, '\n')
-    qty = open('qtyfile.txt', 'r')
-    qtyHeader = (qty.read())
-    print('Quantity header set to ', qtyHeader, '\n')
+    file_list = ['namefile.txt',
+                     'skufile.txt',
+                     'item_desc_file.txt',
+                     'pricefile.txt',
+                     'qtyfile.txt'
+                     ]
+    for i in file_list:
+        if check_file(i) == True:
+            file = open(i, 'r')
+            Header = (file.read())
+            print(i, 'is set to', Header)
+
+### Checks to see if a file exists. should be called before attempting to read a file to prevent crash.
+def check_file(file):
+    file_var = os.path.isfile(file)
+    if file_var == False:
+        print(file, 'does not exist. Column header is not configured. \n')
+    return file_var
+
+### from the settings menu, saves path to inventory excel sheet
+def inventory_file_select():
+    Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+    while True:
+        filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+        if filename.endswith('.xlsx'):
+            break
+        else:
+            print('You must select an excel file. Navigate back to browser and select an excel file. \n')
+    file = open('inventory_path.txt', 'w')
+    file.write(filename)
+    print('Saved \n')
+    input('b - back \n')

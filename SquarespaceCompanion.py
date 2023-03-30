@@ -22,12 +22,12 @@ sleep(1)
 
 #Start the menu loop
 while True:
-    print('Main menu \n')
+    print('\n Main menu \n')
     print('c - Create Products \n'
           's - Settings \n'
           'i - Info \n'
           'x - Exit \n')
-    selection = input('Select an option. \n'
+    selection = input('\n Select an option. \n'
                       '\n')
     if selection == 'c':
         m.productMenu()
