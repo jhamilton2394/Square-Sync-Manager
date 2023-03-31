@@ -7,8 +7,6 @@ import menu as m
 
 
 
-
-
 ######------MAIN STRUCTURE------######
 
 
@@ -17,27 +15,24 @@ print('Welcome to Squarespace Companion!\n'
       '\n'
       'If you have not already, please configure your settings\n'
       'under the settings option in the main menu. \n')
-
 sleep(1)
-
-#Start the menu loop
 while True:
     print('\n Main menu \n')
-    print('c - Create Products \n'
-          's - Settings \n'
-          'i - Info \n'
+    print('1 - Create Products \n'
+          '2 - Settings \n'
+          '3 - Info \n'
           'x - Exit \n')
     selection = input('\n Select an option. \n'
                       '\n')
-    if selection == 'c':
+    if selection == '1':
         m.productMenu()
         print('\n')
-    elif selection == 's':
+    elif selection == '2':
         m.settingsMenu()
-    elif selection == 'i':
+    elif selection == '3':
         m.infoMenu()
     elif selection == 'x':
         break
-    elif selection != ['c', 's', 'i', 'x']:
+    elif selection != ['1', '2', '3', 'x']:
         print('not a valid selection'
               '\n')

@@ -16,27 +16,29 @@ def settingsMenu():
     while True:
         print('\n ---settings menu---'
               '\n')
-        print('a - Set API key \n'
-              '2 - Select inventory spreadsheet \n'
-              'c - Column header configuration \n'
+        print('1 - Set API key \n'
+              '2 - Select inventory file \n'
+              '3 - Column header configuration \n'
               'b - back \n')
         settingOption = input('Select an option. \n'
                               '\n')
-        if settingOption == 'a':
+        if settingOption == '1':
             apiKeyInput()
         elif settingOption == '2':
             inventory_file_select()
-        elif settingOption == 'c':
+        elif settingOption == '3':
             settingOption2 = input('1 - Check configuration \n'
                                    '2 - Set configuration \n'
-                                   '3 - back \n')
+                                   'b - back \n')
             if settingOption2 == '1':
                 column_header_configuration_read()
             elif settingOption2 == '2':
                 column_header_configuration_write()
+            elif settingOption2 != ['1', '2', 'b']:
+                print('not a valid selection \n')
         elif settingOption == 'b':
             break
-        elif settingOption != ['a', 'b', 'c']:
+        elif settingOption != ['1', '2', '3', 'b']:
             print('not a valid selection. \n'
                     '\n')
             
@@ -60,7 +62,7 @@ def productMenu():
                 choice = input('Would you like to create one, or multiple products? \n'
                             '1 - one product \n'
                             '2 - multiple products \n'
-                            '3 - back \n'
+                            'b - back \n'
                             '\n')
                 if choice == '1':
                     name = input('enter the product name \n')
@@ -72,15 +74,20 @@ def productMenu():
                                     'y - yes \n'
                                     'n - no \n')
                     if choice2 == 'y':
+                        
                         cp.createProduct(str(pageSelect()), name, description, sku, price, quantity)
                         break
                 elif choice == '2':
-                    input('Please press enter to select file containing properly formatted inventory, \n'
-                        'then navigate back to this window.'
-                        '(See inventory formatting guidelines for more info) \n')
-                    cp.createAllProducts(cp.openFile(), str(pageSelect()))
-                elif choice == '3':
+                    if check_inventory_file('inventory_path.txt') == True:
+                        inventory_file = open('inventory_path.txt', 'r')
+                        opened_file = inventory_file.read()
+                        cp.createAllProducts(str(opened_file), str(pageSelect()))
+                    else:
+                        break
+                elif choice == 'b':
                     break
+                elif choice != ['1', '2', 'b']:
+                    print('not a valid selection \n')
             else:
                 print('You are not connected to the internet. \n'
                       'Please connect and try again. \n')
@@ -216,8 +223,17 @@ def check_file(file):
         print(file, 'does not exist. Column header is not configured. \n')
     return file_var
 
+def check_inventory_file(file):
+    file_var = os.path.isfile(file)
+    if file_var == False:
+        print('The inventory file has not been configured. Please go to settings to do so. \n')
+    return file_var
+
 ### from the settings menu, saves path to inventory excel sheet
 def inventory_file_select():
+    input('Please select your inventory file. NOTE: excel is currently the only file type supported. \n'
+          'Once you choose a file navigate back to this window (You will not automatically be redirected) \n'
+          'Please press enter to proceed to file selection. \n')
     Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
     while True:
         filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
@@ -227,5 +243,6 @@ def inventory_file_select():
             print('You must select an excel file. Navigate back to browser and select an excel file. \n')
     file = open('inventory_path.txt', 'w')
     file.write(filename)
-    print('Saved \n')
+    print('Your file selection has been saved. You do not need to set it again unless you wish to \n'
+          'use a different file in the future. \n')
     input('b - back \n')

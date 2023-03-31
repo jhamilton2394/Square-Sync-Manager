@@ -135,7 +135,7 @@ def getProducts():
     r = requests.get(prodURL, headers=prodHeaders)
     json_data = r.json()
     pretty_json_data = json.dumps(json_data, indent=3)
-    return print(r, pretty_json_data)
+    return pretty_json_data
 
 ### Updates a product name only, can be changed if needed.
 def ProductUpdate(prodID, name):
@@ -149,7 +149,33 @@ def ProductUpdate(prodID, name):
     json_var = r.json
     return print(r, json_var)
 
+### used the below code to write a products request to a file
+# productFile = open('product_file', 'w')
+# newFile = productFile.write(getProducts())
 
+
+def prod_list_test():
+### opens above mentioned file, converts it to a dictionary,
+    open_product_data = open('product_file', 'r')
+    raw_data = open_product_data.read()
+    prod_main_dict = json.loads(raw_data)
+    prod_list = prod_main_dict['products']
+    for i in prod_list:
+        for key in i.keys():
+            print(key)
+
+prod_list_test()
+        # first_prod_name = first_prod_in_list['name']
+        # print(first_prod_name)
+
+
+# for i in first_key:
+#     first_element = first_key[i]
+#     first_name = first_element['name']
+#     print(first_name)
+# first_element = first_key[0]
+# first_prod_name = first_element['name']
+# print(first_prod_name)
 
 
 
