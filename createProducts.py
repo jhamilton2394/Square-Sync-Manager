@@ -65,9 +65,12 @@ def createAllProducts(file, id):
     priceHeader = (price1.read())
     qty1 = open('qtyfile.txt', 'r')
     qtyHeader = (qty1.read())
+    del1 = open('delfile.txt', 'r')
+    delHeader = (del1.read())
     #open excel doc
     xls = ExcelFile(file)
     df = xls.parse(xls.sheet_names[0])
+    product_list = site_master_prod_list()
     #loop thru doc & create products using column header files.
     for i in range(len(df)):
         sku = str((df.loc[i].at[skuHeader]))
@@ -75,13 +78,19 @@ def createAllProducts(file, id):
         itemDesc = (df.loc[i].at[item_desc_header])
         price = str((df.loc[i].at[priceHeader]))
         quant = str((df.loc[i].at[qtyHeader]))
+        del2 = (df.loc[i].at[delHeader])
         pageID = id
-        createProduct(storePageID=pageID,
-                        productName=name,
-                       productDescription=itemDesc,
-                      variantSku=sku,
-                     productPrice=price,
-                     quantity=quant)
+        if name in product_list:
+            print(name, 'already on site, skipping...\n')
+        elif del2 == 'x':
+            print(name, 'previously deleted from site by user, skipping...')
+        else:
+            createProduct(storePageID=pageID,
+                            productName=name,
+                        productDescription=itemDesc,
+                        variantSku=sku,
+                        productPrice=price,
+                        quantity=quant)
         
 ### Function manually creates a single new product.
 def createProduct(storePageID, productName, productDescription, variantSku, productPrice, quantity):
@@ -127,15 +136,6 @@ def getInventory():
     prettyData = json.dumps(r.json(), indent=3)
     print(r, prettyData)
 
-### Defining out function getProducts, which retreives one page of products
-def getProducts():
-    prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-    prodHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
-                   'User-Agent': 'APIAPP1.0'}
-    r = requests.get(prodURL, headers=prodHeaders)
-    json_data = r.json()
-    pretty_json_data = json.dumps(json_data, indent=3)
-    return pretty_json_data
 
 ### Updates a product name only, can be changed if needed.
 def ProductUpdate(prodID, name):
@@ -151,22 +151,49 @@ def ProductUpdate(prodID, name):
 
 ### used the below code to write a products request to a file
 # productFile = open('product_file', 'w')
-# newFile = productFile.write(getProducts())
+# newFile = productFile.write(prod_list_test.getProducts())
 
-
-def prod_list_test():
-### opens above mentioned file, converts it to a dictionary,
-    open_product_data = open('product_file', 'r')
-    raw_data = open_product_data.read()
+### Calls get products to retreive product data, converts it to a dictionary, then extrapolates each name from each product
+#   and puts it in a list of names. If there are multiple pages of products, it will loop through all
+#   pages and add those products to the list as well
+def site_master_prod_list():
+    #Initial product query
+    actual_prod_list = []
+    ###Commenting out 2 lines below, which just opens the data file. The file was used for testing purposes.
+    # open_product_data = open('product_file', 'r')
+    # raw_data = open_product_data.read()
+    raw_data = getProducts()
     prod_main_dict = json.loads(raw_data)
     prod_list = prod_main_dict['products']
+    pagination = prod_main_dict['pagination']
+    cursor = pagination['nextPageCursor']
     for i in prod_list:
-        for key in i.keys():
-            print(key)
+        actual_prod_list.append(i['name'])
+    ###Loops through all pages if they exist.
+    while pagination['hasNextPage'] == True:
+        raw_data = getProducts(cursor)
+        prod_main_dict = json.loads(raw_data)
+        prod_list = prod_main_dict['products']
+        pagination = prod_main_dict['pagination']
+        cursor = pagination['nextPageCursor']
+        for i in prod_list:
+            actual_prod_list.append(i['name'])
+    return actual_prod_list
+        
+        
+        
 
-prod_list_test()
-        # first_prod_name = first_prod_in_list['name']
-        # print(first_prod_name)
+
+
+### Defining out function getProducts, which retreives one page of products
+def getProducts(cursor=''):
+    prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
+    prodHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
+                'User-Agent': 'APIAPP1.0'}
+    r = requests.get(prodURL, headers=prodHeaders)
+    json_data = r.json()
+    pretty_json_data = json.dumps(json_data, indent=3)
+    return pretty_json_data
 
 
 # for i in first_key:

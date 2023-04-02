@@ -200,6 +200,9 @@ def column_header_configuration_write():
     qty_var = input('Enter the column heading for the "quantity" column as it reads on your inventory excel sheet. \n')
     file4 = open('qtyfile.txt', 'w')
     file4.write(qty_var)
+    del_var = input('Enter the column heading for the "Deleted from site" column as it reads on your inventory excel sheet. \n')
+    file5 = open('delfile.txt', 'w')
+    file5.write(del_var)
     print('saved')
 
 ### reads and prints column header configurations. Has for loop for failsafe if config file doesnt exist.
@@ -208,7 +211,8 @@ def column_header_configuration_read():
                      'skufile.txt',
                      'item_desc_file.txt',
                      'pricefile.txt',
-                     'qtyfile.txt'
+                     'qtyfile.txt',
+                     'delfile.txt'
                      ]
     for i in file_list:
         if check_file(i) == True:

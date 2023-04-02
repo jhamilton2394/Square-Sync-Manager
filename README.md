@@ -25,4 +25,14 @@ will need to be setup in the 'settings' menu before creating any products from y
 Once your initial setup is done you can use your existing inventory excel spreadsheet to create batches of products,
 or you can create individual products.
 
-NOTE: Excel is the only spreadsheet type supported in v0.0.1. 
+v0.0.1 limitations:
+Running create all products from the product menu will do just that, create ALL products regardless of if they already
+exist on the squarespace site. This means that after running product creation more than once you will get several duplicate
+products starting to pile up.
+
+The current work around for this is to make a copy of your inventory spreadsheet and set it as your inventory sheet in settings,
+then clear it out, and paste in only the new products from your main working inventory sheet. Doing it this way will ensure
+that no duplicates are created.
+
+A fix for this limitation is currently being worked on. Once implemented, running create all products will only create the
+products that are not already on the site.
