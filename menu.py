@@ -14,13 +14,13 @@ from tkinter.filedialog import askopenfilename
 ### Settings menu layout
 def settingsMenu():
     while True:
-        print('\n ---settings menu---'
+        print('\n ---Settings menu---'
               '\n')
         print('1 - Set API key \n'
               '2 - Select inventory file \n'
               '3 - Column header configuration \n'
               'b - back \n')
-        settingOption = input('Select an option. \n'
+        settingOption = input(' \n Select an option. \n'
                               '\n')
         if settingOption == '1':
             apiKeyInput()
@@ -182,7 +182,7 @@ def info_inventory_spreadsheet_configuration():
         if choice == 'b':
             break
 
-### Configures the column headers for product creation. Needs to configure name, sku, item description, price, and qty.
+### Configures the column headers for product creation. Needs to configure name, sku, item description, price, qty, and 'deleted from site'.
 #   should probably incorporate a loop to cut down redundant code.
 def column_header_configuration_write():
     name_var = input('Enter the column heading for the "name" column as it reads on your inventory excel sheet. \n')

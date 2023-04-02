@@ -32,7 +32,7 @@ def openFile():
     # from tkinter import Tk
     # from tkinter.filedialog import askopenfilename
 
-    ### function grabs the api key from the keyfile.txt file for use in requests
+### function grabs the api key from the keyfile.txt file for use in requests
 def retreiveApiKey():
     file = open('keyfile.txt', 'r')
     retreivedKey = file.read()
@@ -153,7 +153,7 @@ def ProductUpdate(prodID, name):
 # productFile = open('product_file', 'w')
 # newFile = productFile.write(prod_list_test.getProducts())
 
-### Calls get products to retreive product data, converts it to a dictionary, then extrapolates each name from each product
+### Calls 'get products' to retreive product data, converts it to a dictionary, then extrapolates each name from each product
 #   and puts it in a list of names. If there are multiple pages of products, it will loop through all
 #   pages and add those products to the list as well
 def site_master_prod_list():
@@ -180,12 +180,7 @@ def site_master_prod_list():
             actual_prod_list.append(i['name'])
     return actual_prod_list
         
-        
-        
-
-
-
-### Defining out function getProducts, which retreives one page of products
+### Defining out function getProducts, which retreives one page of products. Optionally takes a cursor.
 def getProducts(cursor=''):
     prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
     prodHeaders = {'Authorization': 'Bearer ' + retreiveApiKey(),
@@ -196,13 +191,6 @@ def getProducts(cursor=''):
     return pretty_json_data
 
 
-# for i in first_key:
-#     first_element = first_key[i]
-#     first_name = first_element['name']
-#     print(first_name)
-# first_element = first_key[0]
-# first_prod_name = first_element['name']
-# print(first_prod_name)
 
 
 

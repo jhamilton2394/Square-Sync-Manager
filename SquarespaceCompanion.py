@@ -17,7 +17,7 @@ print('Welcome to Squarespace Companion!\n'
       'under the settings option in the main menu. \n')
 sleep(1)
 while True:
-    print('\n Main menu \n')
+    print('\n ---Main menu--- \n')
     print('1 - Create Products \n'
           '2 - Settings \n'
           '3 - Info \n'
