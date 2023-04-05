@@ -1,4 +1,6 @@
-# SquarespaceCompanion v0.0.1 is officially released as of March 28th 2023!
+#eCommApp will work with Weebly 
+
+SquarespaceCompanion v0.0.1 is officially released as of March 28th 2023!
 Squarespace Companion is an inventory manager for your Squarespace website. It automates the product upload process to save you time.
 Additional functionalities are in development.
 
