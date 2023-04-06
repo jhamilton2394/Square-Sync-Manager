@@ -1,4 +1,4 @@
-# SquarespaceCompanion v0.0.1 is officially released as of March 28th 2023!
+# SquarespaceCompanion v0.0.3 is officially released as of April 5th 2023!
 Squarespace Companion is an inventory manager for your Squarespace website. It automates the product upload process to save you time.
 Additional functionalities are in development.
 
@@ -10,7 +10,7 @@ openpyxl 3.0.7
 pandas 1.5.3
 requests 2.28.2
 
-NOTE: Excel is the only spreadsheet type supported in v0.0.1.
+NOTE: Excel is the only spreadsheet type supported in v0.0.1 through v0.0.3 (current version)
 
 HOW IT WORKS:
 Instead of creating products one at a time on your Squarespace website, SSC lets you import directly
@@ -19,20 +19,14 @@ from excel. This is especially useful if you use excel to track inventory.
 After downloading and installing dependecies, then cloning the repository, a small amount of initial setup is required.
 SSC needs a few pieces of information about your excel sheet in order to work, this information is referred to as the column
 headers. SSC adapts to your spreadsheet so you don't have to change the layout for SSC to work properly. Simply tell it the 
-names of the columns used for product name, sku, item description, price, and quantity. The column headers and the API key
-will need to be setup in the 'settings' menu before creating any products from your inventory sheet.
+names of the columns used for product name, sku, item description, price, and quantity (a 'Deleted' column was added in v0.0.3. See update notes).
+The column headers and the API key will need to be setup in the 'settings' menu before creating any products from your inventory sheet.
 
 Once your initial setup is done you can use your existing inventory excel spreadsheet to create batches of products,
 or you can create individual products.
 
-v0.0.1 limitations:
-Running create all products from the product menu will do just that, create ALL products regardless of if they already
-exist on the squarespace site. This means that after running product creation more than once you will get several duplicate
-products starting to pile up.
-
-The current work around for this is to make a copy of your inventory spreadsheet and set it as your inventory sheet in settings,
-then clear it out, and paste in only the new products from your main working inventory sheet. Doing it this way will ensure
-that no duplicates are created.
-
-A fix for this limitation is currently being worked on. Once implemented, running create all products will only create the
-products that are not already on the site.
+v0.0.3 fixes the duplicate product problem when creating new products. When creating a batch of products from your working inventory,
+SSC will now compare site inventory against your working inventory, and only create the products that are not already on the site.
+For products that have been deleted from the site that you do not wish to have created again, you must create a new column in your
+spreadsheet, name it 'Deleted' or something similar, then configure your column header in settings. Any product with an 'x' in this
+column will be 'marked as deleted by user' and will not be created.
