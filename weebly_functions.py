@@ -2,6 +2,8 @@
 import requests
 import json
 from pandas import ExcelFile
+import weeblyKeys as wk
+
 
 ### first product query seems to work. returns nothing but a 200 so far, need to add more products.
 def weeblyProductQuery(prodID):
@@ -9,7 +11,7 @@ def weeblyProductQuery(prodID):
     endURL = '?location_ids='
     completeURL = (baseURL + str(prodID) + endURL)
     prodHeaders = {'Square-Version': '2023-03-15',
-                'Authorization': 'Bearer EAAAF_9v3aCUH9u4OGZk5EGEsLngPKx295Y3skQWfIP2xpIleS6kt3_oKfnctwy5',
+                'Authorization': 'Bearer ' + wk.apiKey,
                'Content-Type': 'application/json'}
     r = requests.get(completeURL, headers=prodHeaders)
     json_data = r.json()
