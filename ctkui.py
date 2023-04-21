@@ -15,12 +15,36 @@ class ToplevelWindow(customtkinter.CTkToplevel):
 class ToplevelWindow_1(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.geometry("600x500")
-        self.title("Product Creation")
+        self.geometry(f"{1100}x{580}")
+        self.title("Settings")
 
-        #add widgets here
-        self.label = customtkinter.CTkLabel(self, text="ToplevelWindow")
-        self.label.pack(padx=20, pady=20)
+        # create tabview
+        self.tabview = customtkinter.CTkTabview(self, width=1000, height=550)
+        self.tabview.pack()
+        self.tabview.add("Column Headers")
+        self.tabview.add("Tab 2")
+        self.tabview.add("Tab 3")
+        self.tabview.tab("Column Headers").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
+
+        self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("Column Headers"), dynamic_resizing=False,
+                                                        values=["Value 1", "Value 2", "Value Long Long Long"])
+        self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.combobox_1 = customtkinter.CTkComboBox(self.tabview.tab("Column Headers"),
+                                                    values=["Value 1", "Value 2", "Value Long....."])
+        self.combobox_1.grid(row=1, column=0, padx=20, pady=(10, 10))
+        self.string_input_button = customtkinter.CTkButton(self.tabview.tab("CTkTabview"), text="Open CTkInputDialog",
+                                                           command=self.open_input_dialog_event)
+        self.string_input_button.grid(row=2, column=0, padx=20, pady=(10, 10))
+        self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Tab 2"), text="CTkLabel on Tab 2")
+        self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
+
+class MyFrame(customtkinter.CTkFrame):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+
+        # add widgets onto the frame...
+        self.label.grid(row=0, column=0, padx=20)
 
 
     #add methods here
@@ -45,7 +69,7 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="EcommApp", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
-        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event)
+        self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, text='Settings', command=self.open_toplevel_1)
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=10)
         self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame, command=self.sidebar_button_event)
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
@@ -124,7 +148,7 @@ class App(customtkinter.CTk):
             self.toplevel_window.focus()  # if window exists focus it
 
     def open_toplevel_1(self):
-        if self.toplevel_window_1 is None or not self.toplevel_window.winfo_exists():
+        if self.toplevel_window_1 is None or not self.toplevel_window_1.winfo_exists():
             self.toplevel_window_1 = ToplevelWindow_1(self)  # create window if its None or destroyed
         else:
             self.toplevel_window_1.focus()  # if window exists focus it

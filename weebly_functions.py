@@ -3,6 +3,7 @@ import requests
 import json
 from pandas import ExcelFile
 import weeblyKeys as wk
+import uuid
 
 
 ### first product query seems to work. returns nothing but a 200 so far, need to add more products.
@@ -20,26 +21,41 @@ def weeblyProductQuery(prodID):
     print(pretty_json_data)
     return
     
-weeblyProductQuery(666)
+def idempotencyKey():
+    key = uuid.uuid4()
+    return key
+
 
 ### Using squarespace product creation as framework, we are going to build the weebly product creation.
-def weeblyCreateProduct(storePageID, productName, productDescription, variantSku, productPrice, quantity):
-    dataOutbox = {"idempotency_key": "789ff020-f723-43a9-b4b5-43b5dc1fa3dc",
-                    "batches": [{"objects": [{"type": "ITEM",
-                                                "id": "#Tea",
-                                                "present_at_all_locations": True,
-                                                "item_data": {"name": "Tea",
-                                                                "description": "Hot Leaf Juice",
-                                                                "category_id": "#Beverages",
-                                                                "tax_ids": ["#SalesTax"]
-                                                             }
-                                            }]
-                                }]
-                }
+#   Adapted URL and headers, as well as a basic product info in the dataoutbox.
+def weeblyCreateProduct(sku, name, description, price, qty):
+    id = name.replace(" ", "")
+    id2 = id + '2'
+    dataOutbox = {"idempotency_key": str(idempotencyKey()),
+                    "object": {"id": "#" + id,
+                                "type": "ITEM",
+                                "item_data": {"name": name,
+                                                "description": description,
+                                                "variations": [{"id": "#" + id2,
+                                                                "type": "ITEM_VARIATION",
+                                                                "item_variation_data": {
+                                                                                        "price_money": {
+                                                                                                        "amount": price,
+                                                                                                        "currency": "USD"
+                                                                                                        },
+                                                                                                        "pricing_type": "FIXED_PRICING",
+                                                                                                        "sku": sku
+                                                                                        },
+                                                                "product_set_data": {"quantity_exact": qty}
+                                                        }]
+                                                }
+                                 }
+                 }
+    
     jsonDataOutbox = json.dumps(dataOutbox)
-    prodURL = 'https://connect.squareup.com/v2/catalog/batch-upsert'
-    prodHeaders = {'Square-Version': '2023-03-15',
-                'Authorization': 'Bearer ' + retreiveApiKey(),
+    prodURL = 'https://connect.squareup.com/v2/catalog/object'
+    prodHeaders = {'Square-Version': '2023-04-19',
+                'Authorization': 'Bearer ' + wk.apiKey,
                'Content-Type': 'application/json'}
     r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
     json_data = r.json()
@@ -48,14 +64,15 @@ def weeblyCreateProduct(storePageID, productName, productDescription, variantSku
     print(pretty_json_data)
     return
 
-
+weeblyCreateProduct(sku='1231', name='cafe mocha', description='delicious chocolaty coffee', price=400, qty=17)
 
 def weeblyCreateAllProducts(file, id):
     #opening column header files for input into loop
-    name1 = open('namefile.txt', 'r')
-    nameHeader = (name1.read())
     sku1 = open('skufile.txt', 'r')
     skuHeader = (sku1.read())
+    name1 = open('namefile.txt', 'r')
+    nameHeader = (name1.read())
+    
     item_desc1 = open('item_desc_file.txt', 'r')
     item_desc_header = (item_desc1.read())
     price1 = open('pricefile.txt', 'r')
@@ -135,3 +152,156 @@ curl https://connect.squareup.com/v2/catalog/batch-upsert \
 #         for i in prod_list:
 #             actual_prod_list.append(i['name'])
 #     return actual_prod_list
+
+
+
+#first error
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "MISSING_REQUIRED_PARAMETER",
+         "detail": "Field must be set",
+         "field": "object"
+      }
+   ]
+}
+
+#second error
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "EXPECTED_OBJECT",
+         "detail": "Expected an object value.",
+         "field": "object"
+      }
+   ]
+}
+
+#third error, finally getting somewhre
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "BAD_REQUEST",
+         "detail": "Item with name Tea and token #Tea must have at least one variation."
+      }
+   ]
+}
+#added variation
+
+#fourth error
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "EXPECTED_ARRAY",
+         "detail": "Expected an array.",
+         "field": "object.item_data.variations"
+      }
+   ]
+}
+#had deleted the list brackets immediately after "variations", re-added them.
+
+#fifth error
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "INVALID_VALUE",
+         "detail": "Object `#Tea` of type ITEM references unknown object #Beverages in attr SQ_COGS_MCID"
+      }
+   ]
+}
+
+#deleted the whole #beverages line
+
+#6th error
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "IDEMPOTENCY_KEY_REUSED",
+         "detail": "The idempotency key can only be retried with the same request data.",
+         "field": "idempotency_key"
+      }
+   ]
+}
+
+#changed last two digits of key
+
+#7th error
+#<Response [400]>
+{
+   "errors": [
+      {
+         "category": "INVALID_REQUEST_ERROR",
+         "code": "INVALID_VALUE",
+         "detail": "Object `#42RCVEOEG6Q4QQRCGB5KOU63` of type ITEM_FEE_MEMBERSHIP references unknown object #SalesTax in attr SQ_COGS_FID"
+      }
+   ]
+}
+
+#deleted out sales tax line
+
+#8th try is the charm!! Success!
+#<Response [200]>
+# {
+#    "catalog_object": {
+#       "type": "ITEM",
+#       "id": "7FVH436DLPFC42WGIG6VFT7Q",
+#       "updated_at": "2023-04-21T01:55:16.473Z",
+#       "created_at": "2023-04-21T01:55:16.473Z",
+#       "version": 1682042116473,
+#       "is_deleted": false,
+#       "present_at_all_locations": true,
+#       "item_data": {
+#          "name": "Tea",
+#          "description": "Hot Leaf Juice",
+#          "is_taxable": true,
+#          "variations": [
+#             {
+#                "type": "ITEM_VARIATION",
+#                "id": "V4ZAX2PGNRWYPHBVF4NQHTZO",
+#                "updated_at": "2023-04-21T01:55:16.473Z",
+#                "created_at": "2023-04-21T01:55:16.473Z",
+#                "version": 1682042116473,
+#                "is_deleted": false,
+#                "present_at_all_locations": true,
+#                "item_variation_data": {
+#                   "item_id": "7FVH436DLPFC42WGIG6VFT7Q",
+#                   "name": "Green Tea",
+#                   "ordinal": 0,
+#                   "pricing_type": "FIXED_PRICING",
+#                   "price_money": {
+#                      "amount": 150,
+#                      "currency": "USD"
+#                   },
+#                   "sellable": true,
+#                   "stockable": true
+#                }
+#             }
+#          ],
+#          "product_type": "REGULAR",
+#          "description_html": "<p>Hot Leaf Juice</p>",
+#          "description_plaintext": "Hot Leaf Juice"
+#       }
+#    },
+#    "id_mappings": [
+#       {
+#          "client_object_id": "#Tea",
+#          "object_id": "7FVH436DLPFC42WGIG6VFT7Q"
+#       },
+#       {
+#          "client_object_id": "#teaapparently",
+#          "object_id": "V4ZAX2PGNRWYPHBVF4NQHTZO"
+#       }
+#    ]
+# }
