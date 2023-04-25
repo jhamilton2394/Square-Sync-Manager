@@ -1,5 +1,7 @@
 import tkinter as tk
 import customtkinter
+import createProducts as cp
+import weebly_functions as wf
 
 ### These top level menu classes are the various main menu options that can be selected
 #   from the main window.
@@ -105,6 +107,12 @@ class App(customtkinter.CTk):
         self.tabview.add("Tab 3")
         self.tabview.tab("CTkTabview").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
         self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Tab 3").grid_columnconfigure(0, weight=1)
+
+        self.test_entry = customtkinter.CTkEntry(self.tabview.tab("Tab 3"), placeholder_text="TEST",)
+        self.test_entry.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.test_button = customtkinter.CTkButton(self.tabview.tab("Tab 3"), command=cp.getInventory)
+        self.test_button.grid(row=1, column=0, padx=20, pady=(20, 10))
 
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("CTkTabview"), dynamic_resizing=False,
                                                         values=["Value 1", "Value 2", "Value Long Long Long"])

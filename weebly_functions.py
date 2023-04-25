@@ -305,3 +305,7 @@ curl https://connect.squareup.com/v2/catalog/batch-upsert \
 #       }
 #    ]
 # }
+
+def weebly_namecolumn_header_configuration_write(name_var):
+    file = open('namefile.txt', 'w')
+    file.write(name_var)
