@@ -64,8 +64,6 @@ def weeblyCreateProduct(sku, name, description, price, qty):
     print(pretty_json_data)
     return
 
-weeblyCreateProduct(sku='1231', name='cafe mocha', description='delicious chocolaty coffee', price=400, qty=17)
-
 def weeblyCreateAllProducts(file, id):
     #opening column header files for input into loop
     sku1 = open('skufile.txt', 'r')
@@ -306,6 +304,30 @@ curl https://connect.squareup.com/v2/catalog/batch-upsert \
 #    ]
 # }
 
-def weebly_namecolumn_header_configuration_write(name_var):
+class config_column_headers:
+   def __init__(self) -> None:
+       pass
+   
+   def write_name(name_var):
     file = open('namefile.txt', 'w')
     file.write(name_var)
+
+   def write_sku(sku_var):
+    file1 = open('skufile.txt', 'w')
+    file1.write(sku_var)
+
+   def write_item_desc(item_desc_var):
+    file2 = open('item_desc_file.txt', 'w')
+    file2.write(item_desc_var)
+
+   def write_price(price_var):
+    file3 = open('pricefile.txt', 'w')
+    file3.write(price_var)
+
+   def write_qty(qty_var):
+    file4 = open('qtyfile.txt', 'w')
+    file4.write(qty_var)
+
+   def write_del(del_var):
+    file5 = open('delfile.txt', 'w')
+    file5.write(del_var)

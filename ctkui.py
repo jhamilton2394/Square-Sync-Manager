@@ -20,27 +20,65 @@ class ToplevelWindow_1(customtkinter.CTkToplevel):
         self.geometry(f"{1100}x{580}")
         self.title("Settings")
 
+        #Header instruction text
+        instructions = ('In order for Squarespace Companion to interface with your inventory spreadsheet \n'
+                       'it needs to know the column headers that are used. For example; if your items are \n'
+                       'listed in rows, you probably have data such as "name", "description", and "price", \n'
+                       'set as the column headers. \n'
+                       '\n'
+                       'The column headers that are required to be configured are: \n'
+                       'name \n'
+                       'SKU \n'
+                       'item description \n'
+                       'price \n'
+                       'quantity \n'
+                       '\n'
+                       'If your inventory spreadsheet does not have columns with this info then you must \n'
+                       'create them. This is the minimum info needed to create new products. \n'
+                       'How to set the configuration: \n'
+                       'Navigate to the settings menu and select "column header configuration" \n'
+                       'You will be prompted to enter the column header names that correspond \n'
+                       'to the above headers EXACTLY as they appear on your spreadsheet. \n'
+                       'It is very important that your input matches exactly, it is case sensitive. \n'
+                       'Once they are saved you don\'t need to set them again unless you change \n'
+                       'them on your spreadsheet. \n'
+                       '\n')
+
+
         # create tabview
         self.tabview = customtkinter.CTkTabview(self, width=1000, height=550)
         self.tabview.pack()
         self.tabview.add("Column Headers")
         self.tabview.add("Tab 2")
         self.tabview.add("Tab 3")
-        self.tabview.tab("Column Headers").grid_columnconfigure(0, weight=1)  # configure grid of individual tabs
+        self.tabview.tab("Column Headers").grid_columnconfigure(4, weight=1)  # configure grid of individual tabs
         self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
 
-        self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("Column Headers"), dynamic_resizing=False,
-                                                        values=["Value 1", "Value 2", "Value Long Long Long"])
-        self.optionmenu_1.grid(row=0, column=0, padx=20, pady=(20, 10))
-        self.combobox_1 = customtkinter.CTkComboBox(self.tabview.tab("Column Headers"),
-                                                    values=["Value 1", "Value 2", "Value Long....."])
-        self.combobox_1.grid(row=1, column=0, padx=20, pady=(10, 10))
-        self.string_input_button = customtkinter.CTkButton(self.tabview.tab("CTkTabview"), text="Open CTkInputDialog",
-                                                           command=self.open_input_dialog_event)
-        self.string_input_button.grid(row=2, column=0, padx=20, pady=(10, 10))
-        self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Tab 2"), text="CTkLabel on Tab 2")
-        self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
+        #create scrollable frame inside tabview
+        self.scrollable_frame = customtkinter.CTkScrollableFrame(self.tabview.tab("Column Headers"), width=500, height=490, corner_radius=5)
+        self.scrollable_frame.grid(row=0, column=0, rowspan=6, sticky="nsew")
+        self.scrollable_frame.grid_rowconfigure(4, weight=1)
 
+        #add textbox
+        # self.instruction_textbox = customtkinter.CTkTextbox(self.scrollable_frame)
+        # self.instruction_textbox.grid()
+        # self.instruction_textbox.insert("0.0", text = instructions)
+
+        #add instructions to scrollable frame
+        self.instruction_label = customtkinter.CTkLabel(self.scrollable_frame, text=instructions, width=400, height=490, justify="left")
+        self.instruction_label.grid()
+
+        #create frame inside tabview
+        # self.sidebar_frame = customtkinter.CTkFrame(self.tabview.tab("Column Headers"), width=400, height=490, corner_radius=5 )
+        # self.sidebar_frame.grid(row=0, column=0, rowspan=6, sticky="nsew")
+        # self.sidebar_frame.grid_rowconfigure(4, weight=1)
+
+        self.test_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="Name Header")
+        self.test_entry.grid(row=0, column=1, padx=5, pady=(20, 10))
+        self.test_button = customtkinter.CTkButton(self.tabview.tab("Column Headers"), text= "Enter", command= lambda: wf.config_column_headers.write_name(self.test_entry.get()))
+        self.test_button.grid(row=0, column=2, padx=5, pady=(20, 10))
+        self.test_entry_label = customtkinter.CTkLabel(self.tabview.tab("Column Headers"), text="Name Header")
+        self.test_entry_label.grid(row=0, column=0, padx=5, pady=(20, 10))
 class MyFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -109,10 +147,13 @@ class App(customtkinter.CTk):
         self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
         self.tabview.tab("Tab 3").grid_columnconfigure(0, weight=1)
 
-        self.test_entry = customtkinter.CTkEntry(self.tabview.tab("Tab 3"), placeholder_text="TEST",)
-        self.test_entry.grid(row=0, column=0, padx=20, pady=(20, 10))
-        self.test_button = customtkinter.CTkButton(self.tabview.tab("Tab 3"), command=cp.getInventory)
-        self.test_button.grid(row=1, column=0, padx=20, pady=(20, 10))
+    
+        self.test_entry = customtkinter.CTkEntry(self.tabview.tab("Tab 3"), placeholder_text="Name Header")
+        self.test_entry.grid(row=0, column=1, padx=5, pady=(20, 10))
+        self.test_button = customtkinter.CTkButton(self.tabview.tab("Tab 3"), text= "Enter", command= lambda: wf.config_column_headers.write_name(self.test_entry.get()))
+        self.test_button.grid(row=0, column=2, padx=5, pady=(20, 10))
+        self.test_entry_label = customtkinter.CTkLabel(self.tabview.tab("Tab 3"), text="Name Header")
+        self.test_entry_label.grid(row=0, column=0, padx=5, pady=(20, 10))
 
         self.optionmenu_1 = customtkinter.CTkOptionMenu(self.tabview.tab("CTkTabview"), dynamic_resizing=False,
                                                         values=["Value 1", "Value 2", "Value Long Long Long"])
