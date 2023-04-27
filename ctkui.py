@@ -5,6 +5,13 @@ import weebly_functions as wf
 
 ### These top level menu classes are the various main menu options that can be selected
 #   from the main window.
+def insertNewlines(text, lineLength):
+    if len(text) <= lineLength:
+        return text
+    elif text[lineLength] != ' ':
+        return insertNewlines(text[:], lineLength + 1)
+    else:
+        return text[:lineLength] + '\n' + insertNewlines(text[lineLength + 1:], lineLength)
 class ToplevelWindow(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,64 +28,69 @@ class ToplevelWindow_1(customtkinter.CTkToplevel):
         self.title("Settings")
 
         #Header instruction text
-        instructions = ('In order for Squarespace Companion to interface with your inventory spreadsheet \n'
-                       'it needs to know the column headers that are used. For example; if your items are \n'
-                       'listed in rows, you probably have data such as "name", "description", and "price", \n'
-                       'set as the column headers. \n'
+        instructions = ('In order for Squarespace Companion to interface with your inventory spreadsheet '
+                        'it needs to know the column headers that are used. For example; if your items are '
+                       'listed in rows, you probably have data such as "name", "description", and "price", '
+                       'set as the column headers. '
                        '\n'
                        'The column headers that are required to be configured are: \n'
+                       '\n'
                        'name \n'
                        'SKU \n'
                        'item description \n'
                        'price \n'
                        'quantity \n'
                        '\n'
-                       'If your inventory spreadsheet does not have columns with this info then you must \n'
-                       'create them. This is the minimum info needed to create new products. \n'
-                       'How to set the configuration: \n'
-                       'Navigate to the settings menu and select "column header configuration" \n'
-                       'You will be prompted to enter the column header names that correspond \n'
-                       'to the above headers EXACTLY as they appear on your spreadsheet. \n'
-                       'It is very important that your input matches exactly, it is case sensitive. \n'
-                       'Once they are saved you don\'t need to set them again unless you change \n'
-                       'them on your spreadsheet. \n'
-                       '\n')
+                       'If your inventory spreadsheet does not have columns with this info then you must '
+                       'create them. This is the minimum info needed to create new products. '
+                       'How to set the configuration: '
+                       'Navigate to the settings menu and select "column header configuration" '
+                       'You will be prompted to enter the column header names that correspond '
+                       'to the above headers EXACTLY as they appear on your spreadsheet. '
+                       'It is very important that your input matches exactly, it is case sensitive. '
+                       'Once they are saved you don\'t need to set them again unless you change '
+                       'them on your spreadsheet. '
+                       '')
 
 
         # create tabview
         self.tabview = customtkinter.CTkTabview(self, width=1000, height=550)
-        self.tabview.pack()
-        self.tabview.add("Column Headers")
-        self.tabview.add("Tab 2")
-        self.tabview.add("Tab 3")
-        self.tabview.tab("Column Headers").grid_columnconfigure(4, weight=1)  # configure grid of individual tabs
-        self.tabview.tab("Tab 2").grid_columnconfigure(0, weight=1)
+        self.tabview.grid(row=0, column=0, sticky="nsew")
 
-        #create scrollable frame inside tabview
+        #create and configure the Column Header tab
+        self.tabview.add("Column Headers")
+        self.tabview.tab("Column Headers").grid_columnconfigure(7, weight=0) # configure grid of individual tabs
+        self.tabview.tab("Column Headers").grid_rowconfigure(4, weight=0) 
+
+        #create scrollable frame
         self.scrollable_frame = customtkinter.CTkScrollableFrame(self.tabview.tab("Column Headers"), width=500, height=490, corner_radius=5)
         self.scrollable_frame.grid(row=0, column=0, rowspan=6, sticky="nsew")
         self.scrollable_frame.grid_rowconfigure(4, weight=1)
 
-        #add textbox
-        # self.instruction_textbox = customtkinter.CTkTextbox(self.scrollable_frame)
-        # self.instruction_textbox.grid()
-        # self.instruction_textbox.insert("0.0", text = instructions)
-
         #add instructions to scrollable frame
-        self.instruction_label = customtkinter.CTkLabel(self.scrollable_frame, text=instructions, width=400, height=490, justify="left")
+        self.instruction_label = customtkinter.CTkLabel(self.scrollable_frame, text=instructions, wraplength=400, width=500, height=490, justify="left")
         self.instruction_label.grid()
 
-        #create frame inside tabview
-        # self.sidebar_frame = customtkinter.CTkFrame(self.tabview.tab("Column Headers"), width=400, height=490, corner_radius=5 )
-        # self.sidebar_frame.grid(row=0, column=0, rowspan=6, sticky="nsew")
-        # self.sidebar_frame.grid_rowconfigure(4, weight=1)
+        #add header entries
+        self.name_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="Name Header")
+        self.name_entry.grid(row=0, column=5, padx=10, pady=10)
+        self.sku_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="SKU")
+        self.sku_entry.grid(row=1, column=5, padx=10, pady=10)
+        self.item_desc_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="Item Description")
+        self.item_desc_entry.grid(row=2, column=5, padx=10, pady=10)
+        self.price_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="Price")
+        self.price_entry.grid(row=3, column=5, padx=10, pady=10)
+        self.qty_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="Quantity")
+        self.qty_entry.grid(row=4, column=5, padx=10, pady=10)
 
-        self.test_entry = customtkinter.CTkEntry(self.tabview.tab("Column Headers"), placeholder_text="Name Header")
-        self.test_entry.grid(row=0, column=1, padx=5, pady=(20, 10))
+        #add header labels
         self.test_button = customtkinter.CTkButton(self.tabview.tab("Column Headers"), text= "Enter", command= lambda: wf.config_column_headers.write_name(self.test_entry.get()))
-        self.test_button.grid(row=0, column=2, padx=5, pady=(20, 10))
-        self.test_entry_label = customtkinter.CTkLabel(self.tabview.tab("Column Headers"), text="Name Header")
-        self.test_entry_label.grid(row=0, column=0, padx=5, pady=(20, 10))
+        self.test_button.grid(row=0, column=6, padx=5, pady=(20, 10))
+
+        self.name_label = customtkinter.CTkLabel(self.tabview.tab("Column Headers"), text="Name Header")
+        self.name_label.grid(row=0, column=4, padx=10)
+        self.sku_label = customtkinter.CTkLabel(self.tabview.tab("Column Headers"), text="SKU Header")
+        self.sku_label.grid(row=1, column=4)
 class MyFrame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
