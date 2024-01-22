@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 ssc_env
+dist
+build
+SquarespaceCompanion.spec
+SquarespaceCompanion.zip
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
