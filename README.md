@@ -1,16 +1,12 @@
-# SquarespaceCompanion v0.0.3 is officially released as of April 5th 2023!
+# SquarespaceCompanion v0.0.3.1 is officially released as of January 21st 2024!
 Squarespace Companion is an inventory manager for your Squarespace website. It automates the product upload process to save you time.
 Additional functionalities are in development.
 
 SquarespaceCompanion (from here on referred to as SSC) uses Squarespace's API and requires the Commerce Advanced subscription.
 
-Here is a list of dependencies needed to run SSC:
-Python 3.11
-openpyxl 3.0.7
-pandas 1.5.3
-requests 2.28.2
+Refer to the requirements.txt file for a list of dependencies.
 
-NOTE: Excel is the only spreadsheet type supported in v0.0.1 through v0.0.3 (current version)
+NOTE: Excel is the only spreadsheet type supported in v0.0.1 through v0.0.3.1 (current version)
 
 HOW IT WORKS:
 Instead of creating products one at a time on your Squarespace website, SSC lets you import directly
@@ -30,3 +26,5 @@ SSC will now compare site inventory against your working inventory, and only cre
 For products that have been deleted from the site that you do not wish to have created again, you must create a new column in your
 spreadsheet, name it 'Deleted' or something similar, then configure your column header in settings. Any product with an 'x' in this
 column will be 'marked as deleted by user' and will not be created.
+
+v0.0.3.1 includes dependency updates and a new executable download.
