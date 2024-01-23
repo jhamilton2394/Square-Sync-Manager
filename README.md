@@ -12,7 +12,7 @@ HOW IT WORKS:
 Instead of creating products one at a time on your Squarespace website, SSC lets you import directly
 from excel. This is especially useful if you use excel to track inventory.
 
-After downloading and installing dependecies, then cloning the repository, a small amount of initial setup is required.
+After downloading and installing the most recent release, a small amount of initial setup is required.
 SSC needs a few pieces of information about your excel sheet in order to work, this information is referred to as the column
 headers. SSC adapts to your spreadsheet so you don't have to change the layout for SSC to work properly. Simply tell it the 
 names of the columns used for product name, sku, item description, price, and quantity (a 'Deleted' column was added in v0.0.3. See update notes).
@@ -27,4 +27,4 @@ For products that have been deleted from the site that you do not wish to have c
 spreadsheet, name it 'Deleted' or something similar, then configure your column header in settings. Any product with an 'x' in this
 column will be 'marked as deleted by user' and will not be created.
 
-v0.0.3.1 includes dependency updates and a new executable download.
+v0.0.3.1 includes dependency updates and bug fixes.
