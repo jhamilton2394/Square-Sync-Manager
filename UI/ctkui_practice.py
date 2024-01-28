@@ -1,4 +1,4 @@
-import tkinter
+import tkinter as tk
 import customtkinter
 from PIL import Image, ImageTk
 
@@ -35,8 +35,15 @@ class App(customtkinter.CTk):
         self.input_button.grid(row=0, column=0, padx=20, pady=10)
 
         # create textbox
-        self.textbox = customtkinter.CTkTextbox(self, width=250)
-        self.textbox.grid(row=0, column=1, padx=20, pady=20)
+        # self.textbox = customtkinter.CTkTextbox(self, width=250)
+        # self.textbox.grid(row=0, column=1, padx=20, pady=20)
+
+        # create text
+        self.announcement_box = tk.Text(self, wrap="word", width=250)
+        self.announcement_box.insert("1.0", "If you have not already, please configure your settings under the settings option in the main menu. ")
+        self.announcement_box.config(state="disabled", font="Helvetica")
+        self.announcement_box.grid(row=1, column=1, padx=20, pady=20)
+
 
         # create entry
         self.entry = customtkinter.CTkEntry(self.sidebar_frame, width=150)
@@ -55,7 +62,7 @@ class App(customtkinter.CTk):
 
 
         # Load image
-        image_path = "Untitled.jpeg"
+        image_path = "mars_pic.jpeg"
         self.image = Image.open(image_path)
 
         #resize the image
