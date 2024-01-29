@@ -56,7 +56,9 @@ class App(customtkinter.CTk):
 
 If you have not already, please configure your settings
 under the settings option in the main menu.''')
-        self.announcement_box.config(state="disabled", font="Helvetica")
+        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.announcement_box.tag_configure("custom tag", foreground="white")
+        self.announcement_box.tag_add("custom tag", 0.0, "end")
         self.announcement_box.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
 
 
@@ -88,13 +90,8 @@ class ToplevelWindow_settings(customtkinter.CTkToplevel):
         self.title('Settings Menu')
 
         #add widgets here
-        self.button_1 = customtkinter.CTkButton(self, text='Set API Key', command=None)
-        self.button_2 = customtkinter.CTkButton(self, text='Select Inventory File', command=None)
-
-        #Widget placement
-        self.button_1.grid(row=0, column=0, padx=20, pady=20)
-        self.button_2.grid(row=1, column=0, padx=20, pady=20)
-
+        self.settings_tabview = customtkinter.CTkTabview(self, width=1100, height=580)
+        self.settings_tabview.grid(row=0,column=0, padx=20, pady=20, sticky="nsew")
 
 if __name__ == "__main__":
     app = App()
