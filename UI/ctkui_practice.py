@@ -82,6 +82,16 @@ under the settings option in the main menu.''')
             self.toplevel_window = ToplevelWindow_settings(self)  # create window if its None or destroyed
         else:
             self.toplevel_window.focus()  # if window exists focus it
+            self.hide_all_body()
+
+    def hide_all_body(self):
+        '''
+        Hides all main body widgets. Used to switch between widgets. Button click should call this method
+        then call method to make desired widget visible.
+
+        Any newly created body widgets should be added here so they can be hidden when needed.
+        '''
+        self.announcement_box.grid_forget()
 
 class ToplevelWindow_settings(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
