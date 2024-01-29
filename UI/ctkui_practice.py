@@ -12,6 +12,7 @@ class App(customtkinter.CTk):
         # configure window
         self.title("Squarespace Companion")
         self.geometry(f"{1100}x{580}")
+        self.toplevel_window = None
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -25,10 +26,8 @@ class App(customtkinter.CTk):
         self.sidebar_frame.grid_rowconfigure(4, weight=1)
 
         # Menu logo
-        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame,
-                                                 text="Menu",
-                                                 font=customtkinter.CTkFont(size=30,
-                                                                            weight="bold"))
+        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
+                                                 font=customtkinter.CTkFont(size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20,10))
         
         # Create products button
@@ -36,7 +35,8 @@ class App(customtkinter.CTk):
         self.create_prod_button.grid(row=1, column=0, padx=20, pady=(10, 10))
 
         # Settings button
-        self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140)
+        self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
+                                                       command=self.open_toplevel_settings)
         self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
 
         # info button
@@ -49,10 +49,6 @@ class App(customtkinter.CTk):
         self.input_button = customtkinter.CTkButton(self.sidebar_frame2, text="click for input", command=self.input_dialog_event)
         self.input_button.grid(row=0, column=0, padx=20, pady=10)
 
-        # create textbox
-        # self.textbox = customtkinter.CTkTextbox(self, width=250)
-        # self.textbox.grid(row=0, column=1, padx=20, pady=20)
-
         # create text
         self.announcement_box = tk.Text(self, wrap="word", width=250)
         self.announcement_box.insert("1.0",
@@ -62,48 +58,6 @@ If you have not already, please configure your settings
 under the settings option in the main menu.''')
         self.announcement_box.config(state="disabled", font="Helvetica")
         self.announcement_box.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
-
-
-        # create entry
-        # self.entry = customtkinter.CTkEntry(self.sidebar_frame, width=150)
-        # self.entry.grid(row=1, column=0, padx=(20, 2), pady=20)
-
-        # self.entry.bind("<Return>", command=self.submit_button_event)
-        
-        # create entry submit button
-        # self.submit_button = customtkinter.CTkButton(self.sidebar_frame, text="Submit", command=self.submit_button_event, width=50)
-        # self.submit_button.grid(row=1, column=1, padx=(2, 10), pady=20)
-
-
-
-
-
-
-
-        # Load image
-        # image_path = "mars_pic.jpeg"
-        # self.image = Image.open(image_path)
-
-        #resize the image
-        # width, height = self.image.size
-        # new_width = int(width * 2)
-        # new_height = int(height * 2)
-        # self.resized_image = self.image.resize((new_width, new_height))
-
-        # Convert the image to customkinter PhotoImage
-        #self.photo = ImageTk.PhotoImage(self.image)
-        # 237 x 148 original. x5 = 1185 x 740
-        # self.photo1 = customtkinter.CTkImage(self.image, size=(237, 148))
-
-        # Create a Label widget to display the image
-        # self.label1 = customtkinter.CTkLabel(self.sidebar_frame, image=self.photo1, text=None, width=240, corner_radius=30)
-        # self.label1.grid(row=2, column=0, columnspan=2)
-
-
-
-
-
-
 
 
     def input_dialog_event(self):
@@ -117,7 +71,30 @@ under the settings option in the main menu.''')
             None
         else:
             print(input)
-       
+
+    def open_toplevel_settings(self):
+        '''
+        Method opens the settingss menu if its not already open.
+        '''
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+            self.toplevel_window = ToplevelWindow_settings(self)  # create window if its None or destroyed
+        else:
+            self.toplevel_window.focus()  # if window exists focus it
+
+class ToplevelWindow_settings(customtkinter.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.geometry("1100x580")
+        self.title('Settings Menu')
+
+        #add widgets here
+        self.button_1 = customtkinter.CTkButton(self, text='Set API Key', command=None)
+        self.button_2 = customtkinter.CTkButton(self, text='Select Inventory File', command=None)
+
+        #Widget placement
+        self.button_1.grid(row=0, column=0, padx=20, pady=20)
+        self.button_2.grid(row=1, column=0, padx=20, pady=20)
+
 
 if __name__ == "__main__":
     app = App()
