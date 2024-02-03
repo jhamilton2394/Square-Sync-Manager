@@ -91,14 +91,14 @@ class App(customtkinter.CTk):
             self.view = view(*args, **kwargs)
             self.active_widget = self.view
 
-class WelcomeView(customtkinter.CTk):
+class WelcomeView:
     '''
     This is the welcome widget that is visible upon program startup. It Displays instructions
     or various info.
 
     WelcomeView objects must be instatiated with a parent argument. The parent is which app widget will
     contain the welcome view widget. To place the WelcomeView widget in the default window simply
-    pass "self" as the argument.
+    pass "self" as the argument. All class based views function the same way.
     '''
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
@@ -137,6 +137,12 @@ class SettingsView:
         self.settings_tabview.add("Set API Key")
         self.settings_tabview.add("Select Inventory File")
         self.settings_tabview.add("Column Header Configuration")
+
+        # Create API key entry field and button
+        self.entry_button = customtkinter.CTkButton(self.settings_tabview.tab("Set API Key"), text="Save", width=80)
+        self.entry_button.grid(row=0, column=0, padx=5, pady=20)
+        self.entry = customtkinter.CTkEntry(self.settings_tabview.tab("Set API Key"), placeholder_text="API Key", width=250)
+        self.entry.grid(row=0, column=1, pady=20)
 
     def destroy(self):
         self.settings_tabview.destroy()
