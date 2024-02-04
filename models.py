@@ -15,6 +15,9 @@ class User:
         '''
         Checks if username already exists. Returns False if username exists, ie username is NOT valid.
         Returns True if username does not exist, ie username IS valid.
+
+        Also checks if the file containing user data exists. If not, then no users yet exist and
+        the function returns True.
         '''
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
@@ -33,21 +36,7 @@ class User:
     
     def __repr__(self):
         return f"{self.username}"
-    
-    '''
-    user validate function
-    open file
-
-    check if file even exists:
-    if yes:
-    open file and unpickle list
-    if list contains username then return false
-    if not return true
-
-    if no:
-    return true, proceed to save user
-    '''
-    
+        
     '''
     save user function:
     check if file even exists:
