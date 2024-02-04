@@ -1,4 +1,6 @@
 import hashlib
+import pickle
+import os
 
 class User:
     '''
@@ -9,8 +11,61 @@ class User:
         self.username = username
         self.password = str(SecurePassword(password))
 
+    def validate_username(self):
+        '''
+        Checks if username already exists. Returns False if username exists, ie username is NOT valid.
+        Returns True if username does not exist, ie username IS valid.
+        '''
+        file_path = 'files/users.pkl'
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as file:
+                loaded_users = pickle.load(file)
+            for user in loaded_users:
+                if self.username == user.username:
+                    return False
+            return True
+        else:
+            print('file doesnt exist yet')
+            return True
+
     def __str__(self):
         return f"{self.username}"
+    
+    def __repr__(self):
+        return f"{self.username}"
+    
+    '''
+    user validate function
+    open file
+
+    check if file even exists:
+    if yes:
+    open file and unpickle list
+    if list contains username then return false
+    if not return true
+
+    if no:
+    return true, proceed to save user
+    '''
+    
+    '''
+    save user function:
+    check if file even exists:
+    if yes then:
+    
+    open file
+    unpickle the user list
+    append new user
+    pickle the appended list
+
+    if not:
+    open and create user file
+    create user list with new user
+    pickle it
+
+    should probably have a validate function that makes sure user doesn't already exist
+    '''
+
 
 class SecurePassword:
     '''
@@ -39,8 +94,28 @@ class SecurePassword:
     
 new_user = User("biscuitbuns23", "Jamnjerk747!!")
 
-result = SecurePassword.validate_password(new_user, "Jamnjerk747!!")
+new_user2 = User("chubs", "password")
 
-print(result)
+user_list = []
 
-#print(new_user.password)
+user_list.append(new_user)
+user_list.append(new_user2)
+
+
+with open('files/users.pkl', 'wb') as file:
+    pickle.dump(user_list, file)
+print("pickled the list")
+
+with open('files/users.pkl', 'rb') as file:
+    loaded_objects = pickle.load(file)
+print(type(loaded_objects))
+    
+# for objects in loaded_objects:
+#     print(object.username)
+
+new_user3 = User("babyCakes", "password2")
+
+new_user4 = User("crabby baby", "password2")
+
+
+print(new_user4.validate_username())
