@@ -2,6 +2,14 @@ import hashlib
 import pickle
 import os
 
+# Written by Jonathan Hamilton
+
+'''
+This module can act as a stand-alone authentication-user model. It contains tools for
+creating users with secure passwords. Users are saved to the local machines file
+system via pickling, but this can be easily modified to work with SQL and an ORM.
+'''
+
 class User:
     '''
     Create a user with a username and password. Password is only saved as a hash.
@@ -33,26 +41,27 @@ class User:
         
     def save(self):
         '''
-        IMPORTANT: validate_username must be ran first to ensure no duplicate users
-        are added to the users file.
-
-        Saves user instance to users.pkl file.
+        Validates username and saves user instance to users.pkl file. If username
+        is already taken it is not saved and an error message is printed.
 
         If users.pkl doesn't exist then it is created and the specified user is saved.
         If it does exist the user is appended to the user list.
         '''
-        file_path = 'files/users.pkl'
-        if os.path.exists(file_path):
-            with open(file_path, 'rb') as read_file:
-                user_list = pickle.load(read_file)
-                user_list.append(self)
+        if self.validate_username():
+            file_path = 'files/users.pkl'
+            if os.path.exists(file_path):
+                with open(file_path, 'rb') as read_file:
+                    user_list = pickle.load(read_file)
+                    user_list.append(self)
 
-            with open(file_path, "wb") as write_file:
-                pickle.dump(user_list, write_file)
+                with open(file_path, "wb") as write_file:
+                    pickle.dump(user_list, write_file)
+            else:
+                new_user_list = [self]
+                with open(file_path, "wb") as file:
+                    pickle.dump(new_user_list, file)
         else:
-            new_user_list = [self]
-            with open(file_path, "wb") as file:
-                pickle.dump(new_user_list, file)
+            print(f"The username {self.username} is already taken")
 
     def __str__(self):
         return f"{self.username}"

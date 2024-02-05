@@ -15,41 +15,55 @@ class App(customtkinter.CTk):
         self.title("Squarespace Companion")
         self.geometry(f"{1100}x{580}")
         self.active_widget = None
+        self.authenticated = False
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((2,3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
-        # create sidebar frame with widgets
-        self.sidebar_frame = customtkinter.CTkFrame(self, width=180, corner_radius=0)
-        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+        # Create login view
+        loginview = LoginView(self)
+        self.wait_window(loginview)
 
-        # Menu logo
-        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
-                                                 font=customtkinter.CTkFont(size=30, weight="bold"))
-        self.logo_label.grid(row=0, column=0, padx=20, pady=(20,10))
+        # Menu accessed only after successful authentication from login view
+        if self.authenticated:
+            menu = MenuView(self)
+
+        # menu = MenuView(self)
+
+        # # create sidebar frame with widgets
+        # self.sidebar_frame = customtkinter.CTkFrame(self, width=180, corner_radius=0)
+        # self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        # self.sidebar_frame.grid_rowconfigure(4, weight=1)
+
+        # # Menu logo
+        # self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
+        #                                          font=customtkinter.CTkFont(size=30, weight="bold"))
+        # self.logo_label.grid(row=0, column=0, padx=20, pady=(20,10))
         
-        # Create products button
-        self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140)
-        self.create_prod_button.grid(row=1, column=0, padx=20, pady=(10, 10))
+        # # Create products button
+        # self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140)
+        # self.create_prod_button.grid(row=1, column=0, padx=20, pady=(10, 10))
 
-        # Settings button
-        self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
-                                                       command=lambda: self.view_toggle(SettingsView, parent=self))
-        self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
+        # # Settings button
+        # self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
+        #                                                command=lambda: self.view_toggle(SettingsView, parent=self))
+        # self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
 
-        # info button
-        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
-                                                   command=lambda: self.view_toggle(WelcomeView, parent=self))
-        self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
+        # # info button
+        # self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
+        #                                            command=lambda: self.view_toggle(WelcomeView, parent=self.sidebar_frame))
+        # self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
 
         # create second sidebar frame for practice
         self.sidebar_frame2 = customtkinter.CTkFrame(self, width=200, corner_radius=2)
         self.sidebar_frame2.grid(row=0, column=2, rowspan=4, padx=40,  sticky="nsew")
         self.input_button = customtkinter.CTkButton(self.sidebar_frame2, text="click for input", command=self.input_dialog_event)
         self.input_button.grid(row=0, column=0, padx=20, pady=10)
+
+        # Create the default view
+        # welcomeview = WelcomeView(self)
 
     def input_dialog_event(self):
         dialog = customtkinter.CTkInputDialog(text="input here", title="dialog box")
@@ -88,6 +102,35 @@ class App(customtkinter.CTk):
             self.active_widget.destroy()
             self.view = view(*args, **kwargs)
             self.active_widget = self.view
+
+class MenuView(customtkinter.CTk):
+    def __init__(self, parent):
+        self.parent = parent
+
+        # create sidebar frame with widgets
+        self.sidebar_frame = customtkinter.CTkFrame(parent, width=180, corner_radius=0)
+        self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+
+        # Menu logo
+        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
+                                                 font=customtkinter.CTkFont(size=30, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(20,10))
+        
+        # Create products button
+        self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140)
+        self.create_prod_button.grid(row=1, column=0, padx=20, pady=(10, 10))
+
+        # Settings button
+        self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
+                                                       command=lambda: parent.view_toggle(SettingsView, parent=parent))
+        self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
+
+        # info button
+        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
+                                                   command=lambda: parent.view_toggle(WelcomeView, parent=self.sidebar_frame))
+        self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
+
 
 class WelcomeView:
     '''
@@ -144,3 +187,31 @@ class SettingsView:
 
     def destroy(self):
         self.settings_tabview.destroy()
+
+class LoginView(customtkinter.CTkToplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.title("Login")
+        self.geometry("300x300")
+        self.transient(parent)
+        self.grab_set()
+
+        self.label = customtkinter.CTkLabel(self, text="Enter username and password")
+        self.label.pack(pady=10)
+
+        self.username_entry = customtkinter.CTkEntry(self)
+        self.username_entry.pack(pady=10)
+
+        self.password_entry = customtkinter.CTkEntry(self, show="*")
+        self.password_entry.pack(pady=5)
+        
+        self.login_button = customtkinter.CTkButton(self, text="Login", command= self.authenticate)
+        self.login_button.pack(pady=10)
+
+    def authenticate(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        self.parent.authenticated = True
+        self.destroy()
