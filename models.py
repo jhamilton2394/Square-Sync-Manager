@@ -54,31 +54,11 @@ class User:
             with open(file_path, "wb") as file:
                 pickle.dump(new_user_list, file)
 
-
     def __str__(self):
         return f"{self.username}"
     
     def __repr__(self):
         return f"{self.username}"
-        
-    '''
-    save user function:
-    check if file even exists:
-    if yes then:
-    
-    open file
-    unpickle the user list
-    append new user
-    pickle the appended list
-
-    if not:
-    open and create user file
-    create user list with new user
-    pickle it
-
-    should probably have a validate function that makes sure user doesn't already exist
-    '''
-
 
 class SecurePassword:
     '''
@@ -104,45 +84,3 @@ class SecurePassword:
             
     def __str__(self):
         return f"{self.secure_password}"
-    
-# # new_user = User("biscuitlover", "playdouhj234324#$")
-
-# # new_user2 = User("chubs", "password")
-
-# # user_list = []
-
-# # user_list.append(new_user)
-#user_list.append(new_user2)
-
-
-# with open('files/users.pkl', 'wb') as file:
-#     pickle.dump(user_list, file)
-# print("pickled the list")
-
-# with open('files/users.pkl', 'rb') as file:
-#     loaded_objects = pickle.load(file)
-# print(type(loaded_objects))
-    
-# for objects in loaded_objects:
-#     print(object.username)
-
-# new_user3 = User("babyCakes", "password2")
-
-# new_user4 = User("crabby baby", "password2")
-
-
-# print(new_user4.validate_username())
-    
-#user1 = User("Rowan", "password")
-
-
-# with open(file_path, 'rb') as read_file:
-#     user_list = pickle.load(read_file)
-
-# new = User("user", "password")
-# user_list.append(new)
-
-# print(user_list)
-    
-user1 = User("Rowan", "password")
-user1.save()
