@@ -81,7 +81,7 @@ class SecurePassword:
     def __str__(self):
         return f"{self.secure_password}"
     
-new_user = User("biscuitbuns23", "Jamnjerk747!!")
+new_user = User("biscuitlover", "playdouhj234324#$")
 
 new_user2 = User("chubs", "password")
 
