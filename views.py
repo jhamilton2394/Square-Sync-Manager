@@ -29,53 +29,9 @@ class App(customtkinter.CTk):
         # Menu accessed only after successful authentication from login view
         if self.authenticated:
             menu = MenuView(self)
-
-        # menu = MenuView(self)
-
-        # # create sidebar frame with widgets
-        # self.sidebar_frame = customtkinter.CTkFrame(self, width=180, corner_radius=0)
-        # self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        # self.sidebar_frame.grid_rowconfigure(4, weight=1)
-
-        # # Menu logo
-        # self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
-        #                                          font=customtkinter.CTkFont(size=30, weight="bold"))
-        # self.logo_label.grid(row=0, column=0, padx=20, pady=(20,10))
-        
-        # # Create products button
-        # self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140)
-        # self.create_prod_button.grid(row=1, column=0, padx=20, pady=(10, 10))
-
-        # # Settings button
-        # self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
-        #                                                command=lambda: self.view_toggle(SettingsView, parent=self))
-        # self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
-
-        # # info button
-        # self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
-        #                                            command=lambda: self.view_toggle(WelcomeView, parent=self.sidebar_frame))
-        # self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
-
-        # create second sidebar frame for practice
-        self.sidebar_frame2 = customtkinter.CTkFrame(self, width=200, corner_radius=2)
-        self.sidebar_frame2.grid(row=0, column=2, rowspan=4, padx=40,  sticky="nsew")
-        self.input_button = customtkinter.CTkButton(self.sidebar_frame2, text="click for input", command=self.input_dialog_event)
-        self.input_button.grid(row=0, column=0, padx=20, pady=10)
-
-        # Create the default view
-        # welcomeview = WelcomeView(self)
-
-    def input_dialog_event(self):
-        dialog = customtkinter.CTkInputDialog(text="input here", title="dialog box")
-        print(dialog.get_input())
-
-    def submit_button_event(self, event=None):
-        input = self.entry.get()
-        self.entry.delete(0, 100)
-        if input == '':
-            None
-        else:
-            print(input)
+            
+            # Create the default view
+            welcomeview = WelcomeView(self)
 
     def view_toggle(self, view, *args, **kwargs):
         '''
@@ -104,6 +60,10 @@ class App(customtkinter.CTk):
             self.active_widget = self.view
 
 class MenuView(customtkinter.CTk):
+    '''
+    Menu view is created after successful authentication. Contains a frame with the menu buttons.
+    '''
+
     def __init__(self, parent):
         self.parent = parent
 
@@ -200,10 +160,12 @@ class LoginView(customtkinter.CTkToplevel):
         self.label = customtkinter.CTkLabel(self, text="Enter username and password")
         self.label.pack(pady=10)
 
-        self.username_entry = customtkinter.CTkEntry(self)
+        # self.usernname_label = customtkinter.CTkLabel(self, text="Username")
+        # self.usernname_label.pack()
+        self.username_entry = customtkinter.CTkEntry(self, placeholder_text="Username")
         self.username_entry.pack(pady=10)
 
-        self.password_entry = customtkinter.CTkEntry(self, show="*")
+        self.password_entry = customtkinter.CTkEntry(self, show="*", placeholder_text="Password")
         self.password_entry.pack(pady=5)
         
         self.login_button = customtkinter.CTkButton(self, text="Login", command= self.authenticate)
