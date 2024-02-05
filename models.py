@@ -58,7 +58,7 @@ class User:
 
 class SecurePassword:
     '''
-    Takes users typed password and saves it as a hash. Used in the User class.
+    Takes users plain text password and saves it as a hash. Used in the User class.
     '''
     def __init__(self, password: str):
         self.secure_password = self.password_hash(password)
