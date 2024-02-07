@@ -15,4 +15,4 @@ customtkinter.set_default_color_theme("green")
 if __name__ == "__main__":
     auth_controller = AuthController()
     app = App(auth_controller)
-    app.mainloop()
+    app.mainloop()      

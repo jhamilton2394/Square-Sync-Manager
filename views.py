@@ -2,6 +2,9 @@ import tkinter as tk
 import customtkinter
 from PIL import Image, ImageTk
 
+#### set authenticated to True for development
+#### Leave "Create login view" block commented out for development
+
 '''
 The class based views can be toggled in any container inside the main app class.
 Each view must be passed a "parent" when instantiated so that the view_toggle
@@ -16,8 +19,8 @@ class App(customtkinter.CTk):
     def __init__(self, auth_controller):
         super().__init__()
         self.auth_controller = auth_controller
-        self.active_widget = None
-        self.authenticated = False
+        self.active_widget = WelcomeView(self)
+        self.authenticated = True
         self.active_user = self.auth_controller.active_user
 
         # configure window
@@ -30,15 +33,15 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Create login view
-        loginview = LoginView(self)
-        self.wait_window(loginview)
+        # loginview = LoginView(self)
+        # self.wait_window(loginview)
 
         # Menu accessed only after successful authentication from login view
         if self.authenticated:
             menu = MenuView(self)
             
             # Create the default view
-            welcomeview = WelcomeView(self)
+            #welcomeview = WelcomeView(self)
 
     def view_toggle(self, view, *args, **kwargs):
         '''
@@ -144,20 +147,49 @@ class SettingsView:
     '''
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
-        self.settings_tabview = customtkinter.CTkTabview(parent, width=250)
-        self.settings_tabview.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        self.settings_tabview.add("Set API Key")
-        self.settings_tabview.add("Select Inventory File")
-        self.settings_tabview.add("Column Header Configuration")
 
-        # Create API key entry field and button
-        self.entry_button = customtkinter.CTkButton(self.settings_tabview.tab("Set API Key"), text="Save", width=80)
-        self.entry_button.grid(row=0, column=0, padx=5, pady=20)
-        self.entry = customtkinter.CTkEntry(self.settings_tabview.tab("Set API Key"), placeholder_text="API Key", width=250)
-        self.entry.grid(row=0, column=1, pady=20)
+        # Create settings frame
+        self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=580, border_width=5, border_color="white")
+        self.settings_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+        self.settings_frame.grid_columnconfigure(0, weight=1)
+
+        # dummy frame
+        self.dummy_frame = customtkinter.CTkFrame(self.settings_frame, width=50, height=580, border_width=2, border_color="green")
+        self.dummy_frame.grid(row=0, column=0, padx=10, pady=5, sticky="nsw")
+
+        # API key section
+        self.api_label = customtkinter.CTkLabel(self.dummy_frame, text="Set API key", font=customtkinter.CTkFont(size=15))
+        self.api_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+        # Current key label
+        self.current_key_label = customtkinter.CTkLabel(self.dummy_frame, text="Current API key")
+        self.current_key_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+
+        # Current key entry field
+        self.current_key_entry = customtkinter.CTkEntry(self.dummy_frame, placeholder_text="Current key")
+        self.current_key_entry.grid(row=2, column=0, padx=10, pady=5, sticky="w")
+
+        # self.settings_tabview = customtkinter.CTkTabview(parent, width=50)
+        # self.settings_tabview.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+        # self.settings_tabview.add("Set API Key")
+        # self.settings_tabview.add("Select Inventory File")
+        # self.settings_tabview.add("Column Header Configuration")
+
+        # # Display current API key
+        # self.key_label = customtkinter.CTkLabel(self.settings_tabview.tab("Set API Key"), text="Current API key")
+        # self.key_label.grid(row=0, column=0, padx=5, pady=20)
+        # self.current_key_label = customtkinter.CTkLabel(self.settings_tabview.tab("Set API Key"), text="jasdkfj3joirjfasdkfjakl23")
+        # self.current_key_label.grid(row=0, column=1, padx=5, pady=20)
+
+        # # Create API key entry field and button
+        # self.entry_button = customtkinter.CTkButton(self.settings_tabview.tab("Set API Key"), text="Save", width=80)
+        # self.entry_button.grid(row=1, column=0, padx=5, pady=20)
+        # self.entry = customtkinter.CTkEntry(self.settings_tabview.tab("Set API Key"), placeholder_text="API Key", width=250)
+        # self.entry.grid(row=1, column=1, pady=20)
 
     def destroy(self):
-        self.settings_tabview.destroy()
+        #self.settings_tabview.destroy()
+        self.settings_frame.destroy()
 
 class LoginView(customtkinter.CTkToplevel):
     '''
