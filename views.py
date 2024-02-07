@@ -1,8 +1,12 @@
 import tkinter as tk
 import customtkinter
 from PIL import Image, ImageTk
-from functools import wraps
 
+'''
+The class based views can be toggled in any container inside the main app class.
+Each view must be passed a "parent" when instantiated so that the view_toggle
+method can place the view in the correct place.
+'''
 
 class App(customtkinter.CTk):
     '''

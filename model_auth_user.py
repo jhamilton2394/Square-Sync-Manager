@@ -94,26 +94,6 @@ class SecurePassword:
     def password_hash(self, password: str):
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         return hashed_password
-    
-    def validate_password(user, password: str):
-        '''
-        Takes a user instance and password and checks if given password matches the
-        instance's password hash.
-        '''
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        if hashed_password == user.password:
-            return True
-        else:
-            return False
-            
+                
     def __str__(self):
         return f"{self.secure_password}"
-    
-
-'''
--create a retreive user method that returns the requested
- user instance DONE
--delegate "validate user" to the auth controller.
--delegate the "validate password" method to auth controller
- auth cont will need to receive a user instance
-'''

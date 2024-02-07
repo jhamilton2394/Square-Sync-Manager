@@ -20,3 +20,14 @@ class AuthController:
                 return False
         else:
             return False
+        
+    def validate_password(user, password: str):
+        '''
+        Takes a user instance and password and checks if given password matches the
+        instance's password hash.
+        '''
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        if hashed_password == user.password:
+            return True
+        else:
+            return False
