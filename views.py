@@ -6,16 +6,19 @@ from functools import wraps
 
 class App(customtkinter.CTk):
     '''
-    This is the main app window.
+    This is the main app window. Once authenticated, the MenuView can toggle the class
+    based views inside this main window.
     '''
-    def __init__(self):
+    def __init__(self, auth_controller):
         super().__init__()
+        self.auth_controller = auth_controller
+        self.active_widget = None
+        self.authenticated = False
+        self.active_user = self.auth_controller.active_user
 
         # configure window
         self.title("Squarespace Companion")
         self.geometry(f"{1100}x{580}")
-        self.active_widget = None
-        self.authenticated = False
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -40,7 +43,7 @@ class App(customtkinter.CTk):
         Example usage:
 
         # Toggle view on button click
-        ...command=lambda: view_toggle(WelcomeView(parent=self.sidebar_frame))
+        ...command=lambda: view_toggle(WelcomeView, parent=self.sidebar_frame)
 
         view_toggle creates an instance of the class view, so it is necessary to include the class view's
         required argument, which is the parent container you wish the view to be created in.
@@ -63,7 +66,6 @@ class MenuView(customtkinter.CTk):
     '''
     Menu view is created after successful authentication. Contains a frame with the menu buttons.
     '''
-
     def __init__(self, parent):
         self.parent = parent
 
@@ -83,14 +85,21 @@ class MenuView(customtkinter.CTk):
 
         # Settings button
         self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
-                                                       command=lambda: parent.view_toggle(SettingsView, parent=parent))
+                                                       command=lambda: parent.view_toggle(SettingsView, parent))
         self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
 
         # info button
         self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
-                                                   command=lambda: parent.view_toggle(WelcomeView, parent=self.sidebar_frame))
+                                                   command=lambda: parent.view_toggle(ActiveUserTest, parent))
         self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
 
+class ActiveUserTest:
+    def __init__(self, parent):
+        self.parent = parent
+
+        self.test_box = tk.Text(parent, wrap="word", width=250)
+        self.test_box.insert("1.0", f"Active user is now {self.parent.active_user}")
+        self.test_box.grid(row=0, column=0)
 
 class WelcomeView:
     '''
@@ -126,11 +135,9 @@ under the settings option in the main menu.''')
         self.test_button.destroy()
 
 class SettingsView:
-
     '''
-    Example text
+    Opens the settings menu when toggled.
     '''
-
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
         self.settings_tabview = customtkinter.CTkTabview(parent, width=250)
@@ -149,6 +156,10 @@ class SettingsView:
         self.settings_tabview.destroy()
 
 class LoginView(customtkinter.CTkToplevel):
+    '''
+    LoginView is called automatically upon startup. All other windows are blocked
+    until authentication is successful.
+    '''
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -160,20 +171,29 @@ class LoginView(customtkinter.CTkToplevel):
         self.label = customtkinter.CTkLabel(self, text="Enter username and password")
         self.label.pack(pady=10)
 
-        # self.usernname_label = customtkinter.CTkLabel(self, text="Username")
-        # self.usernname_label.pack()
         self.username_entry = customtkinter.CTkEntry(self, placeholder_text="Username")
         self.username_entry.pack(pady=10)
 
         self.password_entry = customtkinter.CTkEntry(self, show="*", placeholder_text="Password")
         self.password_entry.pack(pady=5)
         
-        self.login_button = customtkinter.CTkButton(self, text="Login", command= self.authenticate)
+        self.login_button = customtkinter.CTkButton(self, text="Login", command=lambda: self.login())
         self.login_button.pack(pady=10)
 
-    def authenticate(self):
+        self.login_failed_label = customtkinter.CTkLabel(self, text="Username or password incorrect")
+        self.login_failed_label.pack(pady=10)
+        
+    def login(self):
+        '''
+        Communicates with the auth_controller and the User model to perform user authentication.
+        If authentication is successful the authenticated user instance is returned and set
+        as the active_user, and the authenticated status is set to True.
+        '''
         username = self.username_entry.get()
         password = self.password_entry.get()
 
-        self.parent.authenticated = True
-        self.destroy()
+        auth_user = self.parent.auth_controller.login_user(username, password)
+        if auth_user:
+            self.parent.authenticated = True
+            self.parent.active_user = auth_user
+            self.destroy()

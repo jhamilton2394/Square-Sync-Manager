@@ -62,6 +62,21 @@ class User:
                     pickle.dump(new_user_list, file)
         else:
             print(f"The username {self.username} is already taken")
+            
+    def get_user(self):
+        '''
+        Matches username of the temp user with the actual user that is
+        saved in the users file, if it exists. Returns actual user instance.
+        Used by auth_controller for authentication.
+        '''
+        file_path = 'files/users.pkl'
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as read_file:
+                user_list = pickle.load(read_file)
+                for user in user_list:
+                    if self.username == user.username:
+                        return user
+                return False
 
     def __str__(self):
         return f"{self.username}"
@@ -93,3 +108,12 @@ class SecurePassword:
             
     def __str__(self):
         return f"{self.secure_password}"
+    
+
+'''
+-create a retreive user method that returns the requested
+ user instance DONE
+-delegate "validate user" to the auth controller.
+-delegate the "validate password" method to auth controller
+ auth cont will need to receive a user instance
+'''
