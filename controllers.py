@@ -1,15 +1,14 @@
 from model_auth_user import *
 
 class AuthController:
-    # rename to auth_controller or 
     def __init__(self):
         self.active_user = None
             
     def auth_controller(self, username, password):
         '''
-        Called by LoginView's authenticate method upon login attempt. Calls the User models login_user method.
-        if the login_user method returns True then the active_user is set, and True
-        is returned to the LoginView's authenticate method.
+        Called by LoginView's login method upon login attempt. Creates a temp_user then calls the User models get_user method.
+        If the get_user method returns a user instance then the temp_user and the matched_users passwords are compared. If
+        successful the user is assigned as active and the instance is returned to the login view.
         '''
         user = User(username, password)
         if user.login_user():
@@ -24,9 +23,6 @@ class AuthController:
                 self.active_user = matched_user
                 return matched_user
             else:
-                print(f"Incorrect password")
-                print(f"the password you entered is {temp_user.password} of type {type(temp_user.password)}")
                 return False
         else:
-            print(f"no matched user")
             return False
