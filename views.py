@@ -151,23 +151,28 @@ class SettingsView:
         # Create settings frame
         self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=580, border_width=5, border_color="white")
         self.settings_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        self.settings_frame.grid_columnconfigure(0, weight=1)
+        self.settings_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
 
-        # dummy frame
-        self.dummy_frame = customtkinter.CTkFrame(self.settings_frame, width=50, height=580, border_width=2, border_color="green")
-        self.dummy_frame.grid(row=0, column=0, padx=10, pady=5, sticky="nsw")
+        # # dummy frame
+        # self.dummy_frame = customtkinter.CTkFrame(self.settings_frame, width=50, height=300, border_width=2, border_color="green")
+        # self.dummy_frame.grid(row=0, column=0, rowspan=5, padx=10, pady=5, sticky="ns")
+        # self.dummy_frame.grid_columnconfigure(0, weight=1)
 
         # API key section
-        self.api_label = customtkinter.CTkLabel(self.dummy_frame, text="Set API key", font=customtkinter.CTkFont(size=15))
-        self.api_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        self.api_label = customtkinter.CTkLabel(self.settings_frame, text="Set API key", font=customtkinter.CTkFont(size=15))
+        self.api_label.grid(row=0, column=0, pady=5, sticky="e")
 
         # Current key label
-        self.current_key_label = customtkinter.CTkLabel(self.dummy_frame, text="Current API key")
-        self.current_key_label.grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        self.current_key_label = customtkinter.CTkLabel(self.settings_frame, text="Current API key")
+        self.current_key_label.grid(row=1, column=0, pady=5, sticky="e")
 
         # Current key entry field
-        self.current_key_entry = customtkinter.CTkEntry(self.dummy_frame, placeholder_text="Current key")
-        self.current_key_entry.grid(row=2, column=0, padx=10, pady=5, sticky="w")
+        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Current key")
+        self.current_key_entry.grid(row=1, column=1, columnspan=3, pady=5, sticky="e")
+
+        # Column header configuration settings
+        self.column_header_label = customtkinter.CTkLabel(self.settings_frame, text="Column header configuration", font=customtkinter.CTkFont(size=15))
+        self.column_header_label.grid(row=3, column=0, pady=5, columnspan=3, sticky="w")
 
         # self.settings_tabview = customtkinter.CTkTabview(parent, width=50)
         # self.settings_tabview.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
