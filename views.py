@@ -149,9 +149,8 @@ class SettingsView:
         self.parent = parent
 
         # Create settings frame
-        self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=580, border_width=5, border_color="white")
-        self.settings_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        self.settings_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
+        self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=580)
+        self.settings_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew", ipadx=20)
 
         # # dummy frame
         # self.dummy_frame = customtkinter.CTkFrame(self.settings_frame, width=50, height=300, border_width=2, border_color="green")
@@ -160,19 +159,50 @@ class SettingsView:
 
         # API key section
         self.api_label = customtkinter.CTkLabel(self.settings_frame, text="Set API key", font=customtkinter.CTkFont(size=15))
-        self.api_label.grid(row=0, column=0, pady=5, sticky="e")
+        self.api_label.grid(row=0, column=0, pady=5, columnspan=3)
 
         # Current key label
         self.current_key_label = customtkinter.CTkLabel(self.settings_frame, text="Current API key")
         self.current_key_label.grid(row=1, column=0, pady=5, sticky="e")
 
         # Current key entry field
-        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Current key")
-        self.current_key_entry.grid(row=1, column=1, columnspan=3, pady=5, sticky="e")
+        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Current key not set",)
+        self.current_key_entry.grid(row=1, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Column header configuration settings
-        self.column_header_label = customtkinter.CTkLabel(self.settings_frame, text="Column header configuration", font=customtkinter.CTkFont(size=15))
-        self.column_header_label.grid(row=3, column=0, pady=5, columnspan=3, sticky="w")
+        self.column_header_label = customtkinter.CTkLabel(self.settings_frame, text="Column header configuration", font=customtkinter.CTkFont(size=15, weight="bold"))
+        self.column_header_label.grid(row=3, column=0, pady=(20, 5), columnspan=3)
+
+        self.name_header_label = customtkinter.CTkLabel(self.settings_frame, text="Name header")
+        self.name_header_label.grid(row=4, column=0, sticky="e")
+        self.name_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Name header not set")
+        self.name_entry.grid(row=4, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
+
+
+        self.sku_header_label = customtkinter.CTkLabel(self.settings_frame, text="SKU header")
+        self.sku_header_label.grid(row=5, column=0, sticky="e")
+
+        self.item_desc_header_label = customtkinter.CTkLabel(self.settings_frame, text="Item Description header")
+        self.item_desc_header_label.grid(row=6, column=0, sticky="e")
+
+        self.price_header_label = customtkinter.CTkLabel(self.settings_frame, text="price header")
+        self.price_header_label.grid(row=7, column=0, sticky="e")
+
+        self.qty_header_label = customtkinter.CTkLabel(self.settings_frame, text="Quantity header")
+        self.qty_header_label.grid(row=8, column=0, sticky="e")
+
+        # Instruction box
+        self.announcement_box = tk.Text(self.settings_frame, wrap="word", width=105)
+        self.announcement_box.insert("1.0",
+                                     '''Welcome to Squarespace Companion!
+
+If you have not already, please configure your settings
+under the settings option in the main menu.''')
+        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.announcement_box.tag_configure("custom tag", foreground="white")
+        self.announcement_box.tag_add("custom tag", 0.0, "end")
+        self.announcement_box.grid(row=9, column=0, rowspan=10, columnspan=12, padx=20, pady=20, sticky="nsew")
+
 
         # self.settings_tabview = customtkinter.CTkTabview(parent, width=50)
         # self.settings_tabview.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
