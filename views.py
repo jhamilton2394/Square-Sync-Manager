@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import font
 import customtkinter
 from PIL import Image, ImageTk
 
@@ -96,17 +97,8 @@ class MenuView(customtkinter.CTk):
         self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
 
         # info button
-        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
-                                                   command=lambda: parent.view_toggle(ActiveUserTest, parent))
+        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140)
         self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
-
-class ActiveUserTest:
-    def __init__(self, parent):
-        self.parent = parent
-
-        self.test_box = tk.Text(parent, wrap="word", width=250)
-        self.test_box.insert("1.0", f"Active user is now {self.parent.active_user}")
-        self.test_box.grid(row=0, column=0)
 
 class WelcomeView:
     '''
@@ -149,7 +141,7 @@ class SettingsView:
         self.parent = parent
 
         # Create settings frame
-        self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=580)
+        self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=1200)
         self.settings_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew", ipadx=20)
 
         # # dummy frame
@@ -158,8 +150,8 @@ class SettingsView:
         # self.dummy_frame.grid_columnconfigure(0, weight=1)
 
         # API key section
-        self.api_label = customtkinter.CTkLabel(self.settings_frame, text="Set API key", font=customtkinter.CTkFont(size=15))
-        self.api_label.grid(row=0, column=0, pady=5, columnspan=3)
+        self.api_label = customtkinter.CTkLabel(self.settings_frame, text="Set API key", font=customtkinter.CTkFont(size=15, weight="bold"))
+        self.api_label.grid(row=0, column=1, padx=7, pady=5, columnspan=5, sticky="w")
 
         # Current key label
         self.current_key_label = customtkinter.CTkLabel(self.settings_frame, text="Current API key")
@@ -171,37 +163,86 @@ class SettingsView:
 
         # Column header configuration settings
         self.column_header_label = customtkinter.CTkLabel(self.settings_frame, text="Column header configuration", font=customtkinter.CTkFont(size=15, weight="bold"))
-        self.column_header_label.grid(row=3, column=0, pady=(20, 5), columnspan=3)
+        self.column_header_label.grid(row=3, column=1, padx=7, pady=(20, 5), columnspan=5, sticky="w")
 
+        # Name header
         self.name_header_label = customtkinter.CTkLabel(self.settings_frame, text="Name header")
         self.name_header_label.grid(row=4, column=0, sticky="e")
         self.name_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Name header not set")
         self.name_entry.grid(row=4, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
-
+        # SKU header
         self.sku_header_label = customtkinter.CTkLabel(self.settings_frame, text="SKU header")
         self.sku_header_label.grid(row=5, column=0, sticky="e")
+        self.sku_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="SKU header not set")
+        self.sku_entry.grid(row=5, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
+        # Item description header
         self.item_desc_header_label = customtkinter.CTkLabel(self.settings_frame, text="Item Description header")
         self.item_desc_header_label.grid(row=6, column=0, sticky="e")
+        self.item_desc_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Name header not set")
+        self.item_desc_entry.grid(row=6, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
+        # Price header
         self.price_header_label = customtkinter.CTkLabel(self.settings_frame, text="price header")
         self.price_header_label.grid(row=7, column=0, sticky="e")
+        self.price_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Price header not set")
+        self.price_entry.grid(row=7, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
+        # Quantity header
         self.qty_header_label = customtkinter.CTkLabel(self.settings_frame, text="Quantity header")
         self.qty_header_label.grid(row=8, column=0, sticky="e")
+        self.qty_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Quantity header not set")
+        self.qty_entry.grid(row=8, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
+
+        # Deleted header
+        self.deleted_header_label = customtkinter.CTkLabel(self.settings_frame, text="Deleted header")
+        self.deleted_header_label.grid(row=9, column=0, sticky="e")
+        self.deleted_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Deleted header not set")
+        self.deleted_entry.grid(row=9, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
+
+        # Save button
+        self.save_button = customtkinter.CTkButton(self.settings_frame, text="Save")
+        self.save_button.grid(row=10, column=1, columnspan=6, padx=7, pady=5, sticky="w")
+
+        # File selection section
+        self.file_selection_label = customtkinter.CTkLabel(self.settings_frame, text="Select inventory file", font=customtkinter.CTkFont(size=15, weight="bold"))
+        self.file_selection_label.grid(row=3, column=6, padx=7, pady=(20, 5), columnspan=3, sticky="w")
+        self.file_selection_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="No file selected")
+        self.file_selection_entry.grid(row=4, column=6, columnspan=5, padx=7, pady=5, sticky="nsew")
+        self.file_select_button = customtkinter.CTkButton(self.settings_frame, text="Select file")
+        self.file_select_button.grid(row=5, column=6, columnspan=6, padx=7, pady=5, sticky="w")
+
+
 
         # Instruction box
-        self.announcement_box = tk.Text(self.settings_frame, wrap="word", width=105)
+        self.announcement_box = tk.Text(self.settings_frame, wrap="word", width=75)
         self.announcement_box.insert("1.0",
-                                     '''Welcome to Squarespace Companion!
+                                     '''In order for Squarespace Companion to interface with your inventory spreadsheet 
+it needs to know the column headers that are used. For example; if your items are 
+listed in rows, you probably have data such as "name", "description", and "price", 
+set as the column headers. 
 
-If you have not already, please configure your settings
-under the settings option in the main menu.''')
-        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+The column headers that are required to be configured are: 
+name 
+SKU 
+item description 
+price 
+quantity
+deleted
+
+If your inventory spreadsheet does not have columns with this info then you must 
+create them. This is the minimum info needed to create new products. 
+
+How to set the configuration: 
+Input the names of your column headers in the fields above and click save. You
+must type them EXACTLY as they appear on the spreadsheet. This only needs to be
+done once unless you change the headers on your excel file.''')
+        self.announcement_box_font = font.Font(size=17, family="Helvetica")
+        self.announcement_box.config(state="disabled", font=self.announcement_box_font, bg="#2b2d30")
         self.announcement_box.tag_configure("custom tag", foreground="white")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
-        self.announcement_box.grid(row=9, column=0, rowspan=10, columnspan=12, padx=20, pady=20, sticky="nsew")
+        self.announcement_box.grid(row=11, column=0, rowspan=10, columnspan=12, padx=20, pady=20, sticky="nsew")
 
 
         # self.settings_tabview = customtkinter.CTkTabview(parent, width=50)
