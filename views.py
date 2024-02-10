@@ -21,7 +21,7 @@ class App(customtkinter.CTk):
         super().__init__()
         self.auth_controller = auth_controller
         self.active_widget = WelcomeView(self)
-        self.authenticated = True
+        self.authenticated = False
         self.active_user = self.auth_controller.active_user
 
         # configure window
@@ -34,8 +34,8 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Create login view
-        # loginview = LoginView(self)
-        # self.wait_window(loginview)
+        loginview = LoginView(self)
+        self.wait_window(loginview)
 
         # Menu accessed only after successful authentication from login view
         if self.authenticated:
@@ -291,9 +291,6 @@ class LoginView(customtkinter.CTkToplevel):
         
         self.login_button = customtkinter.CTkButton(self, text="Login", command=lambda: self.login())
         self.login_button.pack(pady=10)
-
-        self.login_failed_label = customtkinter.CTkLabel(self, text="Username or password incorrect")
-        self.login_failed_label.pack(pady=10)
         
     def login(self):
         '''
@@ -309,3 +306,12 @@ class LoginView(customtkinter.CTkToplevel):
             self.parent.authenticated = True
             self.parent.active_user = auth_user
             self.destroy()
+        else:
+            if not hasattr(self, 'login_failed_label'):
+                self.login_failed_label = customtkinter.CTkLabel(self, text="Username or password incorrect")
+                self.login_failed_label.pack(pady=10)
+            else:
+                self.login_failed_label.config(text="Username or password incorrect")
+
+class CreateUserView(customtkinter.CTkToplevel):
+    pass
