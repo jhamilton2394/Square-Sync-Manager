@@ -80,25 +80,38 @@ class MenuView(customtkinter.CTk):
         # create sidebar frame with widgets
         self.sidebar_frame = customtkinter.CTkFrame(parent, width=180, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+        #self.sidebar_frame.grid_rowconfigure(4, weight=1)
 
         # Menu logo
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
                                                  font=customtkinter.CTkFont(size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20,10))
-        
+
+        if self.parent.active_user:
+            self.active_user_label = customtkinter.CTkLabel(self.sidebar_frame, text=f"Welcome {self.parent.active_user.username}!")
+            self.active_user_label.grid(row=1, column=0, padx=20, pady=(10, 10))
+
+        # Login button
+        if self.parent.active_user is None:
+            self.login_button = customtkinter.CTkButton(self.sidebar_frame, text="Login", width=140)
+            self.login_button.grid(row=2, column=0, padx=20, pady=(10, 10))
+        else:
+            self.logout_button = customtkinter.CTkButton(self.sidebar_frame, text="Log out", width=140)
+            self.logout_button.grid(row=2, column=0, padx=20, pady=(10, 10))
+
         # Create products button
         self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140)
-        self.create_prod_button.grid(row=1, column=0, padx=20, pady=(10, 10))
+        self.create_prod_button.grid(row=3, column=0, padx=20, pady=(10, 10))
 
         # Settings button
         self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
                                                        command=lambda: parent.view_toggle(SettingsView, parent))
-        self.settings_button.grid(row=2, column=0, padx=20, pady=(10, 10))
+        self.settings_button.grid(row=4, column=0, padx=20, pady=(10, 10))
 
         # info button
-        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140)
-        self.info_button.grid(row=3, column=0, padx=20, pady=(10, 10))
+        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
+                                                   command=lambda: parent.view_toggle(AlternateLogin, parent))
+        self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
 class WelcomeView:
     '''
@@ -312,6 +325,52 @@ class LoginView(customtkinter.CTkToplevel):
                 self.login_failed_label.pack(pady=10)
             else:
                 self.login_failed_label.config(text="Username or password incorrect")
+
+class AlternateLogin:
+    def __init__(self, parent):
+        self.parent = parent
+
+        self.login_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=1200)
+        self.login_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew", ipadx=20)
+
+        self.label = customtkinter.CTkLabel(self.login_frame, text="Enter username and password")
+        self.label.pack(pady=10)
+
+        self.username_entry = customtkinter.CTkEntry(self.login_frame, placeholder_text="Username")
+        self.username_entry.pack(pady=10)
+
+        self.password_entry = customtkinter.CTkEntry(self.login_frame, show="*", placeholder_text="Password")
+        self.password_entry.pack(pady=5)
+        
+        self.login_button = customtkinter.CTkButton(self.login_frame, text="Login", command=lambda: self.login())
+        self.login_button.pack(pady=10)
+
+    def login(self):
+        '''
+        Communicates with the auth_controller and the User model to perform user authentication.
+        If authentication is successful the authenticated user instance is returned and set
+        as the active_user, and the authenticated status is set to True.
+        '''
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        auth_user = self.parent.auth_controller.login_user(username, password)
+        if auth_user:
+            self.parent.authenticated = True
+            self.parent.active_user = auth_user
+            self.destroy()
+        else:
+            if not hasattr(self, 'login_failed_label'):
+                self.login_failed_label = customtkinter.CTkLabel(self, text="Username or password incorrect")
+                self.login_failed_label.pack(pady=10)
+            else:
+                self.login_failed_label.config(text="Username or password incorrect")
+
+    def destroy(self):
+        self.login_frame.destroy()
+
+
+
 
 class CreateUserView(customtkinter.CTkToplevel):
     pass
