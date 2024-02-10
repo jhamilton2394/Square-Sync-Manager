@@ -25,6 +25,8 @@ class AuthController:
         '''
         Takes a user instance and password and checks if given password matches the
         instance's password hash.
+
+        Note: The user instance must be an active_user, not a temp_user.
         '''
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if hashed_password == user.password:

@@ -105,12 +105,12 @@ class MenuView(customtkinter.CTk):
 
         # Settings button
         self.settings_button = customtkinter.CTkButton(self.sidebar_frame, text="Settings", width = 140,
-                                                       command=lambda: parent.view_toggle(SettingsView, parent))
+                                                       command=lambda: self.parent.view_toggle(SettingsView, parent))
         self.settings_button.grid(row=4, column=0, padx=20, pady=(10, 10))
 
         # info button
         self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
-                                                   command=lambda: parent.view_toggle(AlternateLogin, parent))
+                                                   command=lambda: self.parent.view_toggle(AlternateLogin, parent))
         self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
 class WelcomeView:
@@ -124,7 +124,7 @@ class WelcomeView:
     '''
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
-        self.announcement_box = tk.Text(parent, wrap="word", width=250)
+        self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
         self.announcement_box.insert("1.0",
                                      '''Welcome to Squarespace Companion!
 
@@ -133,18 +133,13 @@ under the settings option in the main menu.''')
         self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
         self.announcement_box.tag_configure("custom tag", foreground="white")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
-        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-
-        # Create test button
-        self.test_button = customtkinter.CTkButton(parent, text="Test button", width=140)
-        self.test_button.grid(row=1, column=1)
+        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
 
     def __str__(self):
         return f"{self.__class__.__name__}"
 
     def destroy(self):
         self.announcement_box.destroy()
-        self.test_button.destroy()
 
 class SettingsView:
     '''
