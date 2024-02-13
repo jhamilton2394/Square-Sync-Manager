@@ -13,11 +13,20 @@ system via pickling, but this can be easily modified to work with SQL and an ORM
 class User:
     '''
     Create a user with a username and password. Password is only saved as a hash.
-    Refer to SecurePassword class for password details.
+    Refer to SecurePassword class for password details. The other instance variables
+    are the user's inventory sheet header settings.
     '''
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = str(SecurePassword(password))
+
+        self.api_key = None
+        self.product_name = None
+        self.sku = None
+        self.item_desc = None
+        self.price = None
+        self.qty = None
+        self.deleted = None
 
     def validate_username(self):
         '''
@@ -66,8 +75,8 @@ class User:
     def get_user(self):
         '''
         Matches username of the temp user with the actual user that is
-        saved in the users file, if it exists. Returns actual user instance.
-        Used by auth_controller for authentication.
+        saved in the users file, if it exists. Returns actual user instance,
+        or False. Used by auth_controller for authentication.
         '''
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
@@ -77,6 +86,19 @@ class User:
                     if self.username == user.username:
                         return user
                 return False
+            
+    def get_user_list(self):
+        file_path = 'files/users.pkl'
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as read_file:
+                user_list = pickle.load(read_file)
+                return user_list
+            
+    def save_user_list(self, user_list):
+        file_path = 'files/users.pkl'
+        if os.path.exists(file_path):
+            with open(file_path, "wb") as file:
+                pickle.dump(user_list, file)
 
     def __str__(self):
         return f"{self.username}"

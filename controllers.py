@@ -33,3 +33,16 @@ class AuthController:
             return True
         else:
             return False
+
+    def update_user_settings_controller(self, argument_list, active_user):
+        for item in argument_list:
+            active_user.item = item
+
+        user_list = active_user.get_user_list()
+
+        for user in user_list:
+            if active_user.username == user.username:
+                user_list.remove(user)
+        user_list.append(active_user)
+        active_user.save_user_list(user_list)
+        return active_user

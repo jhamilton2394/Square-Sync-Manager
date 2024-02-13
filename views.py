@@ -147,6 +147,7 @@ class SettingsView:
     '''
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
+        self.active_user = self.parent.active_user
 
         # Create settings frame
         self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=1200)
@@ -166,7 +167,7 @@ class SettingsView:
         self.current_key_label.grid(row=1, column=0, pady=5, sticky="e")
 
         # Current key entry field
-        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Current key not set",)
+        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.api_key)
         self.current_key_entry.grid(row=1, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Column header configuration settings
@@ -176,41 +177,42 @@ class SettingsView:
         # Name header
         self.name_header_label = customtkinter.CTkLabel(self.settings_frame, text="Name header")
         self.name_header_label.grid(row=4, column=0, sticky="e")
-        self.name_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Name header not set")
+        self.name_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.product_name)
         self.name_entry.grid(row=4, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # SKU header
         self.sku_header_label = customtkinter.CTkLabel(self.settings_frame, text="SKU header")
         self.sku_header_label.grid(row=5, column=0, sticky="e")
-        self.sku_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="SKU header not set")
+        self.sku_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.sku)
         self.sku_entry.grid(row=5, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Item description header
         self.item_desc_header_label = customtkinter.CTkLabel(self.settings_frame, text="Item Description header")
         self.item_desc_header_label.grid(row=6, column=0, sticky="e")
-        self.item_desc_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Name header not set")
+        self.item_desc_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.item_desc)
         self.item_desc_entry.grid(row=6, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Price header
         self.price_header_label = customtkinter.CTkLabel(self.settings_frame, text="price header")
         self.price_header_label.grid(row=7, column=0, sticky="e")
-        self.price_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Price header not set")
+        self.price_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.price)
         self.price_entry.grid(row=7, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Quantity header
         self.qty_header_label = customtkinter.CTkLabel(self.settings_frame, text="Quantity header")
         self.qty_header_label.grid(row=8, column=0, sticky="e")
-        self.qty_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Quantity header not set")
+        self.qty_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.qty)
         self.qty_entry.grid(row=8, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Deleted header
         self.deleted_header_label = customtkinter.CTkLabel(self.settings_frame, text="Deleted header")
         self.deleted_header_label.grid(row=9, column=0, sticky="e")
-        self.deleted_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="Deleted header not set")
+        self.deleted_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.deleted)
         self.deleted_entry.grid(row=9, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Save button
-        self.save_button = customtkinter.CTkButton(self.settings_frame, text="Save")
+        self.save_button = customtkinter.CTkButton(self.settings_frame, text="Save",
+                                                   command=self.update_user_settings)
         self.save_button.grid(row=10, column=1, columnspan=6, padx=7, pady=5, sticky="w")
 
         # File selection section
@@ -251,25 +253,38 @@ done once unless you change the headers on your excel file.''')
         self.announcement_box.tag_configure("custom tag", foreground="white")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
         self.announcement_box.grid(row=11, column=0, rowspan=10, columnspan=12, padx=20, pady=20, sticky="nsew")
+    
+    def update_user_settings(self):
+        
+        api_key_var = self.current_key_entry.get()
+        product_name_var = self.name_entry.get()
+        sku_var = self.sku_entry.get()
+        item_desc_var = self.item_desc_entry.get()
+        price_var = self.price_entry.get()
+        qty_var = self.qty_entry.get()
+        deleted_var = self.deleted_entry.get()
 
+        active_user = self.parent.active_user
 
-        # self.settings_tabview = customtkinter.CTkTabview(parent, width=50)
-        # self.settings_tabview.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        # self.settings_tabview.add("Set API Key")
-        # self.settings_tabview.add("Select Inventory File")
-        # self.settings_tabview.add("Column Header Configuration")
+        input_dict = {"api_key": api_key_var,
+                      "product_name": product_name_var,
+                      "sku": sku_var,
+                      "item_desc": item_desc_var,
+                      "price": price_var,
+                      "qty": qty_var,
+                      "deleted": deleted_var}
+        argument_dict = {}
+        for key, value in input_dict.items():
+            if value:
+                argument_dict[key] = value
+                print(f"adding {key}, as key, and {value} as value.")
 
-        # # Display current API key
-        # self.key_label = customtkinter.CTkLabel(self.settings_tabview.tab("Set API Key"), text="Current API key")
-        # self.key_label.grid(row=0, column=0, padx=5, pady=20)
-        # self.current_key_label = customtkinter.CTkLabel(self.settings_tabview.tab("Set API Key"), text="jasdkfj3joirjfasdkfjakl23")
-        # self.current_key_label.grid(row=0, column=1, padx=5, pady=20)
+        updated_user = self.parent.auth_controller.update_user_settings_controller(argument_dict, active_user)
+        
+        self.parent.active_user = updated_user
 
-        # # Create API key entry field and button
-        # self.entry_button = customtkinter.CTkButton(self.settings_tabview.tab("Set API Key"), text="Save", width=80)
-        # self.entry_button.grid(row=1, column=0, padx=5, pady=20)
-        # self.entry = customtkinter.CTkEntry(self.settings_tabview.tab("Set API Key"), placeholder_text="API Key", width=250)
-        # self.entry.grid(row=1, column=1, pady=20)
+        self.parent.view_toggle(SettingsView, self.parent)
+        self.parent.view_toggle(SettingsView, self.parent)
 
     def destroy(self):
         #self.settings_tabview.destroy()
