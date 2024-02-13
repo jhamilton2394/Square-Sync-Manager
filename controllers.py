@@ -21,12 +21,12 @@ class AuthController:
         else:
             return False
         
-    def validate_password(user, password: str):
+    def validate_password(user, password):
         '''
         Takes a user instance and password and checks if given password matches the
         instance's password hash.
 
-        Note: The user instance must be an active_user, not a temp_user.
+        Note: The user instance cannot be a temp_user.
         '''
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if hashed_password == user.password:
@@ -34,9 +34,28 @@ class AuthController:
         else:
             return False
 
-    def update_user_settings_controller(self, argument_list, active_user):
-        for item in argument_list:
-            active_user.item = item
+    def update_user_settings_controller(self, argument_dict, active_user):
+        '''
+        Called by SettingsView's update_user_settings method.
+        Parameters:
+            argument_dict (dict): Contains the settings to be updated.
+            active_user (User): The active user whose settings will be updated.
+
+        Returns:
+            User: The updated active user.
+
+        This function uses the argument dictionary to set the corresponding attributes of the
+        active user using setattr().
+
+        Additionally, it updates the user list with the updated user info, then calls
+        save_user_list() to save it.
+
+        Example usage:
+            argument_dict = {'username': 'new_username', 'api_key': '34jAS$##Fddu3!@SSdfvdDD#'}
+            updated_user = update_user_settings_controller(argument_dict, active_user)
+    '''
+        for key, value in argument_dict.items():
+            setattr(active_user, key, value)
 
         user_list = active_user.get_user_list()
 

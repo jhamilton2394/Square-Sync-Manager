@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import font
 import customtkinter
 from PIL import Image, ImageTk
+from controllers import *
 
 #### set authenticated to True for development
 #### Leave "Create login view" block commented out for development
@@ -46,14 +47,15 @@ class App(customtkinter.CTk):
 
     def view_toggle(self, view, *args, **kwargs):
         '''
-        This method toggles the class based views on or off inside their specified containers.
+        This method toggles the class based views on or off inside their specified containers by
+        checking the state of the active_widget attribute, and changing it as necessary.
         
         Example usage:
 
         # Toggle view on button click
         ...command=lambda: view_toggle(WelcomeView, parent=self.sidebar_frame)
 
-        view_toggle creates an instance of the class view, so it is necessary to include the class view's
+        view_toggle creates an instance of the specified view class, so it is necessary to include the view's
         required argument, which is the parent container you wish the view to be created in.
         
         The above example creates an instance of the WelcomeView class inside of the sidebar_frame container.
@@ -140,7 +142,6 @@ under the settings option in the main menu.''')
 
     def destroy(self):
         self.announcement_box.destroy()
-
 class SettingsView:
     '''
     Opens the settings menu when toggled.
@@ -255,7 +256,13 @@ done once unless you change the headers on your excel file.''')
         self.announcement_box.grid(row=11, column=0, rowspan=10, columnspan=12, padx=20, pady=20, sticky="nsew")
     
     def update_user_settings(self):
-        
+        '''
+        Communicates with the auth_controller to update user settings, specifically the
+        api key and column header settings. Blank fields are filtered out, and remaining
+        fields are sent as a dictionary to the update_user_settings_controller method,
+        along with the active_user instance. Updated user set as active and SettingsView
+        is refreshed.
+        '''
         api_key_var = self.current_key_entry.get()
         product_name_var = self.name_entry.get()
         sku_var = self.sku_entry.get()
