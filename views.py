@@ -386,8 +386,5 @@ class AlternateLogin:
     def destroy(self):
         self.login_frame.destroy()
 
-
-
-
 class CreateUserView(customtkinter.CTkToplevel):
     pass
