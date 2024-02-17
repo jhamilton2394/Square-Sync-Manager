@@ -7,17 +7,18 @@ from controllers import *
 #### set authenticated to True for development
 #### Leave "Create login view" block commented out for development
 
-'''
+"""
 The class based views can be toggled in any container inside the main app class.
 Each view must be passed a "parent" when instantiated so that the view_toggle
 method can place the view in the correct place.
-'''
+"""
 
 class App(customtkinter.CTk):
-    '''
+    """
     This is the main app window. Once authenticated, the MenuView can toggle the class
     based views inside this main window.
-    '''
+    """
+
     def __init__(self, auth_controller):
         super().__init__()
         self.auth_controller = auth_controller
@@ -26,7 +27,6 @@ class App(customtkinter.CTk):
         self.derived_session_key = None
 
         self.active_widget = WelcomeView(self)
-
 
         # configure window
         self.title("Squarespace Companion")
@@ -49,7 +49,7 @@ class App(customtkinter.CTk):
             #welcomeview = WelcomeView(self)
 
     def view_toggle(self, view, *args, **kwargs):
-        '''
+        """
         This method toggles the class based views on or off inside their specified containers by
         checking the state of the active_widget attribute, and changing it as necessary.
         
@@ -62,8 +62,7 @@ class App(customtkinter.CTk):
         required argument, which is the parent container you wish the view to be created in.
         
         The above example creates an instance of the WelcomeView class inside of the sidebar_frame container.
-        '''
-
+        """
         if self.active_widget is None:
             self.view = view(*args, **kwargs)
             self.active_widget = self.view
@@ -76,9 +75,8 @@ class App(customtkinter.CTk):
             self.active_widget = self.view
 
 class MenuView(customtkinter.CTk):
-    '''
-    Menu view is created after successful authentication. Contains a frame with the menu buttons.
-    '''
+    """Menu view is created after successful authentication. Contains a frame with the menu buttons."""
+
     def __init__(self, parent):
         self.parent = parent
 
@@ -119,22 +117,23 @@ class MenuView(customtkinter.CTk):
         self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
 class WelcomeView:
-    '''
+    """
     This is the welcome widget that is visible upon program startup. It Displays instructions
     or various info.
 
     WelcomeView objects must be instatiated with a parent argument. The parent is which app widget will
     contain the welcome view widget. To place the WelcomeView widget in the default window simply
     pass "self" as the argument. All class based views function the same way.
-    '''
+    """
+
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
         self.announcement_box.insert("1.0",
-                                     '''Welcome to Squarespace Companion!
+                                     """Welcome to Squarespace Companion!
 
 If you have not already, please configure your settings
-under the settings option in the main menu.''')
+under the settings option in the main menu.""")
         self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
         self.announcement_box.tag_configure("custom tag", foreground="white")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
@@ -146,9 +145,8 @@ under the settings option in the main menu.''')
     def destroy(self):
         self.announcement_box.destroy()
 class SettingsView:
-    '''
-    Opens the settings menu when toggled.
-    '''
+    """Opens the settings menu when toggled."""
+
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
         self.active_user = self.parent.active_user
@@ -237,7 +235,7 @@ class SettingsView:
         # Instruction box
         self.announcement_box = tk.Text(self.settings_frame, wrap="word", width=75)
         self.announcement_box.insert("1.0",
-                                     '''In order for Squarespace Companion to interface with your inventory spreadsheet 
+                                     """In order for Squarespace Companion to interface with your inventory spreadsheet 
 it needs to know the column headers that are used. For example; if your items are 
 listed in rows, you probably have data such as "name", "description", and "price", 
 set as the column headers. 
@@ -256,7 +254,7 @@ create them. This is the minimum info needed to create new products.
 How to set the configuration: 
 Input the names of your column headers in the fields above and click save. You
 must type them EXACTLY as they appear on the spreadsheet. This only needs to be
-done once unless you change the headers on your excel file.''')
+done once unless you change the headers on your excel file.""")
         self.announcement_box_font = font.Font(size=17, family="Helvetica")
         self.announcement_box.config(state="disabled", font=self.announcement_box_font, bg="#2b2d30")
         self.announcement_box.tag_configure("custom tag", foreground="white")
@@ -264,13 +262,13 @@ done once unless you change the headers on your excel file.''')
         self.announcement_box.grid(row=11, column=0, rowspan=10, columnspan=12, padx=20, pady=20, sticky="nsew")
     
     def update_user_settings(self):
-        '''
+        """
         Communicates with the auth_controller to update user settings, specifically the
         api key and column header settings. Blank fields are filtered out, and remaining
         fields are sent as a dictionary to the update_user_settings_controller method,
         along with the active_user instance. Updated user set as active and SettingsView
         is refreshed.
-        '''
+        """
         api_key_var = self.current_key_entry.get()
         encrypted_api_key = self.parent.auth_controller.encrypt(self.parent.derived_session_key, api_key_var)
         product_name_var = self.name_entry.get()
@@ -307,10 +305,11 @@ done once unless you change the headers on your excel file.''')
         self.settings_frame.destroy()
 
 class LoginView(customtkinter.CTkToplevel):
-    '''
+    """
     LoginView is called automatically upon startup. All other windows are blocked
     until authentication is successful.
-    '''
+    """
+    
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -332,12 +331,12 @@ class LoginView(customtkinter.CTkToplevel):
         self.login_button.pack(pady=10)
         
     def login(self):
-        '''
+        """
         Communicates with the auth_controller and the User model to perform user authentication.
         If authentication is successful the authenticated user instance is returned and set
         as the active_user, authenticated status is set to True, and a derived_session_key
         is created and set.
-        '''
+        """
         username = self.username_entry.get()
         password = self.password_entry.get()
 
@@ -374,11 +373,11 @@ class AlternateLogin:
         self.login_button.pack(pady=10)
 
     def login(self):
-        '''
+        """
         Communicates with the auth_controller and the User model to perform user authentication.
         If authentication is successful the authenticated user instance is returned and set
         as the active_user, and the authenticated status is set to True.
-        '''
+        """
         username = self.username_entry.get()
         password = self.password_entry.get()
 

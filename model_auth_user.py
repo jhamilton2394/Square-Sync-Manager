@@ -4,19 +4,20 @@ import os
 
 # Written by Jonathan Hamilton
 
-'''
+"""
 This module can act as a stand-alone authentication-user model. It contains tools for
 creating users with secure passwords. Users are saved to the local machines file
 system via pickling, but this can be easily modified to work with SQL and an ORM.
-'''
+"""
 
 class User:
-    '''
+    """
     Create a user with a username and password. Password is only saved as a hash.
     Refer to SecurePassword class for password details. The other instance variables
     are the user's inventory sheet header settings, as well as the salt, which is
     used for encryption of sensitive persistent data.
-    '''
+    """
+
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = str(SecurePassword(password))
@@ -31,13 +32,13 @@ class User:
         self.deleted = None
 
     def validate_username(self):
-        '''
+        """
         Checks if username already exists. Returns False if username exists, ie username is NOT valid.
         Returns True if username does not exist, ie username IS valid.
 
         Also checks if the file containing user data exists. If not, then no users yet exist and
         the function returns True.
-        '''
+        """
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
             with open(file_path, 'rb') as file:
@@ -51,13 +52,13 @@ class User:
             return True
         
     def save(self):
-        '''
+        """
         Validates username and saves user instance to users.pkl file. If username
         is already taken it is not saved and an error message is printed.
 
         If users.pkl doesn't exist then it is created and the specified user is saved.
         If it does exist the user is appended to the user list.
-        '''
+        """
         if self.validate_username():
             file_path = 'files/users.pkl'
             if os.path.exists(file_path):
@@ -75,11 +76,11 @@ class User:
             print(f"The username {self.username} is already taken")
             
     def get_user(self):
-        '''
+        """
         Matches username of the temp user with the actual user that is
         saved in the users file, if it exists. Returns actual user instance,
         or False. Used by auth_controller for authentication.
-        '''
+        """
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
             with open(file_path, 'rb') as read_file:
@@ -90,10 +91,10 @@ class User:
                 return False
             
     def get_user_list(self):
-        '''
+        """
         Used by AuthController's update_user_settings_controller to retrieve user
         list from user file.
-        '''
+        """
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
             with open(file_path, 'rb') as read_file:
@@ -101,10 +102,10 @@ class User:
                 return user_list
             
     def save_user_list(self, user_list):
-        '''
+        """
         Used by AuthController's update_user_settings_controller to save the
         updated user list to the user file.
-        '''
+        """
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
             with open(file_path, "wb") as file:
@@ -117,9 +118,7 @@ class User:
         return f"{self.username}"
 
 class SecurePassword:
-    '''
-    Takes users plain text password and saves it as a hash. Used in the User class.
-    '''
+    """Takes users plain text password and saves it as a hash. Used in the User class."""
     def __init__(self, password: str):
         self.secure_password = self.password_hash(password)
 

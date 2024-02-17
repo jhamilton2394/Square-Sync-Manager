@@ -10,11 +10,11 @@ class AuthController:
         self.active_user = None
                     
     def login_user(self, username, password):
-        '''
+        """
         Called by LoginView's login method upon login attempt. Creates a temp_user then calls the User models get_user method.
         If the get_user method returns a user instance then the temp_user and the matched_users passwords are compared. If
         successful the user is assigned as active and the instance is returned to the login view.
-        '''
+        """
         temp_user = User(username, password)
         matched_user = temp_user.get_user()
         if matched_user:
@@ -27,12 +27,12 @@ class AuthController:
             return False
         
     def validate_password(user, password):
-        '''
+        """
         Takes a user instance and password and checks if given password matches the
         instance's password hash.
 
         Note: The user instance cannot be a temp_user.
-        '''
+        """
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         if hashed_password == user.password:
             return True
@@ -40,11 +40,11 @@ class AuthController:
             return False
 
     def update_user_settings_controller(self, argument_dict, active_user):
-        '''
+        """
         Called by SettingsView's update_user_settings method.
         This function uses the argument dictionary to set the corresponding attributes of the
         active user using setattr(). User_list is then updated with the updated user.
-        '''
+        """
         for key, value in argument_dict.items():
             setattr(active_user, key, value)
 
@@ -58,10 +58,10 @@ class AuthController:
         return active_user
 
     def derive_key(self, password, salt):
-        '''
+        """
         Creates a derived encryption key using the users password and the users
         randomly generated salt. Used in the encrypt and decrypt methods.
-        '''
+        """
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
@@ -73,17 +73,13 @@ class AuthController:
         return base64.urlsafe_b64encode(key)
     
     def encrypt(self, key, data):
-        '''
-        Encrypts given data using the derived_key.
-        '''
+        """Encrypts given data using the derived_key."""
         fernet = Fernet(key)
         encrypted_data = fernet.encrypt(data.encode())
         return encrypted_data
     
     def decrypt(self, key, encrypted_data):
-        '''
-        Decrypts given encrypted data using the derived_key.
-        '''
+        """Decrypts given encrypted data using the derived_key."""
         fernet = Fernet(key)
         decrypted_data = fernet.decrypt(encrypted_data).decode()
         return decrypted_data
