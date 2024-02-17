@@ -335,7 +335,8 @@ class LoginView(customtkinter.CTkToplevel):
         '''
         Communicates with the auth_controller and the User model to perform user authentication.
         If authentication is successful the authenticated user instance is returned and set
-        as the active_user, and the authenticated status is set to True.
+        as the active_user, authenticated status is set to True, and a derived_session_key
+        is created and set.
         '''
         username = self.username_entry.get()
         password = self.password_entry.get()
