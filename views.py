@@ -21,9 +21,12 @@ class App(customtkinter.CTk):
     def __init__(self, auth_controller):
         super().__init__()
         self.auth_controller = auth_controller
-        self.active_widget = WelcomeView(self)
         self.authenticated = False
-        self.active_user = self.auth_controller.active_user
+        self.active_user = None
+        self.derived_session_key = None
+
+        self.active_widget = WelcomeView(self)
+
 
         # configure window
         self.title("Squarespace Companion")
@@ -149,6 +152,11 @@ class SettingsView:
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
         self.active_user = self.parent.active_user
+        if self.active_user.api_key:
+            self.encrypted_api_key = self.active_user.api_key
+            self.decrypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.encrypted_api_key)
+        else:
+            self.decrypted_api_key = None
 
         # Create settings frame
         self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=1200)
@@ -168,7 +176,7 @@ class SettingsView:
         self.current_key_label.grid(row=1, column=0, pady=5, sticky="e")
 
         # Current key entry field
-        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.api_key)
+        self.current_key_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.decrypted_api_key)
         self.current_key_entry.grid(row=1, column=1, columnspan=5, padx=7, pady=5, sticky="nsew")
 
         # Column header configuration settings
@@ -264,6 +272,7 @@ done once unless you change the headers on your excel file.''')
         is refreshed.
         '''
         api_key_var = self.current_key_entry.get()
+        encrypted_api_key = self.parent.auth_controller.encrypt(self.parent.derived_session_key, api_key_var)
         product_name_var = self.name_entry.get()
         sku_var = self.sku_entry.get()
         item_desc_var = self.item_desc_entry.get()
@@ -273,7 +282,7 @@ done once unless you change the headers on your excel file.''')
 
         active_user = self.parent.active_user
 
-        input_dict = {"api_key": api_key_var,
+        input_dict = {"api_key": encrypted_api_key,
                       "product_name": product_name_var,
                       "sku": sku_var,
                       "item_desc": item_desc_var,
@@ -335,6 +344,7 @@ class LoginView(customtkinter.CTkToplevel):
         if auth_user:
             self.parent.authenticated = True
             self.parent.active_user = auth_user
+            self.parent.derived_session_key = self.parent.auth_controller.derive_key(password, auth_user.salt)
             self.destroy()
         else:
             if not hasattr(self, 'login_failed_label'):

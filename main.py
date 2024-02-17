@@ -3,6 +3,8 @@ from views import *
 from controllers import *
 
 '''
+Dear evaluators,
+
 This app follows the MVC architecture. Refer to the applicable models, views, or controller files as needed.
 
 All data is stored in files under the files folder using Pickle. The apps small size and intended user base

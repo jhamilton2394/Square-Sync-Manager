@@ -14,11 +14,13 @@ class User:
     '''
     Create a user with a username and password. Password is only saved as a hash.
     Refer to SecurePassword class for password details. The other instance variables
-    are the user's inventory sheet header settings.
+    are the user's inventory sheet header settings, as well as the salt, which is
+    used for encryption of sensitive persistent data.
     '''
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = str(SecurePassword(password))
+        self.salt = os.urandom(16)
 
         self.api_key = None
         self.product_name = None
@@ -88,6 +90,10 @@ class User:
                 return False
             
     def get_user_list(self):
+        '''
+        Used by AuthController's update_user_settings_controller to retrieve user
+        list from user file.
+        '''
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
             with open(file_path, 'rb') as read_file:
@@ -95,6 +101,10 @@ class User:
                 return user_list
             
     def save_user_list(self, user_list):
+        '''
+        Used by AuthController's update_user_settings_controller to save the
+        updated user list to the user file.
+        '''
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
             with open(file_path, "wb") as file:

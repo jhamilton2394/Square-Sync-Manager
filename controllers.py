@@ -1,5 +1,10 @@
 from model_auth_user import *
-
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import os
+import base64
 class AuthController:
     def __init__(self):
         self.active_user = None
@@ -51,3 +56,34 @@ class AuthController:
         user_list.append(active_user)
         active_user.save_user_list(user_list)
         return active_user
+
+    def derive_key(self, password, salt):
+        '''
+        Creates a derived encryption key using the users password and the users
+        randomly generated salt. Used in the encrypt and decrypt methods.
+        '''
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+            backend=default_backend()
+        )
+        key = kdf.derive(password.encode())
+        return base64.urlsafe_b64encode(key)
+    
+    def encrypt(self, key, data):
+        '''
+        Encrypts given data using the derived_key.
+        '''
+        fernet = Fernet(key)
+        encrypted_data = fernet.encrypt(data.encode())
+        return encrypted_data
+    
+    def decrypt(self, key, encrypted_data):
+        '''
+        Decrypts given encrypted data using the derived_key.
+        '''
+        fernet = Fernet(key)
+        decrypted_data = fernet.decrypt(encrypted_data).decode()
+        return decrypted_data
