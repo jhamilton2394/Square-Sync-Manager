@@ -64,6 +64,7 @@ class User:
         self.price = None
         self.qty = None
         self.deleted = None
+        self.file_name = None
 
     def validate_username(self):
         """

@@ -1,3 +1,11 @@
+"""
+Note: Any data encrypted with this system is permenantly lost if the user forgets their password.
+Creating a recovery system is not a priority at this time since the only data intended for
+encryption, as of now, is the api key which can easily be retreived from the squarespace
+website if the user does forget their password here.
+"""
+
+
 from model_auth_user import *
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
@@ -5,6 +13,8 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import os
 import base64
+from tkinter.filedialog import askopenfilename
+
 class AuthController:
     def __init__(self):
         self.active_user = None

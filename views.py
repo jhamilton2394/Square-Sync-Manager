@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import font
+from tkinter.filedialog import askopenfilename
 import customtkinter
 from PIL import Image, ImageTk
 from controllers import *
@@ -144,26 +145,21 @@ under the settings option in the main menu.""")
 
     def destroy(self):
         self.announcement_box.destroy()
-class SettingsView:
+class SettingsView(customtkinter.CTk):
     """Opens the settings menu when toggled."""
 
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
         self.active_user = self.parent.active_user
         if self.active_user.api_key:
-            self.encrypted_api_key = self.active_user.api_key
-            self.decrypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.encrypted_api_key)
+            #self.encrypted_api_key = self.active_user.api_key
+            self.decrypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.active_user.api_key)
         else:
             self.decrypted_api_key = None
 
         # Create settings frame
         self.settings_frame = customtkinter.CTkScrollableFrame(parent, width=250, height=1200)
         self.settings_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew", ipadx=20)
-
-        # # dummy frame
-        # self.dummy_frame = customtkinter.CTkFrame(self.settings_frame, width=50, height=300, border_width=2, border_color="green")
-        # self.dummy_frame.grid(row=0, column=0, rowspan=5, padx=10, pady=5, sticky="ns")
-        # self.dummy_frame.grid_columnconfigure(0, weight=1)
 
         # API key section
         self.api_label = customtkinter.CTkLabel(self.settings_frame, text="Set API key", font=customtkinter.CTkFont(size=15, weight="bold"))
@@ -225,12 +221,10 @@ class SettingsView:
         # File selection section
         self.file_selection_label = customtkinter.CTkLabel(self.settings_frame, text="Select inventory file", font=customtkinter.CTkFont(size=15, weight="bold"))
         self.file_selection_label.grid(row=3, column=6, padx=7, pady=(20, 5), columnspan=3, sticky="w")
-        self.file_selection_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text="No file selected")
+        self.file_selection_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.file_name)
         self.file_selection_entry.grid(row=4, column=6, columnspan=5, padx=7, pady=5, sticky="nsew")
-        self.file_select_button = customtkinter.CTkButton(self.settings_frame, text="Select file")
+        self.file_select_button = customtkinter.CTkButton(self.settings_frame, text="Select file", command=self.file_select)
         self.file_select_button.grid(row=5, column=6, columnspan=6, padx=7, pady=5, sticky="w")
-
-
 
         # Instruction box
         self.announcement_box = tk.Text(self.settings_frame, wrap="word", width=75)
@@ -270,15 +264,16 @@ done once unless you change the headers on your excel file.""")
         is refreshed.
         """
         api_key_var = self.current_key_entry.get()
-        encrypted_api_key = self.parent.auth_controller.encrypt(self.parent.derived_session_key, api_key_var)
+        if api_key_var:
+            encrypted_api_key = self.parent.auth_controller.encrypt(self.parent.derived_session_key, api_key_var)
+        else:
+            encrypted_api_key = None
         product_name_var = self.name_entry.get()
         sku_var = self.sku_entry.get()
         item_desc_var = self.item_desc_entry.get()
         price_var = self.price_entry.get()
         qty_var = self.qty_entry.get()
         deleted_var = self.deleted_entry.get()
-
-        active_user = self.parent.active_user
 
         input_dict = {"api_key": encrypted_api_key,
                       "product_name": product_name_var,
@@ -293,23 +288,61 @@ done once unless you change the headers on your excel file.""")
                 argument_dict[key] = value
                 print(f"adding {key}, as key, and {value} as value.")
 
-        updated_user = self.parent.auth_controller.update_user_settings_controller(argument_dict, active_user)
-        
+        updated_user = self.parent.auth_controller.update_user_settings_controller(argument_dict, self.parent.active_user)
         self.parent.active_user = updated_user
 
+        # re-render the page with updated user info
         self.parent.view_toggle(SettingsView, self.parent)
         self.parent.view_toggle(SettingsView, self.parent)
+
+    def file_select(self):
+        file_name = askopenfilename()
+        if file_name.endswith('.xlsx'):
+            input_dict = {"file_name": file_name}
+            argument_dict = {}
+            for key, value in input_dict.items():
+                if value:
+                    argument_dict[key] = value
+            
+            updated_user = self.parent.auth_controller.update_user_settings_controller(argument_dict, self.parent.active_user)
+            self.parent.active_user = updated_user
+
+            self.parent.view_toggle(SettingsView, self.parent)
+            self.parent.view_toggle(SettingsView, self.parent)
+        # else: 
+        #     self.error_message = SettingsMessageView(self)
+
+
+
 
     def destroy(self):
         #self.settings_tabview.destroy()
         self.settings_frame.destroy()
+
+class SettingsMessageView(customtkinter.CTkToplevel):
+    def __init__(self):
+        super().__init__()
+        self.title("Error")
+        self.geometry("300x300")
+
+        self.announcement_box = tk.Text(self, wrap="word", width=250, height=580)
+        self.announcement_box.insert("1.0",
+                                     """Welcome to Squarespace Companion!
+
+If you have not already, please configure your settings
+under the settings option in the main menu.""")
+        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.announcement_box.tag_configure("custom tag", foreground="white")
+        self.announcement_box.tag_add("custom tag", 0.0, "end")
+        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
+
 
 class LoginView(customtkinter.CTkToplevel):
     """
     LoginView is called automatically upon startup. All other windows are blocked
     until authentication is successful.
     """
-    
+
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
