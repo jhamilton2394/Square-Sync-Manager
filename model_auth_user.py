@@ -1,24 +1,58 @@
+# Written by Jonathan Hamilton
+
+"""
+A secure pickle based user model
+
+This module along with its controller can act as a stand-alone authentication-user model. It contains tools for
+creating users with secure passwords, as well encrypting and decrypting sensitive data. Users are saved to the
+local machines file system via pickling, but this can be easily modified to work with SQL and an ORM.
+"""
+
 import hashlib
 import pickle
 import os
 
-# Written by Jonathan Hamilton
-
-"""
-This module can act as a stand-alone authentication-user model. It contains tools for
-creating users with secure passwords. Users are saved to the local machines file
-system via pickling, but this can be easily modified to work with SQL and an ORM.
-"""
-
 class User:
     """
-    Create a user with a username and password. Password is only saved as a hash.
-    Refer to SecurePassword class for password details. The other instance variables
-    are the user's inventory sheet header settings, as well as the salt, which is
-    used for encryption of sensitive persistent data.
+    Create a user with a username and password.
+    
+    Password is only saved as a hash. Refer to SecurePassword class for password details. Any users created
+    are temp_users until the username can be validated. Once validated the user is saved and becomes a
+    regular user.
+
+    Attributes:
+    username: str | username
+    password: str | Hash of users plain-text password, stored as string.
+    salt: bytes | Randomly generated value used for encryption.
+
+    File header settings: str | The following attributes are used to configure the users inventory sheet api:
+    api_key, product_name, sku, item_desc, price, qty, deleted
+
+    Methods:
+    validate_username(self):
+        Checks if the username already exists.
+
+    save(self):
+        Saves the user object to the users file if username is valid.
+
+    get_user(self):
+        Uses temp_user object to retreive actual user from storage.
+
+    get_user_list(self):
+        Uses any user object to retreive user_list from storage.
+
+    save_user_list(self, user_list):
+        Saves user_list to users file. 
     """
 
     def __init__(self, username: str, password: str):
+        """
+        Initialize the user with a username, password, and randomly generated salt.
+
+        Parameters:
+        username: str | desired username
+        password: str | desired password
+        """
         self.username = username
         self.password = str(SecurePassword(password))
         self.salt = os.urandom(16)
@@ -33,8 +67,10 @@ class User:
 
     def validate_username(self):
         """
-        Checks if username already exists. Returns False if username exists, ie username is NOT valid.
-        Returns True if username does not exist, ie username IS valid.
+        Checks if username already exists.
+        
+        Returns False if username exists, ie username is NOT valid. Returns True if username
+        does not exist, ie username IS valid.
 
         Also checks if the file containing user data exists. If not, then no users yet exist and
         the function returns True.
@@ -105,6 +141,9 @@ class User:
         """
         Used by AuthController's update_user_settings_controller to save the
         updated user list to the user file.
+
+        Parameters:
+        user_list: list | list containing user objects
         """
         file_path = 'files/users.pkl'
         if os.path.exists(file_path):
@@ -118,11 +157,32 @@ class User:
         return f"{self.username}"
 
 class SecurePassword:
-    """Takes users plain text password and saves it as a hash. Used in the User class."""
+    """
+    Takes users plain text password and saves it as a hash. Used in the User class.
+    
+    Attributes:
+    secure_password: str | The hash of the users password
+
+    Methods:
+    password_hash(self, password):
+        Hashes the plain-text password
+    """
     def __init__(self, password: str):
+        """
+        Initialize SecurePassword object.
+
+        Parameters:
+        password: str | desired password
+        """
         self.secure_password = self.password_hash(password)
 
     def password_hash(self, password: str):
+        """
+        Creates a hash of the users password and returns it.
+
+        Parameters:
+        password: str | desired password
+        """
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         return hashed_password
                 
