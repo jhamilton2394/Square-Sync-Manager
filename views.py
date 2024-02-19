@@ -26,7 +26,6 @@ class App(customtkinter.CTk):
         self.authenticated = False
         self.active_user = None
         self.derived_session_key = None
-
         self.active_widget = WelcomeView(self)
 
         # configure window
@@ -46,9 +45,6 @@ class App(customtkinter.CTk):
         if self.authenticated:
             menu = MenuView(self)
             
-            # Create the default view
-            #welcomeview = WelcomeView(self)
-
     def view_toggle(self, view, *args, **kwargs):
         """
         This method toggles the class based views on or off inside their specified containers by
@@ -145,6 +141,7 @@ under the settings option in the main menu.""")
 
     def destroy(self):
         self.announcement_box.destroy()
+        
 class SettingsView():
     """Opens the settings menu when toggled."""
 
@@ -152,7 +149,6 @@ class SettingsView():
         self.parent = parent
         self.active_user = self.parent.active_user
         if self.active_user.api_key:
-            #self.encrypted_api_key = self.active_user.api_key
             self.decrypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.active_user.api_key)
         else:
             self.decrypted_api_key = None
@@ -260,7 +256,7 @@ done once unless you change the headers on your excel file.""")
         """
         Communicates with the auth_controller to update user settings, specifically the
         api key and column header settings. Blank fields are filtered out, and remaining
-        fields are sent as a dictionary to the update_user_settings_controller method,
+        fields are sent as a dictionary to the update_user_settings method,
         along with the active_user instance. Updated user set as active and SettingsView
         is refreshed.
         """
@@ -283,13 +279,8 @@ done once unless you change the headers on your excel file.""")
                       "price": price_var,
                       "qty": qty_var,
                       "deleted": deleted_var}
-        argument_dict = {}
-        for key, value in input_dict.items():
-            if value:
-                argument_dict[key] = value
-                print(f"adding {key}, as key, and {value} as value.")
-
-        updated_user = self.parent.auth_controller.update_user_settings_controller(argument_dict, self.parent.active_user)
+        filtered_dict = self.parent.auth_controller.dict_filter(input_dict)
+        updated_user = self.parent.auth_controller.update_user_settings(filtered_dict, self.parent.active_user)
         self.parent.active_user = updated_user
 
         # re-render the page with updated user info
@@ -297,6 +288,12 @@ done once unless you change the headers on your excel file.""")
         self.parent.view_toggle(SettingsView, self.parent)
 
     def file_select(self):
+        """
+        Creates a file selection window so you can pick a file.
+
+        Calls the auth_controllers validate_file_name method to make sure the file is
+        a .xlsx file. If file path is valid the path is saved to the active_user.
+        """
         file_name = askopenfilename()
         updated_user = self.parent.auth_controller.validate_file_name(file_name)
 

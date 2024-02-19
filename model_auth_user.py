@@ -129,7 +129,7 @@ class User:
             
     def get_user_list(self):
         """
-        Used by AuthController's update_user_settings_controller to retrieve user
+        Used by AuthController's update_user_settings to retrieve user
         list from user file.
         """
         file_path = 'files/users.pkl'
@@ -140,7 +140,7 @@ class User:
             
     def save_user_list(self, user_list):
         """
-        Used by AuthController's update_user_settings_controller to save the
+        Used by AuthController's update_user_settings to save the
         updated user list to the user file.
 
         Parameters:

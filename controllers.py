@@ -49,7 +49,7 @@ class AuthController:
         else:
             return False
 
-    def update_user_settings_controller(self, argument_dict, active_user):
+    def update_user_settings(self, argument_dict, active_user):
         """
         Called by SettingsView's update_user_settings method.
         This function uses the argument dictionary to set the corresponding attributes of the
@@ -95,15 +95,38 @@ class AuthController:
         return decrypted_data
     
     def validate_file_name(self, file_name):
+        """
+        Checks if given file path ends in .xlsx.
+
+        If the file is an excel file then it is valid, and is saved to the active_user's profile.
+
+        Parameters:
+        file_name: str | file path
+
+        Returns:
+        user instance updated with file_name attribute, or False if file_name is not .xlsx.
+        """
         if file_name.endswith('.xlsx'):
             input_dict = {"file_name": file_name}
-            argument_dict = {}
-            for key, value in input_dict.items():
-                if value:
-                    argument_dict[key] = value
-
-            updated_user = self.update_user_settings_controller(argument_dict, self.active_user)
+            filtered_dict = self.dict_filter(input_dict)
+            updated_user = self.update_user_settings(filtered_dict, self.active_user)
             return updated_user
         else:
             print("file name does not end with .xlsx")
             return False
+        
+    def dict_filter(self, dict):
+        """
+        Filters out any key value pairs with a None or equivalent value.
+
+        Parameters:
+        dict: dict | any dictionary
+
+        Returns:
+        A new dictionary with any empty key value pairs removed.
+        """
+        filtered_dict = {}
+        for key, value in dict.items():
+            if value:
+                filtered_dict[key] = value
+        return filtered_dict
