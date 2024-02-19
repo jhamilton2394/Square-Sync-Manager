@@ -1,4 +1,9 @@
 """
+A controller module that acts as the middle man between the views and the models.
+
+This module is designed to accompany the model_auth_user module. Together they
+can act as a stand-alone authentication-user model system.
+
 Note: Any data encrypted with this system is permenantly lost if the user forgets their password.
 Creating a recovery system is not a priority at this time since the only data intended for
 encryption, as of now, is the api key which can easily be retreived from the squarespace
@@ -16,14 +21,24 @@ import base64
 from tkinter.filedialog import askopenfilename
 
 class AuthController:
+    """
+    Controls user authentication and user CRUD operations.
+
+    Attributes:
+    active_user: User | The authenticated user
+    """
     def __init__(self):
+        """Initialize the controller in the main file, and pass it to the App() class so the views can access the controller."""
         self.active_user = None
                     
     def login_user(self, username, password):
         """
-        Called by LoginView's login method upon login attempt. Creates a temp_user then calls the User models get_user method.
+        Creates a temp_user then calls the User model's get_user method.
         If the get_user method returns a user instance then the temp_user and the matched_users passwords are compared. If
-        successful the user is assigned as active and the instance is returned to the login view.
+        successful the user is assigned as active and the instance is returned.
+
+        Returns:
+        matched_user: User | The matched user object from storage.
         """
         temp_user = User(username, password)
         matched_user = temp_user.get_user()
@@ -51,9 +66,15 @@ class AuthController:
 
     def update_user_settings(self, argument_dict, active_user):
         """
-        Called by SettingsView's update_user_settings method.
         This function uses the argument dictionary to set the corresponding attributes of the
         active user using setattr(). User_list is then updated with the updated user.
+
+        Parameters:
+        argument_dict: dict | A dictionary containing user attributes
+        active_user: User | The active_user for the session.
+
+        Returns:
+        active_user: User | The updated active user.
         """
         for key, value in argument_dict.items():
             setattr(active_user, key, value)
@@ -71,6 +92,13 @@ class AuthController:
         """
         Creates a derived encryption key using the users password and the users
         randomly generated salt. Used in the encrypt and decrypt methods.
+
+        Parameters:
+        password: str | The users plain-text password (obtained during login)
+        salt: bytes | The users salt attribute
+
+        Returns:
+        key: bytes | base64 urlsave b64encoded key
         """
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -83,7 +111,16 @@ class AuthController:
         return base64.urlsafe_b64encode(key)
     
     def encrypt(self, key, data):
-        """Encrypts given data using the derived_key."""
+        """
+        Encrypts given data using the derived_key.
+        
+        Parameters:
+        key: bytes | derived key from derive_key() method.
+        data: str | data to encrypt. If you need to encrypt a dict, change it to a string first.
+
+        Returns:
+        encrypted_data: bytes
+        """
         fernet = Fernet(key)
         encrypted_data = fernet.encrypt(data.encode())
         return encrypted_data

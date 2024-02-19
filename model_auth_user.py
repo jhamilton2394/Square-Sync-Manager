@@ -3,7 +3,7 @@
 """
 A secure pickle based user model
 
-This module along with its controller can act as a stand-alone authentication-user model. It contains tools for
+This module along with its controller can act as a stand-alone authentication-user model system. It contains tools for
 creating users with secure passwords, as well encrypting and decrypting sensitive data. Users are saved to the
 local machines file system via pickling, but this can be easily modified to work with SQL and an ORM.
 """
@@ -20,13 +20,18 @@ class User:
     are temp_users until the username can be validated. Once validated the user is saved and becomes a
     regular user.
 
+    Usage:
+    # Create a new user.
+    new_user = User("username", "password")
+    new_user.save()
+
     Attributes:
     username: str | username
     password: str | Hash of users plain-text password, stored as string.
     salt: bytes | Randomly generated value used for encryption.
 
     File header settings: str | The following attributes are used to configure the users inventory sheet api:
-    api_key, product_name, sku, item_desc, price, qty, deleted
+    api_key, product_name, sku, item_desc, price, qty, deleted, file_name
 
     Methods:
     validate_username(self):
