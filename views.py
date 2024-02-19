@@ -332,7 +332,6 @@ under the settings option in the main menu.""")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
         self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
 
-
 class LoginView(customtkinter.CTkToplevel):
     """
     LoginView is called automatically upon startup. All other windows are blocked
