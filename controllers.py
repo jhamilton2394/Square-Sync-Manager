@@ -26,6 +26,31 @@ class AuthController:
 
     Attributes:
     active_user: User | The authenticated user
+
+    Methods:
+    login_user(self, username, password):
+        Logs in the specified user if the password is correct.
+
+    validate_password(user, password):
+        Checks if entered password matches the users password.
+
+    update_user_settings(self, argument_dict, active_user):
+        Updates and saves the users settings.
+
+    derive_key(self, password, salt):
+        Creates a derived encryption key.
+
+    encrypt(self, key, data):
+        Encrypts data.
+
+    decrypt(self, key, encrypted_data):
+        Decrypts data.
+
+    validate_file_name(self, file_name):
+        Checks if file is .xlsx. Saves to user settings if True.
+
+    dict_filter(self, dict):
+        Filters out empty key value pairs from a dictionary.
     """
     def __init__(self):
         """Initialize the controller in the main file, and pass it to the App() class so the views can access the controller."""
