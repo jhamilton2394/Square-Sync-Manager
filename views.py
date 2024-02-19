@@ -145,7 +145,7 @@ under the settings option in the main menu.""")
 
     def destroy(self):
         self.announcement_box.destroy()
-class SettingsView(customtkinter.CTk):
+class SettingsView():
     """Opens the settings menu when toggled."""
 
     def __init__(self, parent="self", *args, **kwargs):
@@ -223,6 +223,7 @@ class SettingsView(customtkinter.CTk):
         self.file_selection_label.grid(row=3, column=6, padx=7, pady=(20, 5), columnspan=3, sticky="w")
         self.file_selection_entry = customtkinter.CTkEntry(self.settings_frame, placeholder_text=self.active_user.file_name)
         self.file_selection_entry.grid(row=4, column=6, columnspan=5, padx=7, pady=5, sticky="nsew")
+        self.file_selection_entry.configure(state="disabled")
         self.file_select_button = customtkinter.CTkButton(self.settings_frame, text="Select file", command=self.file_select)
         self.file_select_button.grid(row=5, column=6, columnspan=6, padx=7, pady=5, sticky="w")
 
@@ -297,24 +298,19 @@ done once unless you change the headers on your excel file.""")
 
     def file_select(self):
         file_name = askopenfilename()
-        if file_name.endswith('.xlsx'):
-            input_dict = {"file_name": file_name}
-            argument_dict = {}
-            for key, value in input_dict.items():
-                if value:
-                    argument_dict[key] = value
-            
-            updated_user = self.parent.auth_controller.update_user_settings_controller(argument_dict, self.parent.active_user)
+        updated_user = self.parent.auth_controller.validate_file_name(file_name)
+
+        if updated_user:
             self.parent.active_user = updated_user
 
             self.parent.view_toggle(SettingsView, self.parent)
             self.parent.view_toggle(SettingsView, self.parent)
-        # else: 
-        #     self.error_message = SettingsMessageView(self)
-
-
-
-
+        else: 
+            print("controller returned false")
+            if not hasattr(self, 'wrong_filetype_label'):
+                self.wrong_filetype_label = customtkinter.CTkLabel(self.settings_frame, text="*Please select a .xlsx (Excel) file")
+                self.wrong_filetype_label.grid(row=6, column=6, columnspan=6, padx=7, pady=5, sticky="w")
+                
     def destroy(self):
         #self.settings_tabview.destroy()
         self.settings_frame.destroy()

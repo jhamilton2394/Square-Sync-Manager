@@ -93,3 +93,17 @@ class AuthController:
         fernet = Fernet(key)
         decrypted_data = fernet.decrypt(encrypted_data).decode()
         return decrypted_data
+    
+    def validate_file_name(self, file_name):
+        if file_name.endswith('.xlsx'):
+            input_dict = {"file_name": file_name}
+            argument_dict = {}
+            for key, value in input_dict.items():
+                if value:
+                    argument_dict[key] = value
+
+            updated_user = self.update_user_settings_controller(argument_dict, self.active_user)
+            return updated_user
+        else:
+            print("file name does not end with .xlsx")
+            return False
