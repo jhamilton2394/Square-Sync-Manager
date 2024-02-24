@@ -4,9 +4,10 @@ from tkinter.filedialog import askopenfilename
 import customtkinter
 from PIL import Image, ImageTk
 from controllers import *
+import sys
 
-#### set authenticated to True for development
-#### Leave "Create login view" block commented out for development
+#### In App class, leave "Create login view" block commented out for development
+#### Leave the login override block un-commented as well.
 
 """
 The class based views can be toggled in any container inside the main app class.
@@ -28,6 +29,14 @@ class App(customtkinter.CTk):
         self.derived_session_key = None
         self.active_widget = WelcomeView(self)
 
+        # Login override for development
+        auth_user = auth_controller.login_user("carrot", "password")
+        self.active_user = auth_user
+        self.authenticated = True
+        self.derived_session_key = self.auth_controller.derive_key("password", auth_user.salt)
+
+
+
         # configure window
         self.title("Squarespace Companion")
         self.geometry(f"{1100}x{580}")
@@ -38,8 +47,8 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Create login view
-        loginview = LoginView(self)
-        self.wait_window(loginview)
+        # loginview = LoginView(self)
+        # self.wait_window(loginview)
 
         # Menu accessed only after successful authentication from login view
         if self.authenticated:
@@ -100,7 +109,8 @@ class MenuView(customtkinter.CTk):
             self.logout_button.grid(row=2, column=0, padx=20, pady=(10, 10))
 
         # Create products button
-        self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140)
+        self.create_prod_button = customtkinter.CTkButton(self.sidebar_frame, text="Create Products", width = 140,
+                                                          command=lambda: self.parent.view_toggle(CreateProductsView, parent))
         self.create_prod_button.grid(row=3, column=0, padx=20, pady=(10, 10))
 
         # Settings button
@@ -423,3 +433,52 @@ class AlternateLogin:
 
 class CreateUserView(customtkinter.CTkToplevel):
     pass
+
+class CreateProductsView():
+    """Opens the product creation interface when toggled."""
+
+    def __init__(self, parent="self", *args, **kwargs):
+        self.parent = parent
+
+        # Create products frame
+        self.products_frame = customtkinter.CTkFrame(parent, width=250, height=1200)
+        self.products_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew", ipadx=20)
+
+        self.terminal_frame = customtkinter.CTkFrame(self.products_frame, width=250, height=50)
+        self.terminal_frame.grid(row=10, column=3, padx=20, pady=20, sticky="nsew")
+
+        self.terminal = tk.Text(self.terminal_frame, bg="black", fg="white")
+        self.terminal.pack(fill=tk.BOTH, expand=True)
+        sys.stdout=self
+
+        print("testing \n" * 100)
+    def write(self, text):
+        self.terminal.insert(tk.END, text)
+        self.terminal.see(tk.END)  # Scroll to the end
+
+    def flush(self):
+        pass  # Required for stdout redirection
+
+        
+    def destroy(self):
+        self.products_frame.destroy()
+    
+
+class Terminal(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Terminal")
+        self.geometry("600x400")
+
+        self.text_widget = tk.Text(self, bg="black", fg="white")
+        self.text_widget.pack(fill=tk.BOTH, expand=True)
+
+        # Redirect stdout
+        sys.stdout = self
+
+    def write(self, text):
+        self.text_widget.insert(tk.END, text)
+        self.text_widget.see(tk.END)  # Scroll to the end
+
+    def flush(self):
+        pass  # Required for stdout redirection
