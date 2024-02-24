@@ -322,23 +322,6 @@ done once unless you change the headers on your excel file.""")
         #self.settings_tabview.destroy()
         self.settings_frame.destroy()
 
-class SettingsMessageView(customtkinter.CTkToplevel):
-    def __init__(self):
-        super().__init__()
-        self.title("Error")
-        self.geometry("300x300")
-
-        self.announcement_box = tk.Text(self, wrap="word", width=250, height=580)
-        self.announcement_box.insert("1.0",
-                                     """Welcome to Squarespace Companion!
-
-If you have not already, please configure your settings
-under the settings option in the main menu.""")
-        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
-        self.announcement_box.tag_configure("custom tag", foreground="white")
-        self.announcement_box.tag_add("custom tag", 0.0, "end")
-        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
-
 class LoginView(customtkinter.CTkToplevel):
     """
     LoginView is called automatically upon startup. All other windows are blocked
@@ -388,7 +371,7 @@ class LoginView(customtkinter.CTkToplevel):
             else:
                 self.login_failed_label.config(text="Username or password incorrect")
 
-class AlternateLogin:
+class AlternateLogin: # Not in use
     def __init__(self, parent):
         self.parent = parent
 
@@ -444,41 +427,38 @@ class CreateProductsView():
         self.products_frame = customtkinter.CTkFrame(parent, width=250, height=1200)
         self.products_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew", ipadx=20)
 
+        # Create frame to contain terminal
         self.terminal_frame = customtkinter.CTkFrame(self.products_frame, width=250, height=50)
-        self.terminal_frame.grid(row=10, column=3, padx=20, pady=20, sticky="nsew")
+        self.terminal_frame.grid(row=10, rowspan=20, column=3, padx=20, pady=20, sticky="nsew")
 
+        # Create output terminal
         self.terminal = tk.Text(self.terminal_frame, bg="black", fg="white")
         self.terminal.pack(fill=tk.BOTH, expand=True)
         sys.stdout=self
 
-        print("testing \n" * 100)
+        # Selected file label
+        self.selected_file_label = customtkinter.CTkLabel(self.products_frame, text="Selected inventory file")
+        self.selected_file_label.grid(row=31, column=3, padx=7, pady=1, sticky="w")
+        
+        # Selected file display box
+        self.file_name_box = tk.Text(self.products_frame, wrap="word", height=5)
+        self.file_name_box.insert("1.0", f"{self.parent.active_user.file_name}")
+        self.file_name_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.file_name_box.tag_configure("custom tag", foreground="white")
+        self.file_name_box.tag_add("custom tag", 0.0, "end")
+        self.file_name_box.grid(row=32, column=3, padx=7, pady=2, sticky="w")
+
+        # Create upload button
+        self.upload_button = customtkinter.CTkButton(self.products_frame, width=140, text="Upload to site")
+        self.upload_button.grid(row=33, column=3, padx=7, pady=2, sticky="w")
+        print("test \n" * 100)
+
     def write(self, text):
         self.terminal.insert(tk.END, text)
         self.terminal.see(tk.END)  # Scroll to the end
 
     def flush(self):
         pass  # Required for stdout redirection
-
-        
+ 
     def destroy(self):
         self.products_frame.destroy()
-    
-
-class Terminal(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.title("Terminal")
-        self.geometry("600x400")
-
-        self.text_widget = tk.Text(self, bg="black", fg="white")
-        self.text_widget.pack(fill=tk.BOTH, expand=True)
-
-        # Redirect stdout
-        sys.stdout = self
-
-    def write(self, text):
-        self.text_widget.insert(tk.END, text)
-        self.text_widget.see(tk.END)  # Scroll to the end
-
-    def flush(self):
-        pass  # Required for stdout redirection
