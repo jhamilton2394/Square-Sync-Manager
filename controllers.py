@@ -192,3 +192,7 @@ class AuthController:
             if value:
                 filtered_dict[key] = value
         return filtered_dict
+
+class ApiController:
+    def __init__(self):
+        pass
