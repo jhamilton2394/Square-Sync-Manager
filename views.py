@@ -24,9 +24,11 @@ class App(customtkinter.CTk):
     def __init__(self, auth_controller):
         super().__init__()
         self.auth_controller = auth_controller
+        self.api_controller = None
         self.authenticated = False
         self.active_user = None
         self.derived_session_key = None
+        self.decrypted_api_key = None
         self.active_widget = WelcomeView(self)
 
         # Login override for development
@@ -451,7 +453,6 @@ class CreateProductsView():
         # Create upload button
         self.upload_button = customtkinter.CTkButton(self.products_frame, width=140, text="Upload to site")
         self.upload_button.grid(row=33, column=3, padx=7, pady=2, sticky="w")
-        print("test \n" * 100)
 
     def write(self, text):
         self.terminal.insert(tk.END, text)

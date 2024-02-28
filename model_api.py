@@ -5,7 +5,7 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
 
-class ProductBatch:
+class APIController:
     def __init__(self, user):
         
         self.api_key = user.api_key
@@ -19,20 +19,10 @@ class ProductBatch:
         self.pageID = '65dd50b1aa45113b391e6b50'
 
     def createAllProducts(self):
-        #opening column header files for input into loop
-        # name1 = open('namefile.txt', 'r')
-        # nameHeader = (name1.read())
-        # sku1 = open('skufile.txt', 'r')
-        # skuHeader = (sku1.read())
-        # item_desc1 = open('item_desc_file.txt', 'r')
-        # item_desc_header = (item_desc1.read())
-        # price1 = open('pricefile.txt', 'r')
-        # priceHeader = (price1.read())
-        # qty1 = open('qtyfile.txt', 'r')
-        # qtyHeader = (qty1.read())
-        # del1 = open('delfile.txt', 'r')
-        # delHeader = (del1.read())
-        #open excel doc
+        """
+        Converts excel sheet to pandas dataframe. Extracts data from specified columns and passes
+        it to the createProduct method.
+        """
         xls = ExcelFile(self.filePath)
         df = xls.parse(xls.sheet_names[0])
         product_list = self.site_master_prod_list()
