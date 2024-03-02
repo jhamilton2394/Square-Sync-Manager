@@ -14,11 +14,12 @@ dist
 build
 SquarespaceCompanion.spec
 SquarespaceCompanion.zip
+files/users.pkl
 
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-keys.py
+files/users.pkl
 
 # Mono auto generated files
 mono_crash.*
