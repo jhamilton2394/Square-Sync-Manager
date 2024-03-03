@@ -228,7 +228,7 @@ class APIController:
                     }
         jsonDataOutbox = json.dumps(dataOutbox)
         prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-        prodHeaders = {'Authorization': 'Bearer ' + self.api_Key,
+        prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
                 'User-Agent': 'APIAPP1.0',
                 'Content-Type': 'application/json'}
         r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
@@ -340,7 +340,21 @@ class APIController:
         numOfPages = len(storePages)
 
         # return numOfPages
-        return numOfPages
+        return data
+    
+    def store_pages_info(self):
+        """
+        Uses the squarespace store_pages api to get a dictionary of the store
+        pages data. Dictionary contains pagination data, and a list of store
+        pages and their id's.
+        """
+        store_pages_URL = 'https://api.squarespace.com/1.0/commerce/store_pages'
+        headers = {'Authorization': 'Bearer ' + self.api_key,
+                   'User-Agent': 'APIAPP1.0'}
+        r = requests.get(store_pages_URL, headers=headers)
+        data = r.json()
+        return data
+
 
     ### pagesList shows a list of all pages, their id's, and their page number.
     #   Calls getNumOfPages and getPagesList in order to iterate over all pages.
