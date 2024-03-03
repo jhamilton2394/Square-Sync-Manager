@@ -17,4 +17,6 @@ api = APIController(user)
 
 # print(type(value))
 
-print(api.getNumOfPages())
+pages_data = api.store_pages_info()
+
+print(pages_data["storePages"][0]["id"])
