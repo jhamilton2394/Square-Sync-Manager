@@ -212,6 +212,8 @@ class APIController:
         self.filePath = user.file_name
         self.pageID = '65dd50b1aa45113b391e6b50'
 
+        self.store_pages_info = None
+
     def createProduct(self, storePageID, productName, productDescription, variantSku, productPrice, quantity):
         dataOutbox = {'type': 'PHYSICAL',
                 'storePageId': storePageID,
@@ -342,7 +344,7 @@ class APIController:
         # return numOfPages
         return data
     
-    def store_pages_info(self):
+    def get_store_pages_info(self):
         """
         Uses the squarespace store_pages api to get a dictionary of the store
         pages data. Dictionary contains pagination data, and a list of store
@@ -354,6 +356,31 @@ class APIController:
         r = requests.get(store_pages_URL, headers=headers)
         data = r.json()
         return data
+    
+    def set_store_pages_info(self):
+        """
+        Gets the store pages info and sets it as an attribute for use during
+        the session.
+        """
+        self.store_pages_info = self.get_store_pages_info()
+
+    def page_ids(self):
+        """
+        Filters page names and id's from the store_pages_info
+        attribute. Set_store_pages_info must be called first.
+
+        Returns: list | [{title: page title, id: page id}, ...]
+        """
+        pages_list = []
+        for page in self.store_pages_info["storePages"]:
+            pages_dict = {}
+            id_value = page["id"]
+            title_value = page["title"]
+            pages_dict["title"] = title_value
+            pages_dict["id"] = id_value
+            pages_list.append(pages_dict)
+        return pages_list
+
 
 
     ### pagesList shows a list of all pages, their id's, and their page number.

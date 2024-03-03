@@ -36,6 +36,12 @@ class App(customtkinter.CTk):
         self.active_user = auth_user
         self.authenticated = True
         self.derived_session_key = self.auth_controller.derive_key("password", auth_user.salt)
+        #decrypt api key for development mode
+        dec_key = auth_controller.decrypt(self.derived_session_key, self.active_user.api_key)
+        self.active_user.api_key = dec_key
+        # create api controller
+        self.api_controller = APIController(auth_user)
+
 
 
 
@@ -355,7 +361,7 @@ class LoginView(customtkinter.CTkToplevel):
         Communicates with the auth_controller and the User model to perform user authentication.
         If authentication is successful the authenticated user instance is returned and set
         as the active_user, authenticated status is set to True, and a derived_session_key
-        is created and set.
+        is created and set. The API controller is also created.
         """
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -365,6 +371,8 @@ class LoginView(customtkinter.CTkToplevel):
             self.parent.authenticated = True
             self.parent.active_user = auth_user
             self.parent.derived_session_key = self.parent.auth_controller.derive_key(password, auth_user.salt)
+            self.api = APIController(auth_user)
+            self.parent.api_controller = self.api
             self.destroy()
         else:
             if not hasattr(self, 'login_failed_label'):
@@ -451,8 +459,13 @@ class CreateProductsView():
         self.file_name_box.grid(row=32, column=3, padx=7, pady=2, sticky="w")
 
         # Create upload button
-        self.upload_button = customtkinter.CTkButton(self.products_frame, width=140, text="Upload to site")
+        self.upload_button = customtkinter.CTkButton(self.products_frame, width=140, text="Upload to site",
+                                                     command=self.create_all)
         self.upload_button.grid(row=33, column=3, padx=7, pady=2, sticky="w")
+
+    def create_all(self):
+        self.parent.decypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.parent.active_user.api_key)
+        self.parent.api_controller.createAllProducts()
 
     def write(self, text):
         self.terminal.insert(tk.END, text)
