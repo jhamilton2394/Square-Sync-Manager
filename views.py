@@ -31,16 +31,16 @@ class App(customtkinter.CTk):
         self.decrypted_api_key = None
         self.active_widget = WelcomeView(self)
 
-        # Login override for development
-        auth_user = auth_controller.login_user("carrot", "password")
-        self.active_user = auth_user
-        self.authenticated = True
-        self.derived_session_key = self.auth_controller.derive_key("password", auth_user.salt)
-        #decrypt api key for development mode
-        dec_key = auth_controller.decrypt(self.derived_session_key, self.active_user.api_key)
-        self.active_user.api_key = dec_key
-        # create api controller
-        self.api_controller = APIController(auth_user)
+        # # Login override for development
+        # auth_user = auth_controller.login_user("carrot", "password")
+        # self.active_user = auth_user
+        # self.authenticated = True
+        # self.derived_session_key = self.auth_controller.derive_key("password", auth_user.salt)
+        # # decrypt api key for development mode
+        # dec_key = auth_controller.decrypt(self.derived_session_key, self.active_user.api_key)
+        # self.active_user.api_key = dec_key
+        # # create api controller
+        # self.api_controller = APIController(auth_user)
 
 
 
@@ -55,8 +55,8 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # Create login view
-        # loginview = LoginView(self)
-        # self.wait_window(loginview)
+        loginview = LoginView(self)
+        self.wait_window(loginview)
 
         # Menu accessed only after successful authentication from login view
         if self.authenticated:
@@ -281,6 +281,8 @@ done once unless you change the headers on your excel file.""")
         api_key_var = self.current_key_entry.get()
         if api_key_var:
             encrypted_api_key = self.parent.auth_controller.encrypt(self.parent.derived_session_key, api_key_var)
+            # session api_controller is immediately updated
+            self.parent.api_controller.api_key = api_key_var
         else:
             encrypted_api_key = None
         product_name_var = self.name_entry.get()
@@ -371,8 +373,9 @@ class LoginView(customtkinter.CTkToplevel):
             self.parent.authenticated = True
             self.parent.active_user = auth_user
             self.parent.derived_session_key = self.parent.auth_controller.derive_key(password, auth_user.salt)
-            self.api = APIController(auth_user)
-            self.parent.api_controller = self.api
+            self.parent.api_controller = APIController(auth_user)
+            if auth_user.api_key:
+                self.parent.api_controller.api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, auth_user.api_key)
             self.destroy()
         else:
             if not hasattr(self, 'login_failed_label'):
@@ -464,7 +467,7 @@ class CreateProductsView():
         self.upload_button.grid(row=33, column=3, padx=7, pady=2, sticky="w")
 
     def create_all(self):
-        self.parent.decypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.parent.active_user.api_key)
+        # self.parent.decypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.parent.active_user.api_key)
         self.parent.api_controller.createAllProducts()
 
     def write(self, text):

@@ -16,14 +16,10 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import os
 import base64
-from tkinter.filedialog import askopenfilename
 import requests
 import json
 from pandas import ExcelFile
-from tkinter import Tk
-from tkinter.filedialog import askopenfilename
 
 
 class AuthController:
@@ -200,6 +196,18 @@ class AuthController:
         return filtered_dict
 
 class APIController:
+    """
+    The current API methods can be broken down into product methods, and store_pages methods.
+
+    Product methods:
+    createProduct: Posts a single product
+    createAllProducts: Parses data from excel sheet and passes it to createProduct. Creates all products on excel sheet.
+    getProducts: Gets the initial page of product data.
+    siteMasterProdList: Uses getProducts to create a list of all products on site. Uses pagination as necesary.
+
+    store_pages methods:
+    
+    """
     def __init__(self, user):
         
         self.api_key = user.api_key
@@ -298,7 +306,7 @@ class APIController:
     def getProducts(self, cursor=''):
         prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
         prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
-                    'User-Agent': 'APIAPP1.0'}
+                       'User-Agent': 'APIAPP1.0'}
         r = requests.get(prodURL, headers=prodHeaders)
         json_data = r.json()
         pretty_json_data = json.dumps(json_data, indent=3)
