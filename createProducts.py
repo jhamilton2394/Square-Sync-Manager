@@ -202,7 +202,7 @@ def getProducts(cursor=''):
 #   called by the function 'pagesList'.
 def getPagesList(x):
     getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
-    api_key = '72a30b97-cac8-48e4-b8d7-31bcd6313c29'
+    api_key = ''
     #replaced retreiveAPIKey() with api_key
     getStorePagesHeaders = {'Authorization': 'Bearer ' + api_key,
                             'User-Agent': 'APIAPP1.0'}
@@ -226,7 +226,7 @@ def getPagesList(x):
 #   wants the number of pages, and is also called by pagesList to be used for the range
 #   of pages to be iterated over.
 def getNumOfPages():
-    api_key = '72a30b97-cac8-48e4-b8d7-31bcd6313c29'
+    api_key = ''
     getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
     # replaced retreiveApiKey() function with api_key for testing
     getStorePagesHeaders = {'Authorization': 'Bearer ' + api_key,

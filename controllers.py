@@ -202,11 +202,14 @@ class APIController:
     Product methods:
     createProduct: Posts a single product
     createAllProducts: Parses data from excel sheet and passes it to createProduct. Creates all products on excel sheet.
-    getProducts: Gets the initial page of product data.
+    getProducts: Gets the initial page of product info.
     siteMasterProdList: Uses getProducts to create a list of all products on site. Uses pagination as necesary.
 
     store_pages methods:
-    
+    get_store_pages_info: Gets the initial page of store_pages info.
+    set_store_pages_info: Calls get_store_pages_info and saves return value to the attribute "store_pages_info".
+    page_ids: Filters the store_pages_info attribute for "title" and "id". Returns a list of pages with their titles and id's.
+        Need to incorporate pagination
     """
     def __init__(self, user):
         
@@ -247,7 +250,6 @@ class APIController:
         print(r)
         print(pretty_json_data)
         return
-
 
     def createAllProducts(self):
         """
@@ -302,7 +304,6 @@ class APIController:
                 actual_prod_list.append(i['name'])
         return actual_prod_list
         
-    ### Defining out function getProducts, which retreives one page of products. Optionally takes a cursor.
     def getProducts(self, cursor=''):
         prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
         prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
@@ -311,46 +312,6 @@ class APIController:
         json_data = r.json()
         pretty_json_data = json.dumps(json_data, indent=3)
         return pretty_json_data
-
-    def getPagesList(self, x):
-        getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
-        #replaced retreiveAPIKey() with api_key
-        getStorePagesHeaders = {'Authorization': 'Bearer ' + self.api_key,
-                                'User-Agent': 'APIAPP1.0'}
-        r = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
-        # data is the dictionary returned by the request.
-        data = r.json()
-        # storePages is the 2nd key in dictionary, its value is a list of dictionaries.
-        storePages = data['storePages']
-        # pageOne accesses the first element of the list, which is a dictionary of the
-        # first page's info. If there are multiple store pages then this is a good
-        # place to start a for loop to iterate through them.
-        pageOne = storePages[x]
-        # pageOne has all the info we need for now. pageID and pageName are accessing
-        # the specific keys and values needed for our current use.
-        pageID = pageOne['id']
-        pageName = pageOne['title']
-        pageInfo = {pageName: pageID}
-        return pageInfo
-
-    ### getNumOfPages returns the number of pages. It can be called by itself if the user
-    #   wants the number of pages, and is also called by pagesList to be used for the range
-    #   of pages to be iterated over.
-    def getNumOfPages(self):
-        getStorePagesURL = 'https://api.squarespace.com/1.0/commerce/store_pages'
-        # replaced retreiveApiKey() function with api_key for testing
-        getStorePagesHeaders = {'Authorization': 'Bearer ' + self.api_key,
-                                'User-Agent': 'APIAPP1.0'}
-        r = requests.get(getStorePagesURL, headers=getStorePagesHeaders)
-        # data is the dictionary returned by the request.
-        data = r.json()
-        # storePages is the 2nd key in dictionary, its value is a list of dictionaries.
-
-        storePages = data['storePages']
-        numOfPages = len(storePages)
-
-        # return numOfPages
-        return data
     
     def get_store_pages_info(self):
         """
@@ -388,13 +349,3 @@ class APIController:
             pages_dict["id"] = id_value
             pages_list.append(pages_dict)
         return pages_list
-
-
-
-    ### pagesList shows a list of all pages, their id's, and their page number.
-    #   Calls getNumOfPages and getPagesList in order to iterate over all pages.
-    def pagesList(self):
-        PagesNo = self.getNumOfPages()
-        for i in range(0, PagesNo):
-            page = self.getPagesList(i)
-            print(str(i), str(page))
