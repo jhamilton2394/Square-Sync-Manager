@@ -1,6 +1,6 @@
-import customtkinter
-from views import *
-from controllers import *
+from customtkinter import set_appearance_mode, set_default_color_theme
+from views import App
+from controllers import AuthController
 
 '''
 Dear evaluators,
@@ -11,8 +11,8 @@ All data is stored in files under the files folder using Pickle. The apps small 
 does not warrant the use of SQL. All sensitive data is either hashed or encrypted before being stored.
 '''
 
-customtkinter.set_appearance_mode("system")
-customtkinter.set_default_color_theme("green")
+set_appearance_mode("system")
+set_default_color_theme("green")
 
 if __name__ == "__main__":
     auth_controller = AuthController()
