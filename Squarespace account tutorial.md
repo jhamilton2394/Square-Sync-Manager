@@ -1,3 +1,4 @@
+If you would like to test out Squarespace Companion but you don't have a Squarespace website, you can follow this tutorial to get a free trial.
 ```
 1. Navigate to squarespace.com and click get started.
 ```
