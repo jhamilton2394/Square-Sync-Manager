@@ -27,14 +27,14 @@
 6. Once logged in, from the home page, navigate to settings > developer tools
 > developer api keys.
 ```
-<img width="1676" alt="click settings" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/954f8741-bf98-4935-9f31-6d3292b086d7">
+<img width="1675" alt="generate key" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/92f7324a-b72d-4f35-a85b-901978a5f474">
 
 ```
 7. Click generate key, then check every box, and also check “read and write” where possible.
 ```
-<img width="1675" alt="generate key" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/92f7324a-b72d-4f35-a85b-901978a5f474">
+<img width="1676" alt="key generated" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/8d6ab28d-d608-4142-9519-766d3faad04e">
 
 ```
 8. Give your key a name then click “generate key”. Write your key down and keep it somewhere safe. You will not be able to see the key again after you click close. This is the key you will use with Squarespace Companion.
 ```
-<img width="1676" alt="key generated" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/8d6ab28d-d608-4142-9519-766d3faad04e">
+
