@@ -6,10 +6,14 @@
 ```
 2. Choose your template, then click finish.
 ```
-<img width="1680" alt="Screenshot 2024-03-07 at 6 00 24 PM" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/9bd4e7fd-fb9c-43cf-ba77-951a85ab2561">
+<img width="1675" alt="choose template" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/f5062454-4c38-49b5-ad63-2c1f6266dd09">
 
+```
 3. Under “type” select online store, then select your preferred template.
-4. Click “start with this design”
+```
+<img width="1676" alt="online store" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/a9756f51-43c4-46d1-9221-8d652b9bfc51">
+
+4. Click “start with this design”.
 5. Next create an account and sign in.
 6. Once logged in, from the home page, navigate to settings > developer tools > developer api keys.
 7. Click generate key, then check every box, and also check “read and write” where possible.
