@@ -1,6 +1,7 @@
 ```
 Navigate to squarespace.com and click get started.
 ```
+<img width="1676" alt="Screenshot 2024-03-07 at 5 46 41 PM" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/76bb6c03-f3b6-4308-bbc7-2b402831509d">
 2. Choose your template, then click finish.
 3. Under “type” select online store, then select your preferred template.
 4. Click “start with this design”
