@@ -24,7 +24,8 @@
 <img width="1675" alt="create account" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/9286c255-8f02-4887-a62f-c2fa0b89f413">
 
 ```
-6. Once logged in, from the home page, navigate to settings > developer tools > developer api keys.
+6. Once logged in, from the home page, navigate to settings > developer tools
+> developer api keys.
 ```
 <img width="1676" alt="click settings" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/954f8741-bf98-4935-9f31-6d3292b086d7">
 
