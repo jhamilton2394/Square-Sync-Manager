@@ -35,6 +35,7 @@
 <img width="1675" alt="generate key" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/92f7324a-b72d-4f35-a85b-901978a5f474">
 
 ```
-8. Give your key a name then click “generate key”. Write your key down and keep it somewhere safe. You will not be able to see the key again after you click close. This is the key you will use with Squarespace Companion.
+8. Give your key a name then click “generate key”. Write your key down and keep it somewhere safe. You will
+not be able to see the key again after you click close. This is the key you will use with Squarespace Companion.
 ```
 <img width="1676" alt="key generated" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/8d6ab28d-d608-4142-9519-766d3faad04e">
