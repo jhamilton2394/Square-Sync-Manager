@@ -488,7 +488,7 @@ class CreateProductsView():
         self.selected_index = self.selected_option.get()
         self.page_dict = self.pages[self.selected_index]
         self.parent.api_controller.pageID = self.page_dict["id"]
-        print(f'{self.page_dict["title"]}{self.page_dict["id"]}')
+        print(f'Page "{self.page_dict["title"]}"{self.page_dict["id"]}')
 
     def create_all(self):
         # self.parent.decypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.parent.active_user.api_key)
