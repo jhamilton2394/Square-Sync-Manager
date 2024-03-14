@@ -8,7 +8,10 @@ api controller.
 
 controller = AuthController()
 
-user = controller.login_user("carrot", "password")
+new_user = User("carrot", "password")
+new_user.save()
+
+user = controller.login_user("gook", "password")
 key = controller.derive_key("password", user.salt)
 dec_api_key = controller.decrypt(key, user.api_key)
 user.api_key = dec_api_key

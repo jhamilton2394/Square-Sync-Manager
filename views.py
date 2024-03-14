@@ -376,6 +376,7 @@ class LoginView(customtkinter.CTkToplevel):
             self.parent.api_controller = APIController(auth_user)
             if auth_user.api_key:
                 self.parent.api_controller.api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, auth_user.api_key)
+            self.parent.api_controller.set_store_pages_info()
             self.destroy()
         else:
             if not hasattr(self, 'login_failed_label'):
@@ -435,6 +436,7 @@ class CreateProductsView():
 
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
+        self.pages = self.parent.api_controller.page_ids()
 
         # Create products frame
         self.products_frame = customtkinter.CTkFrame(parent, width=250, height=1200)
@@ -465,6 +467,28 @@ class CreateProductsView():
         self.upload_button = customtkinter.CTkButton(self.products_frame, width=140, text="Upload to site",
                                                      command=self.create_all)
         self.upload_button.grid(row=33, column=3, padx=7, pady=2, sticky="w")
+
+        # Create page select label
+        self.radio_frame_label = customtkinter.CTkLabel(self.products_frame, text="Page Select")
+        self.radio_frame_label.grid(row=10, column=4, padx=20, pady=0, sticky="nsew")
+
+        # Create radio button frame
+        self.radio_frame = customtkinter.CTkFrame(self.products_frame, width=150, height=100)
+        self.radio_frame.grid(row=11, column=4, padx=20, pady=7, sticky="nsew")
+
+        # Create page select radio buttons. Pages and their ID's are retreived from api controller and looped over.
+        self.selected_option = tk.IntVar()
+
+        for i, page in enumerate(self.pages):
+            self.option = customtkinter.CTkRadioButton(self.radio_frame, variable=self.selected_option, value=i, text=page["title"],
+                                                       command= self.page_select)
+            self.option.grid(row=10, column=10, rowspan=2, padx=20, pady=10)
+
+    def page_select(self):
+        self.selected_index = self.selected_option.get()
+        self.page_dict = self.pages[self.selected_index]
+        self.parent.api_controller.pageID = self.page_dict["id"]
+        print(f'{self.page_dict["title"]}{self.page_dict["id"]}')
 
     def create_all(self):
         # self.parent.decypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.parent.active_user.api_key)
