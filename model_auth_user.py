@@ -11,6 +11,9 @@ local machines file system via pickling, but this can be easily modified to work
 import hashlib
 import pickle
 import os
+import platform
+from pathlib import Path
+
 
 class User:
     """
@@ -69,6 +72,9 @@ class User:
         self.price = None
         self.qty = None
         self.deleted = None
+
+        self.program_directory = self.set_program_directory()
+        self.user_file_path = f"{self.program_directory}" + "/users.pkl"
         self.file_name = None
 
     def validate_username(self):
@@ -81,7 +87,7 @@ class User:
         Also checks if the file containing user data exists. If not, then no users yet exist and
         the function returns True.
         """
-        file_path = 'files/users.pkl'
+        file_path = self.user_file_path
         if os.path.exists(file_path):
             with open(file_path, 'rb') as file:
                 loaded_users = pickle.load(file)
@@ -102,7 +108,7 @@ class User:
         If it does exist the user is appended to the user list.
         """
         if self.validate_username():
-            file_path = 'files/users.pkl'
+            file_path = self.user_file_path
             if os.path.exists(file_path):
                 with open(file_path, 'rb') as read_file:
                     user_list = pickle.load(read_file)
@@ -123,7 +129,7 @@ class User:
         saved in the users file, if it exists. Returns actual user instance,
         or False. Used by auth_controller for authentication.
         """
-        file_path = 'files/users.pkl'
+        file_path = self.user_file_path
         if os.path.exists(file_path):
             with open(file_path, 'rb') as read_file:
                 user_list = pickle.load(read_file)
@@ -137,7 +143,7 @@ class User:
         Used by AuthController's update_user_settings to retrieve user
         list from user file.
         """
-        file_path = 'files/users.pkl'
+        file_path = self.user_file_path
         if os.path.exists(file_path):
             with open(file_path, 'rb') as read_file:
                 user_list = pickle.load(read_file)
@@ -151,10 +157,48 @@ class User:
         Parameters:
         user_list: list | list containing user objects
         """
-        file_path = 'files/users.pkl'
+        file_path = self.user_file_path
         if os.path.exists(file_path):
             with open(file_path, "wb") as file:
                 pickle.dump(user_list, file)
+
+    def set_program_directory(self):
+        os_name = platform.system()
+        if os_name == "Darwin":
+            """
+            Program files are stored in the following directories:
+            MacOS: user/applications/Squarespace Companion
+            Windows: ProgramFiles/Squarespace Companion
+            """
+
+            home_dir = str(Path.home())
+            applications_dir = os.path.join(home_dir, "Applications")
+            new_folder_name = "Squarespace Companion"
+            new_folder_path = os.path.join(applications_dir, new_folder_name)
+
+            if not os.path.exists(new_folder_path):
+                os.makedirs(new_folder_path)
+                self.program_directory = new_folder_path
+                print(f"Folder '{new_folder_name}' created successfully in '{applications_dir}'.")
+            else:
+                print(f"Folder '{new_folder_name}' already exists in '{applications_dir}'.")
+                self.program_directory = new_folder_path
+            return new_folder_path
+
+        elif os_name == "Windows":
+            program_files_dir = os.environ["ProgramFiles"]
+            new_folder_name = "Squarespace Companion"
+            new_folder_path = os.path.join(program_files_dir, new_folder_name)
+
+            if not os.path.exists(new_folder_path):
+                try:
+                    os.makedirs(new_folder_path)
+                    print(f"Folder '{new_folder_name}' created successfully in '{program_files_dir}'.")
+                except PermissionError:
+                    print("Permission denied. Please run the script as an administrator.")
+            else:
+                print(f"Folder '{new_folder_name}' already exists in '{program_files_dir}'.")
+            return new_folder_path
 
     def __str__(self):
         return f"{self.username}"

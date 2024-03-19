@@ -20,7 +20,7 @@ import base64
 import requests
 import json
 from pandas import ExcelFile
-
+import urllib.request
 
 class AuthController:
     """
@@ -225,93 +225,110 @@ class APIController:
 
         self.store_pages_info = None
 
+    def check_connection(self, host='http://google.com'):
+        try:
+            urllib.request.urlopen(host) #Python 3.x
+            return True
+        except:
+            # print("You are not connected to the internet.")
+            return False
+
+
     def createProduct(self, storePageID, productName, productDescription, variantSku, productPrice, quantity):
-        dataOutbox = {'type': 'PHYSICAL',
-                'storePageId': storePageID,
-                'name': productName,
-                'description': productDescription,
-                'isVisible': 'true',
-                'variants': [{'sku': variantSku,
-                                'pricing': {'basePrice': {'currency': 'USD',
-                                                        'value': productPrice
-                                                        }
-                                            },
-                                'stock': {'quantity': quantity}}
-                                ]
-                    }
-        jsonDataOutbox = json.dumps(dataOutbox)
-        prodURL = 'https://api.squarespace.com/1.0/commerce/products'
-        prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
-                'User-Agent': 'APIAPP1.0',
-                'Content-Type': 'application/json'}
-        r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
-        json_data = r.json()
-        pretty_json_data = json.dumps(json_data, indent=3)
-        print(r)
-        print(pretty_json_data)
-        return
+        if self.check_connection():
+            dataOutbox = {'type': 'PHYSICAL',
+                    'storePageId': storePageID,
+                    'name': productName,
+                    'description': productDescription,
+                    'isVisible': 'true',
+                    'variants': [{'sku': variantSku,
+                                    'pricing': {'basePrice': {'currency': 'USD',
+                                                            'value': productPrice
+                                                            }
+                                                },
+                                    'stock': {'quantity': quantity}}
+                                    ]
+                        }
+            jsonDataOutbox = json.dumps(dataOutbox)
+            prodURL = 'https://api.squarespace.com/1.0/commerce/products'
+            prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
+                    'User-Agent': 'APIAPP1.0',
+                    'Content-Type': 'application/json'}
+            r = requests.post(prodURL, headers=prodHeaders, data = jsonDataOutbox)
+            json_data = r.json()
+            pretty_json_data = json.dumps(json_data, indent=3)
+            print(r)
+            print(pretty_json_data)
+            return
+        else:
+            return False
 
     def createAllProducts(self):
         """
         Converts excel sheet to pandas dataframe. Extracts data from specified columns and passes
         it to the createProduct method.
         """
-        xls = ExcelFile(self.filePath)
-        df = xls.parse(xls.sheet_names[0])
-        product_list = self.site_master_prod_list()
-        #loop thru doc & create products using column header files.
-        for i in range(len(df)):
-            sku = str((df.loc[i].at[self.skuHeader]))
-            name = (df.loc[i].at[self.nameHeader])
-            itemDesc = (df.loc[i].at[self.item_desc_header])
-            price = str((df.loc[i].at[self.priceHeader]))
-            quant = str((df.loc[i].at[self.qtyHeader]))
-            del2 = (df.loc[i].at[self.delHeader])
-            pageID = self.pageID
-            if name in product_list:
-                print(name, 'already on site, skipping...\n')
-            elif del2 == 'x':
-                print(name, 'previously deleted from site by user, skipping...')
-            else:
-                self.createProduct(storePageID=pageID,
-                                productName=name,
-                            productDescription=itemDesc,
-                            variantSku=sku,
-                            productPrice=price,
-                            quantity=quant)
+        if self.check_connection():
+            xls = ExcelFile(self.filePath)
+            df = xls.parse(xls.sheet_names[0])
+            product_list = self.site_master_prod_list()
+            #loop thru doc & create products using column header files.
+            for i in range(len(df)):
+                sku = str((df.loc[i].at[self.skuHeader]))
+                name = (df.loc[i].at[self.nameHeader])
+                itemDesc = (df.loc[i].at[self.item_desc_header])
+                price = str((df.loc[i].at[self.priceHeader]))
+                quant = str((df.loc[i].at[self.qtyHeader]))
+                del2 = (df.loc[i].at[self.delHeader])
+                pageID = self.pageID
+                if name in product_list:
+                    print(name, 'already on site, skipping...\n')
+                elif del2 == 'x':
+                    print(name, 'previously deleted from site by user, skipping...')
+                else:
+                    self.createProduct(storePageID=pageID,
+                                    productName=name,
+                                productDescription=itemDesc,
+                                variantSku=sku,
+                                productPrice=price,
+                                quantity=quant)
                 
     def site_master_prod_list(self):
-        #Initial product query
-        actual_prod_list = []
-        ###Commenting out 2 lines below, which just opens the data file. The file was used for testing purposes.
-        # open_product_data = open('product_file', 'r')
-        # raw_data = open_product_data.read()
-        raw_data = self.getProducts()
-        prod_main_dict = json.loads(raw_data)
-        prod_list = prod_main_dict['products']
-        pagination = prod_main_dict['pagination']
-        cursor = pagination['nextPageCursor']
-        for i in prod_list:
-            actual_prod_list.append(i['name'])
-        ###Loops through all pages if they exist.
-        while pagination['hasNextPage'] == True:
-            raw_data = self.getProducts(cursor)
+        if self.check_connection():
+            #Initial product query
+            actual_prod_list = []
+            ###Commenting out 2 lines below, which just opens the data file. The file was used for testing purposes.
+            # open_product_data = open('product_file', 'r')
+            # raw_data = open_product_data.read()
+            raw_data = self.getProducts()
             prod_main_dict = json.loads(raw_data)
             prod_list = prod_main_dict['products']
             pagination = prod_main_dict['pagination']
             cursor = pagination['nextPageCursor']
             for i in prod_list:
                 actual_prod_list.append(i['name'])
-        return actual_prod_list
+            ###Loops through all pages if they exist.
+            while pagination['hasNextPage'] == True:
+                raw_data = self.getProducts(cursor)
+                prod_main_dict = json.loads(raw_data)
+                prod_list = prod_main_dict['products']
+                pagination = prod_main_dict['pagination']
+                cursor = pagination['nextPageCursor']
+                for i in prod_list:
+                    actual_prod_list.append(i['name'])
+            return actual_prod_list
         
     def getProducts(self, cursor=''):
-        prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
-        prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
-                       'User-Agent': 'APIAPP1.0'}
-        r = requests.get(prodURL, headers=prodHeaders)
-        json_data = r.json()
-        pretty_json_data = json.dumps(json_data, indent=3)
-        return pretty_json_data
+        if self.check_connection():
+            prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
+            prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
+                        'User-Agent': 'APIAPP1.0'}
+            r = requests.get(prodURL, headers=prodHeaders)
+            json_data = r.json()
+            pretty_json_data = json.dumps(json_data, indent=3)
+            return pretty_json_data
+        else:
+            return False
     
     def get_store_pages_info(self):
         """
@@ -319,12 +336,15 @@ class APIController:
         pages data. Dictionary contains pagination data, and a list of store
         pages and their id's.
         """
-        store_pages_URL = 'https://api.squarespace.com/1.0/commerce/store_pages'
-        headers = {'Authorization': 'Bearer ' + self.api_key,
-                   'User-Agent': 'APIAPP1.0'}
-        r = requests.get(store_pages_URL, headers=headers)
-        data = r.json()
-        return data
+        if self.check_connection():
+            store_pages_URL = 'https://api.squarespace.com/1.0/commerce/store_pages'
+            headers = {'Authorization': 'Bearer ' + self.api_key,
+                    'User-Agent': 'APIAPP1.0'}
+            r = requests.get(store_pages_URL, headers=headers)
+            data = r.json()
+            return data
+        else:
+            return None
     
     def set_store_pages_info(self):
         """
@@ -340,13 +360,15 @@ class APIController:
 
         Returns: list | [{title: page title, id: page id}, ...]
         """
-        pages_list = []
-        for page in self.store_pages_info["storePages"]:
-            pages_dict = {}
-            id_value = page["id"]
-            title_value = page["title"]
-            pages_dict["title"] = title_value
-            pages_dict["id"] = id_value
-            pages_list.append(pages_dict)
-        return pages_list
+        if self.check_connection() and self.store_pages_info:
+            pages_list = []
+            for page in self.store_pages_info["storePages"]:
+                pages_dict = {}
+                id_value = page["id"]
+                title_value = page["title"]
+                pages_dict["title"] = title_value
+                pages_dict["id"] = id_value
+                pages_list.append(pages_dict)
+            return pages_list
+        return False
     
