@@ -113,7 +113,8 @@ class MenuView(customtkinter.CTk):
             self.login_button = customtkinter.CTkButton(self.sidebar_frame, text="Login", width=140)
             self.login_button.grid(row=2, column=0, padx=20, pady=(10, 10))
         else:
-            self.logout_button = customtkinter.CTkButton(self.sidebar_frame, text="Log out", width=140)
+            self.logout_button = customtkinter.CTkButton(self.sidebar_frame, text="Log out", width=140,
+                                                         command=self.logout)
             self.logout_button.grid(row=2, column=0, padx=20, pady=(10, 10))
 
         # Create products button
@@ -130,6 +131,12 @@ class MenuView(customtkinter.CTk):
         self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
                                                    command=lambda: self.parent.view_toggle(AlternateLogin, parent))
         self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
+
+    def logout(self):
+        """
+        Logs the user out by destroying the main app window.
+        """
+        self.parent.destroy()
 
 class WelcomeView:
     """
