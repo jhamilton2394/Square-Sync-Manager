@@ -91,6 +91,22 @@ class AuthController:
         else:
             return False
 
+    def password_match(self, password1, password2):
+        if password1 == password2:
+            return True
+        else:
+            return False
+        
+    def create_new_user(self, username, password1, password2):
+        if self.password_match(password1, password2):
+            new_user = User(username, password1)
+            if new_user.save():
+                return "New user created successfully"
+            else:
+                return "Username already taken"
+        else:
+            return "Passwords do not match"
+
     def update_user_settings(self, argument_dict, active_user):
         """
         This function uses the argument dictionary to set the corresponding attributes of the

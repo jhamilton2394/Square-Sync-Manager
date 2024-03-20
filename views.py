@@ -396,7 +396,7 @@ class LoginView(customtkinter.CTkToplevel):
                 self.login_failed_label.config(text="Username or password incorrect")
     
     def create_user(self):
-        self.create_user_window = CreateUserView(self)
+        self.create_user_window = CreateUserView(self.parent)
 class AlternateLogin: # Not in use
     def __init__(self, parent):
         self.parent = parent
@@ -470,30 +470,38 @@ class CreateUserView(customtkinter.CTkToplevel):
         password = self.password_entry.get()
         password2 = self.password_reentry.get()
 
-        if password == password2:
-            self.password_match = True
+        create_attempt = self.parent.auth_controller.create_new_user(username, password, password2)
+
+        if not hasattr(self, 'message_label'):
+            self.message_label = customtkinter.CTkLabel(self, text=f"{create_attempt}")
+            self.message_label.pack(pady=10)
         else:
-            if not hasattr(self, 'message_label'):
-                self.message_label = customtkinter.CTkLabel(self, text="Passwords do not match")
-                self.message_label.pack(pady=10)
-            else:
-                self.message_label.configure(text="Passwords still do not match")
+            self.message_label.configure(text=f"{create_attempt}")
 
-        if self.password_match == True:
-            new_user = User(username, password)
-            if new_user.save():
-                if not hasattr(self, 'message_label'):
-                    self.message_label = customtkinter.CTkLabel(self, text="New user created successfully")
-                    self.message_label.pack(pady=10)
-                else:
-                    self.message_label.configure(text="New user created successfully")
+        # if password == password2:
+        #     self.password_match = True
+        # else:
+        #     if not hasattr(self, 'message_label'):
+        #         self.message_label = customtkinter.CTkLabel(self, text="Passwords do not match")
+        #         self.message_label.pack(pady=10)
+        #     else:
+        #         self.message_label.configure(text="Passwords still do not match")
 
-            else:
-                if not hasattr(self, 'message_label'):
-                    self.message_label = customtkinter.CTkLabel(self, text="That username is already taken")
-                    self.message_label.pack(pady=10)
-                else:
-                    self.message_label.configure(text="That username is already taken")
+        # if self.password_match == True:
+        #     new_user = User(username, password)
+        #     if new_user.save():
+        #         if not hasattr(self, 'message_label'):
+        #             self.message_label = customtkinter.CTkLabel(self, text="New user created successfully")
+        #             self.message_label.pack(pady=10)
+        #         else:
+        #             self.message_label.configure(text="New user created successfully")
+
+        #     else:
+        #         if not hasattr(self, 'message_label'):
+        #             self.message_label = customtkinter.CTkLabel(self, text="That username is already taken")
+        #             self.message_label.pack(pady=10)
+        #         else:
+        #             self.message_label.configure(text="That username is already taken")
  
 
 class CreateProductsView():
