@@ -364,6 +364,9 @@ class LoginView(customtkinter.CTkToplevel):
         
         self.login_button = customtkinter.CTkButton(self, text="Login", command=lambda: self.login())
         self.login_button.pack(pady=10)
+
+        self.create_user_button = customtkinter.CTkButton(self, text="Create new user", command=self.create_user)
+        self.create_user_button.pack(pady=5)
         
     def login(self):
         """
@@ -391,7 +394,9 @@ class LoginView(customtkinter.CTkToplevel):
                 self.login_failed_label.pack(pady=10)
             else:
                 self.login_failed_label.config(text="Username or password incorrect")
-
+    
+    def create_user(self):
+        self.create_user_window = CreateUserView(self)
 class AlternateLogin: # Not in use
     def __init__(self, parent):
         self.parent = parent
@@ -436,7 +441,60 @@ class AlternateLogin: # Not in use
         self.login_frame.destroy()
 
 class CreateUserView(customtkinter.CTkToplevel):
-    pass
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.title("Create new user")
+        self.geometry("300x300")
+        self.transient(parent)
+        self.grab_set()
+
+        self.label = customtkinter.CTkLabel(self, text="Enter username and password")
+        self.label.pack(pady=10)
+
+        self.username_entry = customtkinter.CTkEntry(self, placeholder_text="Username")
+        self.username_entry.pack(pady=10)
+
+        self.password_entry = customtkinter.CTkEntry(self, show="*", placeholder_text="Password")
+        self.password_entry.pack(pady=5)
+
+        self.password_reentry = customtkinter.CTkEntry(self, show="*", placeholder_text="Re-enter password")
+        self.password_reentry.pack(pady=5)
+
+        self.create_user_button = customtkinter.CTkButton(self, text="Create user", command=self.create_user)
+        self.create_user_button.pack(pady=10)
+
+    def create_user(self):
+        self.password_match = False
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        password2 = self.password_reentry.get()
+
+        if password == password2:
+            self.password_match = True
+        else:
+            if not hasattr(self, 'message_label'):
+                self.message_label = customtkinter.CTkLabel(self, text="Passwords do not match")
+                self.message_label.pack(pady=10)
+            else:
+                self.message_label.configure(text="Passwords still do not match")
+
+        if self.password_match == True:
+            new_user = User(username, password)
+            if new_user.save():
+                if not hasattr(self, 'message_label'):
+                    self.message_label = customtkinter.CTkLabel(self, text="New user created successfully")
+                    self.message_label.pack(pady=10)
+                else:
+                    self.message_label.configure(text="New user created successfully")
+
+            else:
+                if not hasattr(self, 'message_label'):
+                    self.message_label = customtkinter.CTkLabel(self, text="That username is already taken")
+                    self.message_label.pack(pady=10)
+                else:
+                    self.message_label.configure(text="That username is already taken")
+ 
 
 class CreateProductsView():
     """Opens the product creation interface when toggled."""
@@ -497,8 +555,6 @@ class CreateProductsView():
         elif self.pages == None:
             self.no_conn_label = customtkinter.CTkLabel(self.radio_frame, text="There are no pages to select")
             self.no_conn_label.grid(row=10, column=10, rowspan=2, padx=20, pady=10)
-
-
 
     def page_select(self):
         self.selected_index = self.selected_option.get()

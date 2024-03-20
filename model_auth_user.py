@@ -116,12 +116,15 @@ class User:
 
                 with open(file_path, "wb") as write_file:
                     pickle.dump(user_list, write_file)
+                return True
             else:
                 new_user_list = [self]
                 with open(file_path, "wb") as file:
                     pickle.dump(new_user_list, file)
+                return True
         else:
             print(f"The username {self.username} is already taken")
+            return False
             
     def get_user(self):
         """
