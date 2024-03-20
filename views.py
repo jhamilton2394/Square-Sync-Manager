@@ -478,32 +478,6 @@ class CreateUserView(customtkinter.CTkToplevel):
         else:
             self.message_label.configure(text=f"{create_attempt}")
 
-        # if password == password2:
-        #     self.password_match = True
-        # else:
-        #     if not hasattr(self, 'message_label'):
-        #         self.message_label = customtkinter.CTkLabel(self, text="Passwords do not match")
-        #         self.message_label.pack(pady=10)
-        #     else:
-        #         self.message_label.configure(text="Passwords still do not match")
-
-        # if self.password_match == True:
-        #     new_user = User(username, password)
-        #     if new_user.save():
-        #         if not hasattr(self, 'message_label'):
-        #             self.message_label = customtkinter.CTkLabel(self, text="New user created successfully")
-        #             self.message_label.pack(pady=10)
-        #         else:
-        #             self.message_label.configure(text="New user created successfully")
-
-        #     else:
-        #         if not hasattr(self, 'message_label'):
-        #             self.message_label = customtkinter.CTkLabel(self, text="That username is already taken")
-        #             self.message_label.pack(pady=10)
-        #         else:
-        #             self.message_label.configure(text="That username is already taken")
- 
-
 class CreateProductsView():
     """Opens the product creation interface when toggled."""
 
