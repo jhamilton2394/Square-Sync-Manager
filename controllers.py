@@ -249,7 +249,6 @@ class APIController:
             # print("You are not connected to the internet.")
             return False
 
-
     def createProduct(self, storePageID, productName, productDescription, variantSku, productPrice, quantity):
         if self.check_connection():
             dataOutbox = {'type': 'PHYSICAL',
@@ -378,13 +377,17 @@ class APIController:
         """
         if self.check_connection() and self.store_pages_info:
             pages_list = []
-            for page in self.store_pages_info["storePages"]:
-                pages_dict = {}
-                id_value = page["id"]
-                title_value = page["title"]
-                pages_dict["title"] = title_value
-                pages_dict["id"] = id_value
-                pages_list.append(pages_dict)
-            return pages_list
+            try:
+                for page in self.store_pages_info["storePages"]:
+                    pages_dict = {}
+                    id_value = page["id"]
+                    title_value = page["title"]
+                    pages_dict["title"] = title_value
+                    pages_dict["id"] = id_value
+                    pages_list.append(pages_dict)
+                return pages_list
+            except KeyError:
+                print("There are no store pages to upload to")
+                return None
         return False
     

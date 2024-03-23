@@ -550,6 +550,8 @@ class CreateProductsView():
             self.parent.api_controller.set_store_pages_info()
             self.parent.view_toggle(CreateProductsView, self.parent)
             self.parent.view_toggle(CreateProductsView, self.parent)
+        elif self.parent.api_controller.pageID == None:
+            print("You must select a page to upload to")
         else:
             self.parent.api_controller.createAllProducts()
 
