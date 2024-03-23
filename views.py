@@ -5,7 +5,6 @@ import customtkinter
 from PIL import Image, ImageTk
 from controllers import *
 import sys
-from tkhtmlview import HTMLLabel, HTMLText, RenderHTML
 
 #### In App class, leave "Create login view" block commented out for development
 #### Leave the login override block un-commented as well.
@@ -151,12 +150,16 @@ class WelcomeView:
 
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
+        self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
+        self.announcement_box.insert("1.0",
+                                     """Welcome to Squarespace Companion!
 
-        self.text_frame = customtkinter.CTkFrame(parent, width=250, height=580)
-        self.text_frame.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
-        self.html_widget = HTMLText(self.text_frame, html=RenderHTML('welcome.html'))
-        self.html_widget.configure(bg="#4a4848")
-        self.html_widget.pack(expand=True, fill="both")
+If you have not already, please configure your settings
+under the settings option in the main menu.""")
+        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.announcement_box.tag_configure("custom tag", foreground="white")
+        self.announcement_box.tag_add("custom tag", 0.0, "end")
+        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
 
     def __str__(self):
         return f"{self.__class__.__name__}"
