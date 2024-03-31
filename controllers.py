@@ -36,6 +36,12 @@ class AuthController:
     validate_password(user, password):
         Checks if entered password matches the users password.
 
+    password_match(password1, password2):
+        Checks if two passwords match.
+
+    create_new_user(username, password1, password2):
+        Creates and saves a new user to storage.
+
     update_user_settings(self, argument_dict, active_user):
         Updates and saves the users settings.
 
@@ -54,6 +60,7 @@ class AuthController:
     dict_filter(self, dict):
         Filters out empty key value pairs from a dictionary.
     """
+
     def __init__(self):
         """Initialize the controller in the main file, and pass it to the App() class so the views can access the controller."""
         self.active_user = None
@@ -92,12 +99,22 @@ class AuthController:
             return False
 
     def password_match(self, password1, password2):
+        """
+        Checks if two passwords match.
+        """
         if password1 == password2:
             return True
         else:
             return False
         
     def create_new_user(self, username, password1, password2):
+        """
+        Creates and saves a new user to storage. Verifies both entered passwords match,
+        and also verifies username isn't already taken.
+
+        Returns:
+        message: Str | A message that is displayed to the user.
+        """
         if self.password_match(password1, password2):
             new_user = User(username, password1)
             if new_user.save():
@@ -213,6 +230,20 @@ class AuthController:
 
 class APIController:
     """
+    Controls API functionality by processing input from the views and any required info from the models.
+
+    Attributes:
+    api_key: Str | The users decrypted api key.
+    nameHeader: Str | The users name header setting.
+    skuHeader: Str | The users sku header setting.
+    item_desc_header: Str | The users item description header setting.
+    priceHeader: Str | The users price header setting.
+    qtyHeader: Str | The users quantity header setting
+    delHeader: Str | The users deleted header setting
+    filePath: Str | The users file path setting
+    pageID: Str | The selected page ID. Set during the product creation process. Selected by user in the create products view.
+    store_pages_info: Dict | A dictionary of information about store pages.
+
     The current API methods can be broken down into product methods, and store_pages methods.
 
     Product methods:
@@ -390,4 +421,3 @@ class APIController:
                 print("There are no store pages to upload to")
                 return None
         return False
-    
