@@ -244,20 +244,37 @@ class APIController:
     pageID: Str | The selected page ID. Set during the product creation process. Selected by user in the create products view.
     store_pages_info: Dict | A dictionary of information about store pages.
 
-    The current API methods can be broken down into product methods, and store_pages methods.
+    The current API methods can be broken down into product methods, store_pages methods, and general utility methods.
 
     Product methods:
-    createProduct: Posts a single product
-    createAllProducts: Parses data from excel sheet and passes it to createProduct. Creates all products on excel sheet.
-    getProducts: Gets the initial page of product info.
-    siteMasterProdList: Uses getProducts to create a list of all products on site. Uses pagination as necesary.
+    createProduct(self, storePageID, productName, productDescription, variantSku, productPrice, quantity):
+        Posts a single product.
+
+    createAllProducts(self):
+        Parses data from excel sheet and passes it to createProduct. Creates all products on excel sheet.
+
+    getProducts(self, cursor=''):
+        Gets the initial page of product info.
+
+    siteMasterProdList(self):
+        Uses getProducts to create a list of all products on site. Uses pagination as necesary.
 
     store_pages methods:
-    get_store_pages_info: Gets the initial page of store_pages info.
-    set_store_pages_info: Calls get_store_pages_info and saves return value to the attribute "store_pages_info".
-    page_ids: Filters the store_pages_info attribute for "title" and "id". Returns a list of pages with their titles and id's.
+    get_store_pages_info(self):
+        Gets the initial page of store_pages info.
+
+    set_store_pages_info(self):
+        Calls get_store_pages_info and saves return value to the attribute "store_pages_info".
+
+    page_ids(self):
+        Filters the store_pages_info attribute for "title" and "id". Returns a list of pages with their titles and id's.
         Need to incorporate pagination
+
+    general utility methods:
+    check_connection(self, host='http://google.com'):
+        Checks if an internet connection exists.
     """
+
     def __init__(self, user):
         
         self.api_key = user.api_key
@@ -273,14 +290,31 @@ class APIController:
         self.store_pages_info = None
 
     def check_connection(self, host='http://google.com'):
+        """
+        Checks if an internet connection exists.
+        """
         try:
             urllib.request.urlopen(host) #Python 3.x
             return True
         except:
-            # print("You are not connected to the internet.")
             return False
 
     def createProduct(self, storePageID, productName, productDescription, variantSku, productPrice, quantity):
+        """
+        Creates a single product. Primarily used in the createAllProducts method, which parses the necessary
+        data from the inventory sheet and passes it as arguments to this method.
+
+        Parameters:
+        storePageID: Str | store page ID, chosen by user on create product view.
+        productName: Str | product name from inventory file.
+        productDescription: Str | product description from inventory file.
+        variantSku: Str | sku from inventory file.
+        productPrice: Str | price from inventory file.
+        quantity: Str | quantity from inventroy file.
+
+        Returns:
+        Nothing if successful, and False if no internet connection exists.
+        """
         if self.check_connection():
             dataOutbox = {'type': 'PHYSICAL',
                     'storePageId': storePageID,
@@ -312,7 +346,8 @@ class APIController:
     def createAllProducts(self):
         """
         Converts excel sheet to pandas dataframe. Extracts data from specified columns and passes
-        it to the createProduct method.
+        it to the createProduct method. Avoids creating duplicate products by checking if they're
+        already present, and checking if they were specifically omitted from upload.
         """
         if self.check_connection():
             xls = ExcelFile(self.filePath)
@@ -340,6 +375,13 @@ class APIController:
                                 quantity=quant)
                 
     def site_master_prod_list(self):
+        """
+        Uses the getPRoducts method, along with any returned cursors to create a list of all
+        products currently on the site.
+
+        Returns:
+        actual_prod_list: List | A list of all products on the site.
+        """
         if self.check_connection():
             #Initial product query
             actual_prod_list = []
@@ -365,6 +407,13 @@ class APIController:
             return actual_prod_list
         
     def getProducts(self, cursor=''):
+        """
+        Gets the products dictionary from products API.
+
+        Returns:
+        pretty_json_data: Dict | A dictionary of products data.
+        OR False: Bool | If no internet connection exists.
+        """
         if self.check_connection():
             prodURL = 'https://api.squarespace.com/1.0/commerce/products?cursor=' + cursor
             prodHeaders = {'Authorization': 'Bearer ' + self.api_key,
@@ -381,6 +430,10 @@ class APIController:
         Uses the squarespace store_pages api to get a dictionary of the store
         pages data. Dictionary contains pagination data, and a list of store
         pages and their id's.
+
+        Returns:
+        data: Dict | dictionary of store pages info.
+        None: If no connection exists.
         """
         if self.check_connection():
             store_pages_URL = 'https://api.squarespace.com/1.0/commerce/store_pages'
