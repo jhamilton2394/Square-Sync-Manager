@@ -5,6 +5,9 @@ import customtkinter
 from PIL import Image, ImageTk
 from controllers import *
 import sys
+import markdown2
+import html2text
+
 
 #### In App class, leave "Create login view" block commented out for development
 #### Leave the login override block un-commented as well.
@@ -14,6 +17,23 @@ The class based views can be toggled in any container inside the main app class.
 Each view must be passed a "parent" when instantiated so that the view_toggle
 method can place the view in the correct place.
 """
+class BaseView():
+    """
+    BaseView provides methods for displaying the content of markdown files.
+    """
+    def __init__(self):
+        pass
+
+    def load_markdown_file(self, filename):
+        with open(filename, 'r') as file:
+            markdown_content = file.read()
+        return markdown_content
+
+    def display_markdown_file(self, filename, widget):
+        markdown_content = self.load_markdown_file(filename)
+        html_content = markdown2.markdown(markdown_content)
+        plain_text = html2text.html2text(html_content)
+        widget.insert(tk.END, plain_text)
 
 class App(customtkinter.CTk):
     """
@@ -127,9 +147,9 @@ class MenuView(customtkinter.CTk):
                                                        command=lambda: self.parent.view_toggle(SettingsView, parent))
         self.settings_button.grid(row=4, column=0, padx=20, pady=(10, 10))
 
-        # Appearance button
+        # Info button
         self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
-                                                   command=lambda: self.parent.view_toggle(AlternateLogin, parent))
+                                                   command=lambda: self.parent.view_toggle(InfoView, parent))
         self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
     def logout(self):
@@ -141,8 +161,7 @@ class MenuView(customtkinter.CTk):
     def change_appearance_mode_event(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
-
-class WelcomeView:
+class WelcomeView(BaseView):
     """
     This is the welcome widget that is visible upon program startup. It Displays instructions
     or various info.
@@ -155,15 +174,29 @@ class WelcomeView:
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
-        self.announcement_box.insert("1.0",
-                                     """Welcome to Squarespace Companion!
-
-If you have not already, please configure your settings
-under the settings option in the main menu.""")
+        self.display_markdown_file("files/welcome.md", self.announcement_box)
         self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
         self.announcement_box.tag_configure("custom tag", foreground="white")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
         self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
+
+    def __str__(self):
+        return f"{self.__class__.__name__}"
+
+    def destroy(self):
+        self.announcement_box.destroy()
+
+class InfoView(BaseView):
+
+    def __init__(self, parent, *args, **kwargs):
+        self.parent = parent
+        self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
+        self.display_markdown_file("README.md", self.announcement_box)
+        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.announcement_box.tag_configure("custom tag", foreground="white")
+        self.announcement_box.tag_add("custom tag", 0.0, "end")
+        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
+
 
     def __str__(self):
         return f"{self.__class__.__name__}"
