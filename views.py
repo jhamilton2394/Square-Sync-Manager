@@ -127,7 +127,7 @@ class MenuView(customtkinter.CTk):
                                                        command=lambda: self.parent.view_toggle(SettingsView, parent))
         self.settings_button.grid(row=4, column=0, padx=20, pady=(10, 10))
 
-        # info button
+        # Appearance button
         self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="Info", width = 140,
                                                    command=lambda: self.parent.view_toggle(AlternateLogin, parent))
         self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
@@ -137,6 +137,10 @@ class MenuView(customtkinter.CTk):
         Logs the user out by destroying the main app window.
         """
         self.parent.destroy()
+
+    def change_appearance_mode_event(self, new_appearance_mode):
+        customtkinter.set_appearance_mode(new_appearance_mode)
+
 
 class WelcomeView:
     """

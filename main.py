@@ -11,7 +11,7 @@ All data is stored in files under the files folder using Pickle. The apps small 
 does not warrant the use of SQL. All sensitive data is either hashed or encrypted before being stored.
 '''
 
-set_appearance_mode("system")
+set_appearance_mode("dark")
 set_default_color_theme("green")
 
 if __name__ == "__main__":
