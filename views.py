@@ -137,7 +137,19 @@ class App(customtkinter.CTk):
             self.active_widget = self.view
 
 class MenuView(customtkinter.CTk):
-    """Menu view is created after successful authentication. Contains a frame with the menu buttons."""
+    """
+    Menu view is created after successful authentication. Contains a frame with the menu buttons.
+    
+    Attributes:
+    parent: View object | The view that contains MenuView. Can be any view class, but is typically an instance of App.
+
+    Methods:
+    logout(self):
+        Logs you out by destroying the main app window.
+
+    change_appearance_mode_event(self, new_appearance_mode):
+        Changes appearance mode.    
+    """
 
     def __init__(self, parent):
         self.parent = parent
@@ -187,6 +199,9 @@ class MenuView(customtkinter.CTk):
         self.parent.destroy()
 
     def change_appearance_mode_event(self, new_appearance_mode):
+        """
+        Changes appearance mode. Options are "light", "dark", and "system".
+        """
         customtkinter.set_appearance_mode(new_appearance_mode)
 
 class WelcomeView(BaseView):
