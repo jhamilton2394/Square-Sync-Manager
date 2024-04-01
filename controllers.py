@@ -40,7 +40,7 @@ class AuthController:
         Checks if two passwords match.
 
     create_new_user(username, password1, password2):
-        Creates and saves a new user to storage.
+        Handles the creation and saving of a new user.
 
     update_user_settings(self, argument_dict, active_user):
         Updates and saves the users settings.
@@ -471,6 +471,5 @@ class APIController:
                     pages_list.append(pages_dict)
                 return pages_list
             except KeyError:
-                print("There are no store pages to upload to")
                 return None
         return False
