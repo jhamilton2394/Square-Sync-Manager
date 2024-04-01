@@ -20,16 +20,34 @@ method can place the view in the correct place.
 class BaseView():
     """
     BaseView provides methods for displaying the content of markdown files.
+
+    methods:
+
+    load_markdown_file(self, filename):
+        Opens markdown file.
+
+    display_markdown_file(self, filename, widget):
+        Inserts markdown file content into specified widget.
     """
     def __init__(self):
         pass
 
     def load_markdown_file(self, filename):
+        """
+        Opens specified file.
+        """
         with open(filename, 'r') as file:
             markdown_content = file.read()
         return markdown_content
 
     def display_markdown_file(self, filename, widget):
+        """
+        Inserts markdown content into specified widget
+
+        Parameters:
+        filename: Str | path to mardown file
+        widget: Tk object | widget to insert markdown into.
+        """
         markdown_content = self.load_markdown_file(filename)
         html_content = markdown2.markdown(markdown_content)
         plain_text = html2text.html2text(html_content)
@@ -39,6 +57,19 @@ class App(customtkinter.CTk):
     """
     This is the main app window. Once authenticated, the MenuView can toggle the class
     based views inside this main window.
+
+    Attributes:
+    auth_controller: AuthController | AuthController instance, handles authentication and user business logic.
+    api_controller: APIController | APIController instance, handles api business logic.
+    authenticated: Bool | indicates authentication status.
+    active_user: User | User instance set after successfull authentication
+    derived_session_key: bytes | base64 urlsafe b64encoded key. Created using user password and salt upon login.
+    decrypted_api_key: Str | decrypted api key used for api requests.
+    active_widget: view object | Active view in App window. Defaults to WelcomeView
+
+    Methods:
+    view_toggle(self, view, *args, **kwargs):
+        Used to toggle views inside the main app window.
     """
 
     def __init__(self, auth_controller):
@@ -61,9 +92,6 @@ class App(customtkinter.CTk):
         # self.active_user.api_key = dec_key
         # # create api controller
         # self.api_controller = APIController(auth_user)
-
-
-
 
         # configure window
         self.title("Squarespace Companion")
