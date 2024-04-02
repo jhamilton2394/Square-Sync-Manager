@@ -208,10 +208,6 @@ class WelcomeView(BaseView):
     """
     This is the welcome widget that is visible upon program startup. It Displays instructions
     or various info.
-
-    WelcomeView objects must be instatiated with a parent argument. The parent is which app widget will
-    contain the welcome view widget. To place the WelcomeView widget in the default window simply
-    pass "self" as the argument. All class based views function the same way.
     """
 
     def __init__(self, parent, *args, **kwargs):
@@ -230,7 +226,10 @@ class WelcomeView(BaseView):
         self.announcement_box.destroy()
 
 class InfoView(BaseView):
-
+    """
+    Info View displays info about the app. In the current case it displays the content of
+    the readme.MD file.
+    """
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
@@ -248,7 +247,21 @@ class InfoView(BaseView):
         self.announcement_box.destroy()
         
 class SettingsView(BaseView):
-    """Opens the settings menu when toggled."""
+    """
+    Opens the settings menu when toggled.
+    
+    Attributes:
+    parent: view class | the view that contains the settings view.
+    active_user: User | The active user. Makes user info accessible to the view.
+    decrypted_api_key: Str | active users decrypted api key.
+
+    Methods:
+    update_user_settings(self):
+        Gets data from entry fields and saves it to user profile.
+
+    file_select(self):
+        Creates a file selection window so you can pick a file.
+    """
 
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
@@ -403,6 +416,13 @@ class LoginView(customtkinter.CTkToplevel):
     """
     LoginView is called automatically upon startup. All other windows are blocked
     until authentication is successful.
+
+    Methods:
+    login(self):
+        Gets username and password from entry fields and sends it to the auth_controller.
+
+    create_user(self):
+        Toggles the create_user view.   
     """
 
     def __init__(self, parent):
@@ -456,6 +476,7 @@ class LoginView(customtkinter.CTkToplevel):
                 self.login_failed_label.config(text="Username or password incorrect")
     
     def create_user(self):
+        """Toggles the CreateUserView"""
         self.create_user_window = CreateUserView(self.parent)
 class AlternateLogin: # Not in use
     def __init__(self, parent):
@@ -501,6 +522,13 @@ class AlternateLogin: # Not in use
         self.login_frame.destroy()
 
 class CreateUserView(customtkinter.CTkToplevel):
+    """
+    View for creating a new user profile.
+
+    Methods:
+    create_user(self):
+        Gets user info from entry fields and sends it to the auth_controller to create a new user.
+    """
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
@@ -525,6 +553,7 @@ class CreateUserView(customtkinter.CTkToplevel):
         self.create_user_button.pack(pady=10)
 
     def create_user(self):
+        """Communicates with the auth_controller to create a new user."""
         self.password_match = False
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -538,8 +567,27 @@ class CreateUserView(customtkinter.CTkToplevel):
         else:
             self.message_label.configure(text=f"{create_attempt}")
 
-class CreateProductsView():
-    """Opens the product creation interface when toggled."""
+class CreateProductsView:
+    """
+    Opens the product creation interface when toggled.
+
+    Attributes:
+    parent: view class | The view that contains createProductsView.
+    pages: List | A list of dictionaries; [{title: page title, id: page id}, ...]
+
+    Methods:
+    page_select(self):
+        Sets the auth_controllers pageID attribute to the selected page.
+
+    create_all(self):
+        Initiates product creation process if all conditions are met.
+
+    write(self, text):
+        Performs write action for local terminal.
+
+    flush(self):
+        Required for stdout redirection.
+    """
 
     def __init__(self, parent="self", *args, **kwargs):
         self.parent = parent
@@ -599,13 +647,18 @@ class CreateProductsView():
             self.no_conn_label.grid(row=10, column=10, rowspan=2, padx=20, pady=10)
 
     def page_select(self):
+        """
+        Gets selected page from the radio button list and sets it as the pageID in the
+        auth_controller instance.
+        """
         self.selected_index = self.selected_option.get()
         self.page_dict = self.pages[self.selected_index]
         self.parent.api_controller.pageID = self.page_dict["id"]
         print(f'Page "{self.page_dict["title"]}"{self.page_dict["id"]}')
 
     def create_all(self):
-        # self.parent.decypted_api_key = self.parent.auth_controller.decrypt(self.parent.derived_session_key, self.parent.active_user.api_key)
+        """Initiates product creation process if all conditions are met."""
+
         if self.parent.api_controller.store_pages_info == None:
             self.parent.api_controller.set_store_pages_info()
             self.parent.view_toggle(CreateProductsView, self.parent)
@@ -616,11 +669,13 @@ class CreateProductsView():
             self.parent.api_controller.createAllProducts()
 
     def write(self, text):
+        """Performs write action for local terminal."""
         self.terminal.insert(tk.END, text)
         self.terminal.see(tk.END)  # Scroll to the end
 
     def flush(self):
-        pass  # Required for stdout redirection
+        """Required for stdout redirection"""
+        pass
  
     def destroy(self):
         self.products_frame.destroy()
