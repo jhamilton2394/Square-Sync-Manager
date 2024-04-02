@@ -1,4 +1,4 @@
-If you would like to test out Squarespace Companion but you don't have a Squarespace website, you can follow this tutorial to get a free trial. If you just need to find your API key, jump to step 6.
+If you would like to test out Square Sync Manager but you don't have a Squarespace website, you can follow this tutorial to get a free trial. If you just need to find your API key, jump to step 6.
 ```
 1. Navigate to squarespace.com and click get started.
 ```
@@ -37,6 +37,6 @@ If you would like to test out Squarespace Companion but you don't have a Squares
 
 ```
 8. Give your key a name then click “generate key”. Write your key down and keep it somewhere safe. You will
-not be able to see the key again after you click close. This is the key you will use with Squarespace Companion.
+not be able to see the key again after you click close. This is the key you will use with Square Sync Manager.
 ```
 <img width="1676" alt="key generated" src="https://github.com/biscuitbuns23/SquarespaceCompanion/assets/28676599/8d6ab28d-d608-4142-9519-766d3faad04e">
