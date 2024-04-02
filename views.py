@@ -17,7 +17,7 @@ The class based views can be toggled in any container inside the main app class.
 Each view must be passed a "parent" when instantiated so that the view_toggle
 method can place the view in the correct place.
 """
-class BaseView():
+class BaseView:
     """
     BaseView provides methods for displaying the content of markdown files.
 
@@ -477,7 +477,8 @@ class LoginView(customtkinter.CTkToplevel):
     
     def create_user(self):
         """Toggles the CreateUserView"""
-        self.create_user_window = CreateUserView(self.parent)
+        #self.create_user_window = CreateUserView(self.parent)
+        self.legal_window = LegalDocsView(self.parent)
 class AlternateLogin: # Not in use
     def __init__(self, parent):
         self.parent = parent
@@ -566,6 +567,52 @@ class CreateUserView(customtkinter.CTkToplevel):
             self.message_label.pack(pady=10)
         else:
             self.message_label.configure(text=f"{create_attempt}")
+
+class LegalDocsView(customtkinter.CTkToplevel, BaseView):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent=parent
+        self.title("EULA and Privacy Policy agreement")
+        self.geometry=("1000x1000")
+        self.transient(parent)
+        self.grab_set()
+
+        # # scrollable main frame
+        # self.main_frame = customtkinter.CTkFrame(self, width=600, height=400)
+        # self.main_frame.pack()
+
+        # # Create EULA frame
+        # self.eula_frame = customtkinter.CTkScrollableFrame(self.main_frame, width=300, height=300)
+        # self.eula_frame.pack()
+
+        # Create EULA box
+        self.eula_box = tk.Text(self, wrap="word")
+        self.display_markdown_file("files/EULA.md", self.eula_box)
+        self.eula_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.eula_box.tag_configure("custom tag", foreground="white")
+        self.eula_box.tag_add("custom tag", 0.0, "end")
+        self.eula_box.pack(padx=20, pady=20)
+        # self.eula_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
+
+        # Create privacy policy frame
+        # self.pp_frame = customtkinter.CTkScrollableFrame(self.main_frame, width=300, height=300)
+        # self.pp_frame.pack()
+
+        # Create privacy policy box
+        self.pp_box = tk.Text(self, wrap="word")
+        self.display_markdown_file("files/privacy_policy.md", self.pp_box)
+        self.pp_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.pp_box.tag_configure("custom tag", foreground="white")
+        self.pp_box.tag_add("custom tag", 0.0, "end")
+        self.pp_box.pack(padx=20, pady=20)
+        # self.pp_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
+
+        # Create checkboxes
+        self.eula_checkbox = customtkinter.CTkCheckBox(self, text="I have read and agree to the End User License Agreement",)
+        self.eula_checkbox.pack(anchor="w", padx=20, pady=10)
+        self.pp_checkbox = customtkinter.CTkCheckBox(self, text="I have read and agree to the Privacy Policy")
+        self.pp_checkbox.pack(anchor="w", padx=20, pady=10)
+
 
 class CreateProductsView:
     """
