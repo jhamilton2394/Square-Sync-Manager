@@ -1,4 +1,4 @@
-In order for Squarespace Companion to interface with your inventory spreadsheet 
+In order for Square Sync Manager to interface with your inventory spreadsheet 
 it needs to know the column headers that are used. For example; if your items are 
 listed in rows, you probably have data such as "name", "description", and "price", 
 set as the column headers. 

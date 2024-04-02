@@ -170,13 +170,13 @@ class User:
         if os_name == "Darwin":
             """
             Program files are stored in the following directories:
-            MacOS: user/applications/Squarespace Companion
-            Windows: ProgramFiles/Squarespace Companion
+            MacOS: user/applications/Square Sync Manager
+            Windows: ProgramFiles/Square Sync Manager
             """
 
             home_dir = str(Path.home())
             applications_dir = os.path.join(home_dir, "Applications")
-            new_folder_name = "Squarespace Companion"
+            new_folder_name = "Square Sync Manager"
             new_folder_path = os.path.join(applications_dir, new_folder_name)
 
             if not os.path.exists(new_folder_path):
@@ -190,7 +190,7 @@ class User:
 
         elif os_name == "Windows":
             program_files_dir = os.environ["ProgramFiles"]
-            new_folder_name = "Squarespace Companion"
+            new_folder_name = "Square Sync Manager"
             new_folder_path = os.path.join(program_files_dir, new_folder_name)
 
             if not os.path.exists(new_folder_path):
