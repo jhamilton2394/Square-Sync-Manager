@@ -12,7 +12,7 @@ does not warrant the use of SQL. All sensitive data is either hashed or encrypte
 '''
 
 set_appearance_mode("dark")
-set_default_color_theme("green")
+set_default_color_theme("blue")
 
 if __name__ == "__main__":
     auth_controller = AuthController()

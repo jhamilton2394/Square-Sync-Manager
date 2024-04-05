@@ -157,7 +157,7 @@ class MenuView(customtkinter.CTk):
         # create sidebar frame with widgets
         self.sidebar_frame = customtkinter.CTkFrame(parent, width=180, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        #self.sidebar_frame.grid_rowconfigure(4, weight=1)
+        self.sidebar_frame.grid_rowconfigure(7, weight=1)
 
         # Menu logo
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Menu",
@@ -192,6 +192,17 @@ class MenuView(customtkinter.CTk):
                                                    command=lambda: self.parent.view_toggle(InfoView, parent))
         self.info_button.grid(row=5, column=0, padx=20, pady=(10, 10))
 
+        # License button
+        self.info_button = customtkinter.CTkButton(self.sidebar_frame, text="License", width = 140,
+                                                   command=lambda: self.parent.view_toggle(LicenseView, parent))
+        self.info_button.grid(row=6, column=0, padx=20, pady=(10, 10))
+
+        # copyright label logo
+        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Copyright © 2024 Jonathan Hamilton")
+        self.logo_label.grid(row=8, column=0, padx=20, pady=(20,10))
+
+
+
     def logout(self):
         """
         Logs the user out by destroying the main app window.
@@ -214,6 +225,24 @@ class WelcomeView(BaseView):
         self.parent = parent
         self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
         self.display_markdown_file("files/welcome.md", self.announcement_box)
+        self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
+        self.announcement_box.tag_configure("custom tag", foreground="white")
+        self.announcement_box.tag_add("custom tag", 0.0, "end")
+        self.announcement_box.grid(row=0, column=1, padx=20, pady=20, ipadx=10, ipady=10, sticky="nsew")
+
+    def __str__(self):
+        return f"{self.__class__.__name__}"
+
+    def destroy(self):
+        self.announcement_box.destroy()
+
+class LicenseView(BaseView):
+    """This view displays the current license."""
+
+    def __init__(self, parent, *args, **kwargs):
+        self.parent = parent
+        self.announcement_box = tk.Text(parent, wrap="word", width=250, height=580)
+        self.display_markdown_file("License", self.announcement_box)
         self.announcement_box.config(state="disabled", font="Helvetica", bg="#2b2d30")
         self.announcement_box.tag_configure("custom tag", foreground="white")
         self.announcement_box.tag_add("custom tag", 0.0, "end")
