@@ -473,12 +473,12 @@ class LoginView(customtkinter.CTkToplevel):
                 self.login_failed_label = customtkinter.CTkLabel(self, text="Username or password incorrect")
                 self.login_failed_label.pack(pady=10)
             else:
-                self.login_failed_label.config(text="Username or password incorrect")
+                self.login_failed_label.configure(text="Username or password incorrect")
     
     def create_user(self):
         """Toggles the CreateUserView"""
-        #self.create_user_window = CreateUserView(self.parent)
-        self.legal_window = LegalDocsView(self.parent)
+        self.create_user_window = CreateUserView(self.parent)
+        #self.legal_window = LegalDocsView(self.parent)
 class AlternateLogin: # Not in use
     def __init__(self, parent):
         self.parent = parent
