@@ -4,8 +4,6 @@ Additional functionalities are in development.
 
 Square Sync Manager (from here on referred to as SSM) uses Squarespace's API and requires the Commerce Advanced subscription.
 
-Refer to the requirements.txt file for a list of dependencies.
-
 NOTE: Excel is the only spreadsheet type supported in v0.0.1 through v0.0.3.1 (current version)
 
 HOW IT WORKS:
