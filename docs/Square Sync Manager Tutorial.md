@@ -6,14 +6,13 @@
 The entry fields on the settings page each correspond to a column header on your inventory
 file. In order to upload the items to your website SSM needs to know exactly what these column
 headers are called so it can assemble the product information correctly. Fill in all the entry
-fields using the image below as a reference.
-
-There is a special column called "Deleted" that you must include. This column dictates
+fields using the image below as a reference. There is a special column called "Deleted" that you must include. This column dictates
 whether or not the item will be excluded from the upload process. If there are products
 that have already sold out, or have been taken down, then simply mark this column with an
 x and it will be excluded. (Also note that duplicate items will NOT be created if you
 upload the same sheet more than once. Every item is checked against the current inventory
-on the website to ensure no duplicates are created.) 
+on the website to ensure no duplicates are created.)
+
 <img width="1679" alt="Settings config example" src="https://github.com/biscuitbuns23/Square-Sync-Manager/assets/28676599/c4ca414b-1427-4a88-831f-10321abba5ad">
 
 5. Next you need to enter your API key in the corresponding field. The Squarespace account setup
