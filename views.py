@@ -712,9 +712,9 @@ class CreateProductsView:
 
         if self.pages:
             for i, page in enumerate(self.pages):
-                self.option = customtkinter.CTkRadioButton(self.radio_frame, variable=self.selected_option, value=i, text=page["title"],
+                self.page = customtkinter.CTkRadioButton(self.radio_frame, variable=self.selected_option, value=i, text=page["title"],
                                                         command= self.page_select)
-                self.option.grid(row=10, column=10, rowspan=2, padx=20, pady=10)
+                self.page.pack(padx=20, pady=10)
         elif self.pages == False:
             self.no_conn_label = customtkinter.CTkLabel(self.radio_frame, text="Not connected to internet")
             self.no_conn_label.grid(row=10, column=10, rowspan=2, padx=20, pady=10)
