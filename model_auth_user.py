@@ -55,7 +55,9 @@ class User:
 
     def __init__(self, username: str, password: str):
         """
-        Initialize the user with a username, password, and randomly generated salt.
+        Initialize the user with a username, password, and randomly generated salt. Program directory is also created upon
+        user creation. Note: directory will also be created during first login attempt since a temp user is created when
+        attempting to log in.
 
         Parameters:
         username: str | desired username
