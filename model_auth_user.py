@@ -74,7 +74,7 @@ class User:
         self.deleted = None
 
         self.program_directory = self.set_program_directory()
-        self.user_file_path = f"{self.program_directory}" + "/users.pkl"
+        self.user_file_path = f"{self.program_directory}"
         self.file_name = None
 
     def validate_username(self):
@@ -177,7 +177,9 @@ class User:
             home_dir = str(Path.home())
             applications_dir = os.path.join(home_dir, "Applications")
             new_folder_name = "Square Sync Manager"
-            new_folder_path = os.path.join(applications_dir, new_folder_name)
+            new_file_name = "users.pkl"
+            new_folder_path = os.path.join(applications_dir, new_folder_name, new_file_name)
+            
 
             if not os.path.exists(new_folder_path):
                 os.makedirs(new_folder_path)
@@ -189,19 +191,19 @@ class User:
             return new_folder_path
 
         elif os_name == "Windows":
-            new_folder_path = ''
-            # program_files_dir = os.environ["ProgramFiles"]
-            # new_folder_name = "Square Sync Manager"
-            # new_folder_path = os.path.join(program_files_dir, new_folder_name)
+            program_files_dir = os.environ["ProgramFiles"]
+            new_folder_name = "Square Sync Manager"
+            new_file_name = "users.pkl"
+            new_folder_path = os.path.join(program_files_dir, new_folder_name, new_file_name)
 
-            # if not os.path.exists(new_folder_path):
-            #     try:
-            #         os.makedirs(new_folder_path)
-            #         print(f"Folder '{new_folder_name}' created successfully in '{program_files_dir}'.")
-            #     except PermissionError:
-            #         print("Permission denied. Please run the script as an administrator.")
-            # else:
-            #     print(f"Folder '{new_folder_name}' already exists in '{program_files_dir}'.")
+            if not os.path.exists(new_folder_path):
+                try:
+                    os.makedirs(new_folder_path)
+                    print(f"Folder '{new_folder_name}' created successfully in '{program_files_dir}'.")
+                except PermissionError:
+                    print("Permission denied. Please run the script as an administrator.")
+            else:
+                print(f"Folder '{new_folder_name}' already exists in '{program_files_dir}'.")
             return new_folder_path
 
     def __str__(self):
