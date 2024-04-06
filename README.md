@@ -1,4 +1,4 @@
-# Square Sync Manager v0.0.3.1 is officially released as of January 21st 2024!
+# Square Sync Manager v1.0.0 is officially released as of April 6th 2024!
 (Dear evaluators, please see the project resume [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Project%20Resume.md) before you leave.)
 
 Square Sync Manager is an inventory manager for your Squarespace ecommerce website. It automates the product upload process to save you time.
@@ -6,7 +6,7 @@ Additional functionalities are in development.
 
 Square Sync Manager (from here on referred to as SSM) uses Squarespace's API and requires the Commerce Advanced subscription.
 
-NOTE: Excel is the only spreadsheet type supported in v0.0.1 through v0.0.3.1 (current version)
+NOTE: Excel is the only spreadsheet type supported in v0.0.1 through v1.0.0 (current version)
 
 HOW IT WORKS:
 Instead of creating products one at a time on your Squarespace website, SSM lets you import directly

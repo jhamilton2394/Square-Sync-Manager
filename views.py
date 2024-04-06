@@ -94,7 +94,7 @@ class App(customtkinter.CTk):
         # self.api_controller = APIController(auth_user)
 
         # configure window
-        self.title("Square Sync Manager v0.0.3.1")
+        self.title("Square Sync Manager v1.0.0")
         self.geometry(f"{1150}x{580}")
 
         # configure grid layout (4x4)
