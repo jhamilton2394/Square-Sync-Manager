@@ -3,5 +3,8 @@
 2. Follow the instructions for downloading and installing the latest release [here](https://github.com/biscuitbuns23/Square-Sync-Manager/releases).
    
 3. Open Square Sync Manager, create your account, and proceed to the settings page.
-You will be prompted to fill in your inventory sheet column headers like so:
+The entry fields on the settings page each correspond to a column header on your inventory
+file. In order to upload the items to your website SSM needs to know exactly what these column
+headers are called so it can assemble the product information correctly. Fill in all the entry
+fields using the image below as a reference.
 <img width="1679" alt="Settings config example" src="https://github.com/biscuitbuns23/Square-Sync-Manager/assets/28676599/c4ca414b-1427-4a88-831f-10321abba5ad">
