@@ -19,6 +19,7 @@ the inventory template included under the "docs" folder.
 Navigate to the Create Products tab and select the store page you'd like to
 upload to, Then click upload to site.
 <img width="1147" alt="create products" src="https://github.com/biscuitbuns23/Square-Sync-Manager/assets/28676599/cdb88b72-83b8-4b9e-b09c-afede0200278">
+
 ```
 It may take some time to upload depending on the number of products you have. You'll see a loading wheel
 until the upload process finishes. Once it's complete the details will be displayed in the terminal.
