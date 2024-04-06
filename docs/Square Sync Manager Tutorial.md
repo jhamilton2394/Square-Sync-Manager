@@ -1,0 +1,1 @@
+If you don't have a Squarespace account set up, follow my Squarespace Account setup tutorial <link "https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Squarespace%20account%20tutorial.md"/>
