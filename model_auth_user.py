@@ -74,7 +74,7 @@ class User:
         self.deleted = None
 
         self.program_directory = self.set_program_directory()
-        self.user_file_path = f"{self.program_directory}" + "/users.pkl"
+        self.user_file_path = os.path.join(self.program_directory, "users.pkl")
         self.file_name = None
 
     def validate_username(self):
