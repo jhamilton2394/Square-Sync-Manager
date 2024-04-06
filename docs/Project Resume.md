@@ -11,9 +11,10 @@ that lie between you and your goal are far more valuable than the number of hour
 reading about coding in a classroom. Below are some of the skills demonstrated throughout
 this projects codebase:
 
-- Encryption and Decryption of sensitive data
+- Encryption and Decryption of sensitive data using cryptography
 - Password hashing and secure storage
 - CRUD operations using pickle
+- Operating system dependent file handling
 - Custom built light-weight secure user authentication system
 - Model View Controller (MVC) software architecture
 - eCommerce API implementation
