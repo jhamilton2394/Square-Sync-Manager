@@ -189,18 +189,19 @@ class User:
             return new_folder_path
 
         elif os_name == "Windows":
-            program_files_dir = os.environ["ProgramFiles"]
-            new_folder_name = "Square Sync Manager"
-            new_folder_path = os.path.join(program_files_dir, new_folder_name)
+            new_folder_path = ''
+            # program_files_dir = os.environ["ProgramFiles"]
+            # new_folder_name = "Square Sync Manager"
+            # new_folder_path = os.path.join(program_files_dir, new_folder_name)
 
-            if not os.path.exists(new_folder_path):
-                try:
-                    os.makedirs(new_folder_path)
-                    print(f"Folder '{new_folder_name}' created successfully in '{program_files_dir}'.")
-                except PermissionError:
-                    print("Permission denied. Please run the script as an administrator.")
-            else:
-                print(f"Folder '{new_folder_name}' already exists in '{program_files_dir}'.")
+            # if not os.path.exists(new_folder_path):
+            #     try:
+            #         os.makedirs(new_folder_path)
+            #         print(f"Folder '{new_folder_name}' created successfully in '{program_files_dir}'.")
+            #     except PermissionError:
+            #         print("Permission denied. Please run the script as an administrator.")
+            # else:
+            #     print(f"Folder '{new_folder_name}' already exists in '{program_files_dir}'.")
             return new_folder_path
 
     def __str__(self):
