@@ -18,9 +18,9 @@ The column headers and the API key will need to be setup in the 'settings' menu 
 
 Once your initial setup is done you can use your existing inventory excel spreadsheet to create batches of products.
 
--Check out the Squarespace Account tutorial here if you don't have a squarespace website but would like to try out our app.
--Check out the Square Sync Manager tutorial here if you'd like more in depth instructions.
--If you're an evaluator that is here to check out my coding skills, please go check out the project resume here.
+- Check out the Squarespace Account tutorial here if you don't have a squarespace website but would like to try out our app.
+- Check out the Square Sync Manager tutorial here if you'd like more in depth instructions.
+- If you're an evaluator that is here to check out my coding skills, please go check out the project resume here.
 
 v0.0.3 fixes the duplicate product problem when creating new products. When creating a batch of products from your working inventory,
 SSM will now compare site inventory against your working inventory, and only create the products that are not already on the site.
