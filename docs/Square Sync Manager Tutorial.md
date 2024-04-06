@@ -3,3 +3,8 @@ If you don't have a Squarespace website set up, follow my Squarespace Account se
 1. Follow the instructions for downloading and installing the latest release.
 ```
 [Releases](https://github.com/biscuitbuns23/Square-Sync-Manager/releases)
+```
+2. Open Square Sync Manager, create your account, and proceed to the settings page.
+You will be prompted to fill in your inventory sheet column headers like so:
+```
+<img width="1679" alt="Settings config example" src="https://github.com/biscuitbuns23/Square-Sync-Manager/assets/28676599/c4ca414b-1427-4a88-831f-10321abba5ad">
