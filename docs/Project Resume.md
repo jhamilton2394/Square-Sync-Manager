@@ -22,3 +22,4 @@ this projects codebase:
 - Software use documentation
 - PEP 257 & PEP 8
 - Python language
+- Agile methodologies (yes, I practiced by myself) using Jira
