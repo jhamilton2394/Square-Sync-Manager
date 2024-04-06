@@ -1,5 +1,5 @@
 # Square Sync Manager v0.0.3.1 is officially released as of January 21st 2024!
-(Dear evaluators, please see the project resume here before you leave.)
+(Dear evaluators, please see the project resume [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Project%20Resume.md) before you leave.)
 
 Square Sync Manager is an inventory manager for your Squarespace ecommerce website. It automates the product upload process to save you time.
 Additional functionalities are in development.
@@ -20,9 +20,9 @@ The column headers and the API key will need to be setup in the 'settings' menu 
 
 Once your initial setup is done you can use your existing inventory excel spreadsheet to create batches of products.
 
-- Check out the Squarespace Account tutorial here if you don't have a squarespace website but would like to try out our app.
-- Check out the Square Sync Manager tutorial here if you'd like more in depth instructions.
-- If you're an evaluator that is here to check out my coding skills, please go check out the project resume here.
+- Check out the Squarespace Account tutorial [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Squarespace%20account%20tutorial.md) if you don't have a squarespace website but would like to try out our app.
+- Check out the Square Sync Manager tutorial [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Square%20Sync%20Manager%20Tutorial.md) if you'd like more in depth instructions.
+- If you're an evaluator that is here to check out my coding skills, please go check out the project resume [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Project%20Resume.md).
 
 v0.0.3 fixes the duplicate product problem when creating new products. When creating a batch of products from your working inventory,
 SSM will now compare site inventory against your working inventory, and only create the products that are not already on the site.
