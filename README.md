@@ -1,4 +1,5 @@
 # Square Sync Manager v0.0.3.1 is officially released as of January 21st 2024!
+(Dear evaluators, please see the project resume here before you leave.)
 Square Sync Manager is an inventory manager for your Squarespace ecommerce website. It automates the product upload process to save you time.
 Additional functionalities are in development.
 
