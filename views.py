@@ -95,7 +95,7 @@ class App(customtkinter.CTk):
 
         # configure window
         self.title("Square Sync Manager v0.0.3.1")
-        self.geometry(f"{1100}x{580}")
+        self.geometry(f"{1150}x{580}")
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
