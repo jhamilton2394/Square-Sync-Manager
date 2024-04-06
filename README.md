@@ -22,4 +22,4 @@ Once your initial setup is done you can use your existing inventory excel spread
 
 - Check out the Squarespace Account tutorial [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Squarespace%20account%20tutorial.md) if you don't have a squarespace website but would like to try out our app.
 - Check out the Square Sync Manager tutorial [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Square%20Sync%20Manager%20Tutorial.md) if you'd like more in depth instructions.
-- If you're an evaluator that is here to check out my coding skills, please go check out the project resume [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Project%20Resume.md).
+- If you're an evaluator that is here to check out my coding skills, please go to the project resume [here](https://github.com/biscuitbuns23/Square-Sync-Manager/blob/Initial-consolidated/docs/Project%20Resume.md).
